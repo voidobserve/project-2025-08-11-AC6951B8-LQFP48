@@ -1,0 +1,2285 @@
+# depslib dependency file v1.0
+1638239626 source:d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\apps\common\debug\debug.c
+	"app_config.h"
+	"typedef.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\apps\mesh\include\app_config.h
+	"board_config.h"
+	"btcontroller_mode.h"
+	"user_cfg_id.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\apps\mesh\board\br23\board_config.h
+	"board_ac635n_demo_cfg.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\apps\mesh\board\br23\board_ac635n_demo_cfg.h
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\btctrler\btcontroller_mode.h
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\apps\mesh\include\user_cfg_id.h
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\generic\typedef.h
+	"asm/cpu.h"
+	"generic/errno-base.h"
+	"string.h"
+	"strings.h"
+	"system/malloc.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\driver\cpu\br23\asm\cpu.h
+	"br23.h"
+	"csfr.h"
+	"asm/irq.h"
+	"generic/printf.h"
+	"system/generic/log.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\driver\cpu\br23\asm\br23.h
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\driver\cpu\br23\asm\csfr.h
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\driver\cpu\br23\asm\irq.h
+	"asm/hwi.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\driver\cpu\br23\asm\hwi.h
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\generic\printf.h
+	<stdarg.h>
+	"typedef.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\generic\log.h
+	"system/generic/printf.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\generic\errno-base.h
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\malloc.h
+
+1668133588 source:d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\apps\common\key\adkey.c
+	"key_driver.h"
+	"adkey.h"
+	"gpio.h"
+	"system/event.h"
+	"app_config.h"
+	"asm/uart_dev.h"
+
+1668064376 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\device\key_driver.h
+	"typedef.h"
+
+1668154049 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\device\adkey.h
+	"typedef.h"
+	"asm/adc_api.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\driver\cpu\br23\asm\adc_api.h
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\generic\gpio.h
+	"asm/gpio.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\driver\cpu\br23\asm\gpio.h
+	"typedef.h"
+
+1667903735 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\event.h
+	"generic/typedef.h"
+	"generic/list.h"
+	"generic/rect.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\generic\list.h
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\generic\rect.h
+	"typedef.h"
+
+1675904230 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\driver\cpu\br23\asm\uart_dev.h
+	"typedef.h"
+	"os/os_api.h"
+	"jiffies.h"
+	"irq.h"
+	"adkey.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\os\os_api.h
+	"generic/typedef.h"
+	"os/os_cpu.h"
+	"os/os_error.h"
+	"os/os_type.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\os\os_cpu.h
+	"asm/cpu.h"
+	"jiffies.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\generic\jiffies.h
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\os\os_error.h
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\os\os_type.h
+	"FreeRTOS/FreeRTOS.h"
+	"FreeRTOS/semphr.h"
+	"FreeRTOS/task.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\os\freertos\freertos.h
+	"FreeRTOSConfig.h"
+	"projdefs.h"
+	"portable.h"
+	<reent.h>
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\os\freertos\freertosconfig.h
+	"pi32v2/portmacro.h"
+	"pi32_lto/portmacro.h"
+	"q32s/portmacro.h"
+	"printf.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\os\freertos\pi32v2\portmacro.h
+	"asm/cpu.h"
+	<stdint.h>
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\os\freertos\pi32_lto\portmacro.h
+	"asm/cpu.h"
+	<stdint.h>
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\os\freertos\q32s\portmacro.h
+	"asm/cpu.h"
+	<stdint.h>
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\os\freertos\projdefs.h
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\os\freertos\portable.h
+	"deprecated_definitions.h"
+	"portmacro.h"
+	"mpu_wrappers.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\os\freertos\deprecated_definitions.h
+	"..\..\Source\portable\owatcom\16bitdos\pc\portmacro.h"
+	"..\..\Source\portable\owatcom\16bitdos\flsh186\portmacro.h"
+	"../portable/GCC/ATMega323/portmacro.h"
+	"../portable/IAR/ATMega323/portmacro.h"
+	"../../Source/portable/MPLAB/PIC24_dsPIC/portmacro.h"
+	"../../Source/portable/MPLAB/PIC24_dsPIC/portmacro.h"
+	"../../Source/portable/MPLAB/PIC18F/portmacro.h"
+	"../../Source/portable/MPLAB/PIC32MX/portmacro.h"
+	"libFreeRTOS/Include/portmacro.h"
+	"../../Source/portable/SDCC/Cygnal/portmacro.h"
+	"../../Source/portable/GCC/ARM7_LPC2000/portmacro.h"
+	"portmacro.h"
+	"../../Source/portable/GCC/ARM7_LPC23xx/portmacro.h"
+	"..\..\Source\portable\IAR\MSP430\portmacro.h"
+	"../../Source/portable/GCC/MSP430F449/portmacro.h"
+	"../../Source/portable/Rowley/MSP430F449/portmacro.h"
+	"..\..\Source\portable\RVDS\ARM7_LPC21xx\portmacro.h"
+	"../../Source/portable/GCC/ARM7_AT91SAM7S/portmacro.h"
+	"..\..\Source\portable\IAR\AtmelSAM7S64\portmacro.h"
+	"..\..\Source\portable\IAR\AtmelSAM9XE\portmacro.h"
+	"..\..\Source\portable\IAR\LPC2000\portmacro.h"
+	"..\..\Source\portable\IAR\STR71x\portmacro.h"
+	"..\..\Source\portable\IAR\STR75x\portmacro.h"
+	"..\..\Source\portable\GCC\STR75x\portmacro.h"
+	"..\..\Source\portable\IAR\STR91x\portmacro.h"
+	"../../Source/portable/GCC/H8S2329/portmacro.h"
+	"../../Source/portable/GCC/ARM7_AT91FR40008/portmacro.h"
+	"../../Source/portable/RVDS/ARM_CM3/portmacro.h"
+	"../../Source/portable/GCC/ARM_CM3/portmacro.h"
+	"../../Source/portable/GCC/ARM_CM3/portmacro.h"
+	"../../Source/portable/IAR/ARM_CM3/portmacro.h"
+	"../../Source/portable/IAR/ARM_CM3/portmacro.h"
+	"../../Source/portable/CodeWarrior/HCS12/portmacro.h"
+	"../../Source/portable/GCC/MicroBlaze/portmacro.h"
+	"..\..\Source\portable\Paradigm\Tern_EE\small\portmacro.h"
+	"../../Source/portable/GCC/HCS12/portmacro.h"
+	"../../Source/portable/GCC/MCF5235/portmacro.h"
+	"../../../Source/portable/GCC/ColdFire_V2/portmacro.h"
+	"../../Source/portable/CodeWarrior/ColdFire_V2/portmacro.h"
+	"../../Source/portable/GCC/PPC405_Xilinx/portmacro.h"
+	"../../Source/portable/GCC/PPC440_Xilinx/portmacro.h"
+	"..\..\Source\portable\Softune\MB96340\portmacro.h"
+	"frconfig.h"
+	"..\portable\BCC\16BitDOS\PC\prtmacro.h"
+	"frconfig.h"
+	"..\portable\BCC\16BitDOS\flsh186\prtmacro.h"
+	"portmacro.h"
+	"portmacro.h"
+	"portmacro.h"
+	"portmacro.h"
+	"../../Source/portable/IAR/V850ES/portmacro.h"
+	"../../Source/portable/IAR/V850ES/portmacro.h"
+	"../../Source/portable/IAR/V850ES/portmacro.h"
+	"../../Source/portable/IAR/V850ES/portmacro.h"
+	"../../Source/portable/IAR/V850ES/portmacro.h"
+	"../../Source/portable/IAR/78K0R/portmacro.h"
+	"../../Source/portable/IAR/78K0R/portmacro.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\os\freertos\mpu_wrappers.h
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\os\freertos\semphr.h
+	"queue.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\os\freertos\queue.h
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\os\freertos\task.h
+	"list.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\os\freertos\list.h
+
+1638239626 source:d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\apps\common\key\iokey.c
+	"key_driver.h"
+	"iokey.h"
+	"gpio.h"
+	"system/event.h"
+	"app_config.h"
+	"asm/clock.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\device\iokey.h
+	"typedef.h"
+	"device/device.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\device\device.h
+	"generic/typedef.h"
+	"generic/list.h"
+	"generic/atomic.h"
+	"device/ioctl_cmds.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\generic\atomic.h
+	"cpu.h"
+	"irq.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\generic\cpu.h
+	<asm/cpu.h>
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\generic\irq.h
+	"asm/irq.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\device\ioctl_cmds.h
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\driver\cpu\br23\asm\clock.h
+	"typedef.h"
+	"clock_hw.h"
+	"asm/clock_define.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\driver\cpu\br23\asm\clock_hw.h
+	"typedef.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\driver\cpu\br23\asm\clock_define.h
+
+1668063990 source:d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\apps\common\key\key_driver.c
+	"device/key_driver.h"
+	"system/event.h"
+	"system/init.h"
+	"iokey.h"
+	"adkey.h"
+	"slidekey.h"
+	"irkey.h"
+	"touch_key.h"
+	"system/timer.h"
+	"asm/power_interface.h"
+	"app_config.h"
+	"rdec_key.h"
+	"tone_player.h"
+	"irSensor/ir_manage.h"
+	"debug.h"
+	"asm/ctmu.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\init.h
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\device\slidekey.h
+	"typedef.h"
+	"device/device.h"
+	"asm/adc_api.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\device\irkey.h
+	"typedef.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\device\touch_key.h
+	"typedef.h"
+	"asm/plcnt.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\driver\cpu\br23\asm\plcnt.h
+
+1668150013 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\timer.h
+	"typedef.h"
+	"generic/list.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\driver\cpu\br23\asm\power_interface.h
+	"generic/typedef.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\device\rdec_key.h
+	"typedef.h"
+	"asm/rdec.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\driver\cpu\br23\asm\rdec.h
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\debug.h
+	"asm/cpu.h"
+	"generic/typedef.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\driver\cpu\br23\asm\ctmu.h
+	"typedef.h"
+
+1638239626 source:d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\apps\common\update\testbox_update.c
+	"update_loader_download.h"
+	"update.h"
+	"btctrler_task.h"
+	"app_config.h"
+	"lib_profile_cfg.h"
+	"bt_profile_cfg.h"
+	"smartbox/smartbox_task.h"
+	"system/debug.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\update\update_loader_download.h
+	"typedef.h"
+	"system/task.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\task.h
+	"os/os_api.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\update\update.h
+	"typedef.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\btctrler\btctrler_task.h
+	"typedef.h"
+	"system/task.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\apps\common\config\include\bt_profile_cfg.h
+	"app_config.h"
+	"btcontroller_modules.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\btctrler\btcontroller_modules.h
+	"hci_transport.h"
+	"btcontroller_mode.h"
+	"ble/hci_ll.h"
+	"classic/hci_lmp.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\btctrler\hci_transport.h
+	"generic/typedef.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\btctrler\ble\hci_ll.h
+	<stdint.h>
+	<stdlib.h>
+	<stdarg.h>
+	"typedef.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\btctrler\classic\hci_lmp.h
+
+1638239626 source:d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\apps\common\update\update.c
+	"update.h"
+	"update_loader_download.h"
+	"asm/crc16.h"
+	"asm/wdt.h"
+	"os/os_api.h"
+	"app_config.h"
+	"cpu.h"
+	"syscfg_id.h"
+	"vm.h"
+	"btcontroller_modules.h"
+	"system/includes.h"
+	"uart_update.h"
+	"dual_bank_updata_api.h"
+	"smartbox_extra_flash_opt.h"
+	"ui/ui_api.h"
+	"rcsp_user_update.h"
+	"rcsp_adv_user_update.h"
+	"custom_cfg.h"
+	"update_tws.h"
+	"system/debug.h"
+	"tone_player.h"
+	"audio_config.h"
+	"asm/pwm_led.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\driver\cpu\br23\asm\crc16.h
+	"typedef.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\driver\cpu\br23\asm\wdt.h
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\syscfg_id.h
+	"typedef.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\device\vm.h
+	"ioctl.h"
+	"device/device.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\generic\ioctl.h
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\includes.h
+	"init.h"
+	"event.h"
+	"malloc.h"
+	"spinlock.h"
+	"task.h"
+	"timer.h"
+	"wait.h"
+	"app_core.h"
+	"app_msg.h"
+	"database.h"
+	"fs/fs.h"
+	"power_manage.h"
+	"syscfg_id.h"
+	"bank_switch.h"
+	"generic/includes.h"
+	"device/includes.h"
+	"asm/includes.h"
+	"device/sdio_host_init.h"
+	"crypto_toolbox/crypto.h"
+	"crypto_toolbox/Crypto_hash.h"
+	"crypto_toolbox/hmac.h"
+	"crypto_toolbox/sha256.h"
+	"crypto_toolbox/bigint.h"
+	"crypto_toolbox/bigint_impl.h"
+	"crypto_toolbox/ecdh.h"
+	"crypto_toolbox/micro-ecc/uECC_new.h"
+	"crypto_toolbox/micro-ecc/uECC.h"
+	"crypto_toolbox/aes_cmac.h"
+	"crypto_toolbox/rijndael.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\spinlock.h
+	"typedef.h"
+	"cpu.h"
+	"irq.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\wait.h
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\app_core.h
+	"typedef.h"
+	"generic/list.h"
+	"system/event.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\app_msg.h
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\database.h
+	"typedef.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\fs\fs.h
+	"generic/typedef.h"
+	"generic/list.h"
+	"generic/ioctl.h"
+	"generic/atomic.h"
+	"system/task.h"
+	"system/malloc.h"
+	"system/sys_time.h"
+	"stdarg.h"
+	"fs_file_name.h"
+	"sdfile.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\sys_time.h
+	"typedef.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\fs\fs_file_name.h
+	"generic/typedef.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\fs\sdfile.h
+	"typedef.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\power_manage.h
+	"generic/typedef.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\bank_switch.h
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\generic\includes.h
+	"errno-base.h"
+	"typedef.h"
+	"ascii.h"
+	"atomic.h"
+	"ioctl.h"
+	"cpu.h"
+	"gpio.h"
+	"irq.h"
+	"jiffies.h"
+	"list.h"
+	"printf.h"
+	"rect.h"
+	"version.h"
+	"lbuf.h"
+	"lbuf_lite.h"
+	"circular_buf.h"
+	"index.h"
+	"debug_lite.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\generic\ascii.h
+	"typedef.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\generic\version.h
+	"typedef.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\generic\lbuf.h
+	"typedef.h"
+	"list.h"
+	"system/spinlock.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\generic\lbuf_lite.h
+	"typedef.h"
+	"list.h"
+	"system/spinlock.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\generic\circular_buf.h
+	"typedef.h"
+	"system/spinlock.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\generic\index.h
+	"typedef.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\generic\debug_lite.h
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\device\includes.h
+	"device.h"
+	"ioctl_cmds.h"
+	"key_driver.h"
+	"iokey.h"
+	"irkey.h"
+	"adkey.h"
+	"slidekey.h"
+	"touch_key.h"
+	"rdec_key.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\driver\cpu\br23\asm\includes.h
+	"asm/cpu.h"
+	"asm/crc16.h"
+	"asm/clock.h"
+	"asm/uart.h"
+	"asm/uart_dev.h"
+	"asm/gpio.h"
+	"asm/spiflash.h"
+	"asm/csfr.h"
+	"asm/power_interface.h"
+	"asm/efuse.h"
+	"asm/wdt.h"
+	"asm/timer.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\driver\cpu\br23\asm\uart.h
+	"device/uart.h"
+	"device/device.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\driver\device\uart.h
+	"typedef.h"
+	"device/device.h"
+	"generic/ioctl.h"
+	"system/task.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\driver\cpu\br23\asm\spiflash.h
+	"device/device.h"
+	"device/spiflash.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\driver\device\spiflash.h
+	"typedef.h"
+	"generic/list.h"
+	"generic/ioctl.h"
+	"device/device.h"
+	"system/task.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\driver\cpu\br23\asm\efuse.h
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\driver\cpu\br23\asm\timer.h
+	"typedef.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\driver\device\sdio_host_init.h
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\crypto_toolbox\crypto.h
+	"endian.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\crypto_toolbox\endian.h
+	"generic/typedef.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\crypto_toolbox\crypto_hash.h
+	"generic/typedef.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\crypto_toolbox\hmac.h
+	"crypto.h"
+	"sha256.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\crypto_toolbox\sha256.h
+	"crypto.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\crypto_toolbox\bigint.h
+	"bigint_impl.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\crypto_toolbox\bigint_impl.h
+	"generic/typedef.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\crypto_toolbox\ecdh.h
+	"bigint_impl.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\crypto_toolbox\micro-ecc\uecc_new.h
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\crypto_toolbox\micro-ecc\uecc.h
+	<stdint.h>
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\crypto_toolbox\aes_cmac.h
+	<stdint.h>
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\system\crypto_toolbox\rijndael.h
+	<stdint.h>
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\update\uart_update.h
+	"typedef.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\update\dual_bank_updata_api.h
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\apps\common\third_party_profile\common\custom_cfg.h
+	"typedef.h"
+	<string.h>
+	"app_config.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\apps\common\include\update_tws.h
+	"app_config.h"
+	"system/event.h"
+	"update_loader_download.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\driver\cpu\br23\asm\pwm_led.h
+
+1638239626 source:d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\cpu\br23\adc_api.c
+	"typedef.h"
+	"asm/clock.h"
+	"asm/adc_api.h"
+	"timer.h"
+	"init.h"
+	"asm/efuse.h"
+	"irq.h"
+	"asm/power/p33.h"
+	"asm/power_interface.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\driver\cpu\br23\asm\power\p33.h
+	"typedef.h"
+
+1638239626 source:d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\cpu\br23\charge.c
+	"asm/clock.h"
+	"timer.h"
+	"asm/power/p33.h"
+	"asm/charge.h"
+	"uart.h"
+	"device/device.h"
+	"asm/power_interface.h"
+	"system/event.h"
+	"asm/efuse.h"
+	"gpio.h"
+	"app_config.h"
+	"debug.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\driver\cpu\br23\asm\charge.h
+	"typedef.h"
+
+1638239626 source:d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\cpu\br23\chargestore.c
+	"generic/typedef.h"
+	"generic/gpio.h"
+	"asm/power/p33.h"
+	"asm/hwi.h"
+	"asm/gpio.h"
+	"asm/clock.h"
+	"asm/chargestore.h"
+	"update.h"
+	"app_config.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\driver\cpu\br23\asm\chargestore.h
+
+1638239626 source:d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\cpu\br23\ctmu.c
+	"app_config.h"
+	"asm/ctmu.h"
+	"asm/gpio.h"
+
+1638239626 source:d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\cpu\br23\iic_hw.c
+	"asm/iic_hw.h"
+	"system/generic/gpio.h"
+	"system/generic/log.h"
+	"asm/clock.h"
+	"asm/cpu.h"
+	"update.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\driver\cpu\br23\asm\iic_hw.h
+	"system/generic/typedef.h"
+
+1638239626 source:d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\cpu\br23\iic_soft.c
+	"asm/iic_soft.h"
+	"generic/gpio.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\driver\cpu\br23\asm\iic_soft.h
+	"generic/typedef.h"
+
+1638320249 source:d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\cpu\br23\led_spi.c
+	"system/includes.h"
+
+1638320249 source:d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\cpu\br23\ledc_test.c
+	"system/includes.h"
+	"audio_spectrum.h"
+
+1668136854 source:d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\cpu\br23\mcpwm.c
+	"asm/mcpwm.h"
+	"asm/clock.h"
+	"asm/gpio.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\driver\cpu\br23\asm\mcpwm.h
+	"typedef.h"
+
+1638239626 source:d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\cpu\br23\port_wkup.c
+	"typedef.h"
+	"irq.h"
+	"asm/gpio.h"
+
+1638239626 source:d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\cpu\br23\pwm_led.c
+	"generic/gpio.h"
+	"asm/includes.h"
+	"asm/power/p33.h"
+	"asm/pwm_led.h"
+	"system/timer.h"
+
+1638239626 source:d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\cpu\br23\setup.c
+	"asm/includes.h"
+	"asm/wdt.h"
+	"asm/debug.h"
+	"asm/efuse.h"
+	"asm/power/p33.h"
+	"system/task.h"
+	"timer.h"
+	"system/init.h"
+	"system/includes.h"
+	"app_config.h"
+	"gpio.h"
+	"debug.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\driver\cpu\br23\asm\debug.h
+
+1638239626 source:d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\cpu\br23\spi.c
+	"system/debug.h"
+	"generic/gpio.h"
+	"asm/clock.h"
+	"asm/spi.h"
+	"update.h"
+
+1638239626 d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\include_lib\driver\cpu\br23\asm\spi.h
+	"typedef.h"
+	"generic/ioctl.h"
+
+1638239626 source:d:\项目资料\博朗\zd0223-220901-bl-sjq\ac695n-3.0.6-source-sdk\cpu\br23\uart_dev.c
+	"asm/clock.h"
+	"asm/uart_dev.h"
+	"asm/cpu.h"
+	"generic/gpio.h"
+	"spinlock.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\debug\debug.c
+	"app_config.h"
+	"typedef.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\mesh\include\app_config.h
+	"board_config.h"
+	"btcontroller_mode.h"
+	"user_cfg_id.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\mesh\board\br23\board_config.h
+	"board_ac635n_demo_cfg.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\mesh\board\br23\board_ac635n_demo_cfg.h
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\btctrler\btcontroller_mode.h
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\mesh\include\user_cfg_id.h
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\generic\typedef.h
+	"asm/cpu.h"
+	"generic/errno-base.h"
+	"string.h"
+	"strings.h"
+	"system/malloc.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\driver\cpu\br23\asm\cpu.h
+	"br23.h"
+	"csfr.h"
+	"asm/irq.h"
+	"generic/printf.h"
+	"system/generic/log.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\driver\cpu\br23\asm\br23.h
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\driver\cpu\br23\asm\csfr.h
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\driver\cpu\br23\asm\irq.h
+	"asm/hwi.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\driver\cpu\br23\asm\hwi.h
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\generic\printf.h
+	<stdarg.h>
+	"typedef.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\generic\log.h
+	"system/generic/printf.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\generic\errno-base.h
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\malloc.h
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\key\adkey.c
+	"key_driver.h"
+	"adkey.h"
+	"gpio.h"
+	"system/event.h"
+	"app_config.h"
+	"asm/uart_dev.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\device\key_driver.h
+	"typedef.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\device\adkey.h
+	"typedef.h"
+	"asm/adc_api.h"
+	"gpio.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\driver\cpu\br23\asm\adc_api.h
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\generic\gpio.h
+	"asm/gpio.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\driver\cpu\br23\asm\gpio.h
+	"typedef.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\event.h
+	"generic/typedef.h"
+	"generic/list.h"
+	"generic/rect.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\generic\list.h
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\generic\rect.h
+	"typedef.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\driver\cpu\br23\asm\uart_dev.h
+	"typedef.h"
+	"os/os_api.h"
+	"jiffies.h"
+	"irq.h"
+	"adkey.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\os\os_api.h
+	"generic/typedef.h"
+	"os/os_cpu.h"
+	"os/os_error.h"
+	"os/os_type.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\os\os_cpu.h
+	"asm/cpu.h"
+	"jiffies.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\generic\jiffies.h
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\os\os_error.h
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\os\os_type.h
+	"FreeRTOS/FreeRTOS.h"
+	"FreeRTOS/semphr.h"
+	"FreeRTOS/task.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\os\freertos\freertos.h
+	"FreeRTOSConfig.h"
+	"projdefs.h"
+	"portable.h"
+	<reent.h>
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\os\freertos\freertosconfig.h
+	"pi32v2/portmacro.h"
+	"pi32_lto/portmacro.h"
+	"q32s/portmacro.h"
+	"printf.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\os\freertos\pi32v2\portmacro.h
+	"asm/cpu.h"
+	<stdint.h>
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\os\freertos\pi32_lto\portmacro.h
+	"asm/cpu.h"
+	<stdint.h>
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\os\freertos\q32s\portmacro.h
+	"asm/cpu.h"
+	<stdint.h>
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\os\freertos\projdefs.h
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\os\freertos\portable.h
+	"deprecated_definitions.h"
+	"portmacro.h"
+	"mpu_wrappers.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\os\freertos\deprecated_definitions.h
+	"..\..\Source\portable\owatcom\16bitdos\pc\portmacro.h"
+	"..\..\Source\portable\owatcom\16bitdos\flsh186\portmacro.h"
+	"../portable/GCC/ATMega323/portmacro.h"
+	"../portable/IAR/ATMega323/portmacro.h"
+	"../../Source/portable/MPLAB/PIC24_dsPIC/portmacro.h"
+	"../../Source/portable/MPLAB/PIC24_dsPIC/portmacro.h"
+	"../../Source/portable/MPLAB/PIC18F/portmacro.h"
+	"../../Source/portable/MPLAB/PIC32MX/portmacro.h"
+	"libFreeRTOS/Include/portmacro.h"
+	"../../Source/portable/SDCC/Cygnal/portmacro.h"
+	"../../Source/portable/GCC/ARM7_LPC2000/portmacro.h"
+	"portmacro.h"
+	"../../Source/portable/GCC/ARM7_LPC23xx/portmacro.h"
+	"..\..\Source\portable\IAR\MSP430\portmacro.h"
+	"../../Source/portable/GCC/MSP430F449/portmacro.h"
+	"../../Source/portable/Rowley/MSP430F449/portmacro.h"
+	"..\..\Source\portable\RVDS\ARM7_LPC21xx\portmacro.h"
+	"../../Source/portable/GCC/ARM7_AT91SAM7S/portmacro.h"
+	"..\..\Source\portable\IAR\AtmelSAM7S64\portmacro.h"
+	"..\..\Source\portable\IAR\AtmelSAM9XE\portmacro.h"
+	"..\..\Source\portable\IAR\LPC2000\portmacro.h"
+	"..\..\Source\portable\IAR\STR71x\portmacro.h"
+	"..\..\Source\portable\IAR\STR75x\portmacro.h"
+	"..\..\Source\portable\GCC\STR75x\portmacro.h"
+	"..\..\Source\portable\IAR\STR91x\portmacro.h"
+	"../../Source/portable/GCC/H8S2329/portmacro.h"
+	"../../Source/portable/GCC/ARM7_AT91FR40008/portmacro.h"
+	"../../Source/portable/RVDS/ARM_CM3/portmacro.h"
+	"../../Source/portable/GCC/ARM_CM3/portmacro.h"
+	"../../Source/portable/GCC/ARM_CM3/portmacro.h"
+	"../../Source/portable/IAR/ARM_CM3/portmacro.h"
+	"../../Source/portable/IAR/ARM_CM3/portmacro.h"
+	"../../Source/portable/CodeWarrior/HCS12/portmacro.h"
+	"../../Source/portable/GCC/MicroBlaze/portmacro.h"
+	"..\..\Source\portable\Paradigm\Tern_EE\small\portmacro.h"
+	"../../Source/portable/GCC/HCS12/portmacro.h"
+	"../../Source/portable/GCC/MCF5235/portmacro.h"
+	"../../../Source/portable/GCC/ColdFire_V2/portmacro.h"
+	"../../Source/portable/CodeWarrior/ColdFire_V2/portmacro.h"
+	"../../Source/portable/GCC/PPC405_Xilinx/portmacro.h"
+	"../../Source/portable/GCC/PPC440_Xilinx/portmacro.h"
+	"..\..\Source\portable\Softune\MB96340\portmacro.h"
+	"frconfig.h"
+	"..\portable\BCC\16BitDOS\PC\prtmacro.h"
+	"frconfig.h"
+	"..\portable\BCC\16BitDOS\flsh186\prtmacro.h"
+	"portmacro.h"
+	"portmacro.h"
+	"portmacro.h"
+	"portmacro.h"
+	"../../Source/portable/IAR/V850ES/portmacro.h"
+	"../../Source/portable/IAR/V850ES/portmacro.h"
+	"../../Source/portable/IAR/V850ES/portmacro.h"
+	"../../Source/portable/IAR/V850ES/portmacro.h"
+	"../../Source/portable/IAR/V850ES/portmacro.h"
+	"../../Source/portable/IAR/78K0R/portmacro.h"
+	"../../Source/portable/IAR/78K0R/portmacro.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\os\freertos\mpu_wrappers.h
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\os\freertos\semphr.h
+	"queue.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\os\freertos\queue.h
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\os\freertos\task.h
+	"list.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\os\freertos\list.h
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\key\iokey.c
+	"key_driver.h"
+	"iokey.h"
+	"gpio.h"
+	"system/event.h"
+	"app_config.h"
+	"asm/clock.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\device\iokey.h
+	"typedef.h"
+	"device/device.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\device\device.h
+	"generic/typedef.h"
+	"generic/list.h"
+	"generic/atomic.h"
+	"device/ioctl_cmds.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\generic\atomic.h
+	"cpu.h"
+	"irq.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\generic\cpu.h
+	<asm/cpu.h>
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\generic\irq.h
+	"asm/irq.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\device\ioctl_cmds.h
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\driver\cpu\br23\asm\clock.h
+	"typedef.h"
+	"clock_hw.h"
+	"asm/clock_define.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\driver\cpu\br23\asm\clock_hw.h
+	"typedef.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\driver\cpu\br23\asm\clock_define.h
+
+1697873278 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\key\key_driver.c
+	"device/key_driver.h"
+	"system/event.h"
+	"system/init.h"
+	"iokey.h"
+	"adkey.h"
+	"slidekey.h"
+	"irkey.h"
+	"touch_key.h"
+	"system/timer.h"
+	"asm/power_interface.h"
+	"app_config.h"
+	"rdec_key.h"
+	"tone_player.h"
+	"irSensor/ir_manage.h"
+	"debug.h"
+	"asm/ctmu.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\init.h
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\device\slidekey.h
+	"typedef.h"
+	"device/device.h"
+	"asm/adc_api.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\device\irkey.h
+	"typedef.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\device\touch_key.h
+	"typedef.h"
+	"asm/plcnt.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\driver\cpu\br23\asm\plcnt.h
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\timer.h
+	"typedef.h"
+	"generic/list.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\driver\cpu\br23\asm\power_interface.h
+	"generic/typedef.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\device\rdec_key.h
+	"typedef.h"
+	"asm/rdec.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\driver\cpu\br23\asm\rdec.h
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\debug.h
+	"asm/cpu.h"
+	"generic/typedef.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\driver\cpu\br23\asm\ctmu.h
+	"typedef.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\access.c
+	"adaptation.h"
+	"mesh.h"
+	"adv.h"
+	"net.h"
+	"lpn.h"
+	"transport.h"
+	"access.h"
+	"foundation.h"
+	"mesh_log.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\adaptation\adaptation.h
+	"api/basic_depend.h"
+	"generic/list.h"
+	"generic/jiffies.h"
+	"misc/byteorder.h"
+	"misc/slist.h"
+	"api/sig_mesh_api.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\api\basic_depend.h
+	"generic/typedef.h"
+	"adapter/include/common/sys_timer.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\btctrler\adapter\include\common\sys_timer.h
+	"generic/sys_time.h"
+	"generic/typedef.h"
+	"generic/list.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\adaptation\misc\byteorder.h
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\adaptation\misc\slist.h
+	"misc/list_gen.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\adaptation\misc\list_gen.h
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\api\sig_mesh_api.h
+	"api/basic_depend.h"
+	"api/mesh_config.h"
+	"kernel/atomic_h.h"
+	"api/access.h"
+	"api/main.h"
+	"api/proxy.h"
+	"api/cfg_cli.h"
+	"api/cfg_srv.h"
+	"api/health_cli.h"
+	"api/health_srv.h"
+	"api/cdb.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\api\mesh_config.h
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\adaptation\kernel\atomic_h.h
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\api\access.h
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\api\main.h
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\api\proxy.h
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\api\cfg_cli.h
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\api\cfg_srv.h
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\api\health_cli.h
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\api\health_srv.h
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\api\cdb.h
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\mesh.h
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\adv.h
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\net.h
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\lpn.h
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\transport.h
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\access.h
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\foundation.h
+	"net/buf.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\net\buf.h
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\adaptation\mesh_log.h
+	"system/debug.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\adaptation\ble_core\adv_core.c
+	"adaptation.h"
+	"net/buf.h"
+	"adv.h"
+	"timer.h"
+	"ble/hci_ll.h"
+	"os/os_cpu.h"
+	"btstack/bluetooth.h"
+	"mesh_log.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\btctrler\ble\hci_ll.h
+	<stdint.h>
+	<stdlib.h>
+	<stdarg.h>
+	"typedef.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\btstack\bluetooth.h
+	"typedef.h"
+	"le/ble_data_types.h"
+	"le/ble_api.h"
+	"le/le_user.h"
+	"le/att.h"
+	"le/gatt.h"
+	"le/sm.h"
+	"btstack_event.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\btstack\le\ble_data_types.h
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\btstack\le\ble_api.h
+	"typedef.h"
+	"btstack/btstack_typedef.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\btstack\btstack_typedef.h
+	"typedef.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\btstack\le\le_user.h
+	"typedef.h"
+	"btstack/btstack_typedef.h"
+	"ble_api.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\btstack\le\att.h
+	"typedef.h"
+	"btstack/btstack_typedef.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\btstack\le\gatt.h
+	"typedef.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\btstack\le\sm.h
+	"typedef.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\btstack\btstack_event.h
+	"btstack/btstack_typedef.h"
+	<stdint.h>
+	"le/gatt.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\adaptation\ble_core\gatt_core.c
+	"adaptation.h"
+	"proxy.h"
+	"ble/hci_ll.h"
+	"btstack/bluetooth.h"
+	"mesh_log.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\proxy.h
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\adaptation\ble_core\hci_core.c
+	"adaptation.h"
+	"bluetooth.h"
+	"ble/hci_ll.h"
+	"mesh_log.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\adaptation\ble_core\scan_core.c
+	"adaptation.h"
+	"ble/hci_ll.h"
+	"btstack/bluetooth.h"
+	"mesh_log.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\adaptation\kernel\atomic_c.c
+	"adaptation.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\adaptation\kernel\kernel_work.c
+	"adaptation.h"
+	"system/timer.h"
+	"mesh_log.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\adaptation\storage.c
+	"adaptation.h"
+	"vm.h"
+	"mesh_log.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\device\vm.h
+	"ioctl.h"
+	"device/device.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\generic\ioctl.h
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\adaptation\utils.c
+	"adaptation.h"
+	"mesh_log.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\adv.c
+	"adaptation.h"
+	"net/buf.h"
+	"adv.h"
+	"net.h"
+	"foundation.h"
+	"beacon.h"
+	"prov.h"
+	"proxy.h"
+	"mesh_log.h"
+	"system/malloc.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\beacon.h
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\prov.h
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\api\sig_mesh_api.c
+	"adaptation.h"
+	"net/buf.h"
+	"sig_mesh/access.h"
+	"mesh_log.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\beacon.c
+	"adaptation.h"
+	"adv.h"
+	"mesh.h"
+	"net.h"
+	"prov.h"
+	"crypto.h"
+	"beacon.h"
+	"foundation.h"
+	"mesh_log.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\crypto.h
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\cdb.c
+	"adaptation.h"
+	"mesh.h"
+	"net.h"
+	"settings.h"
+	"mesh_log.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\settings.h
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\cfg_cli.c
+	"adaptation.h"
+	"net.h"
+	"foundation.h"
+	"mesh_log.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\cfg_srv.c
+	"adaptation.h"
+	"mesh.h"
+	"adv.h"
+	"net.h"
+	"lpn.h"
+	"transport.h"
+	"crypto.h"
+	"access.h"
+	"beacon.h"
+	"proxy.h"
+	"foundation.h"
+	"friend.h"
+	"settings.h"
+	"mesh_log.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\friend.h
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\crypto.c
+	"adaptation.h"
+	<tinycrypt/constants.h>
+	<tinycrypt/utils.h>
+	<tinycrypt/aes.h>
+	<tinycrypt/cmac_mode.h>
+	<tinycrypt/ccm_mode.h>
+	"mesh.h"
+	"crypto.h"
+	"net/buf.h"
+	"mesh_log.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\tinycrypt\include\tinycrypt\constants.h
+	<stdbool.h>
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\tinycrypt\include\tinycrypt\utils.h
+	<stdint.h>
+	<stddef.h>
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\tinycrypt\include\tinycrypt\aes.h
+	<stdint.h>
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\tinycrypt\include\tinycrypt\cmac_mode.h
+	<tinycrypt/aes.h>
+	<stddef.h>
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\tinycrypt\include\tinycrypt\ccm_mode.h
+	<tinycrypt/aes.h>
+	<stddef.h>
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\friend.c
+	"adaptation.h"
+	"crypto.h"
+	"adv.h"
+	"mesh.h"
+	"net.h"
+	"transport.h"
+	"access.h"
+	"foundation.h"
+	"friend.h"
+	"mesh_log.h"
+	"system/malloc.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\health_cli.c
+	"adaptation.h"
+	"net.h"
+	"foundation.h"
+	"mesh_log.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\health_srv.c
+	"adaptation.h"
+	"mesh.h"
+	"adv.h"
+	"net.h"
+	"transport.h"
+	"access.h"
+	"foundation.h"
+	"mesh_log.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\lpn.c
+	"adaptation.h"
+	"crypto.h"
+	"adv.h"
+	"mesh.h"
+	"net.h"
+	"transport.h"
+	"access.h"
+	"beacon.h"
+	"foundation.h"
+	"lpn.h"
+	"mesh_log.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\main.c
+	"adaptation.h"
+	"adv.h"
+	"prov.h"
+	"net.h"
+	"beacon.h"
+	"lpn.h"
+	"friend.h"
+	"transport.h"
+	"access.h"
+	"foundation.h"
+	"proxy.h"
+	"settings.h"
+	"mesh.h"
+	"mesh_log.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\net.c
+	"adaptation.h"
+	"crypto.h"
+	"adv.h"
+	"mesh.h"
+	"net.h"
+	"lpn.h"
+	"friend.h"
+	"proxy.h"
+	"transport.h"
+	"access.h"
+	"foundation.h"
+	"beacon.h"
+	"settings.h"
+	"prov.h"
+	"mesh_log.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\net\buf.c
+	"adaptation.h"
+	"net/buf.h"
+	"adv.h"
+	"mesh_log.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\prov.c
+	"adaptation.h"
+	"crypto.h"
+	"adv.h"
+	"mesh.h"
+	"net.h"
+	"access.h"
+	"foundation.h"
+	"proxy.h"
+	"prov.h"
+	"settings.h"
+	"mesh_log.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\proxy.c
+	"adaptation.h"
+	"mesh.h"
+	"adv.h"
+	"net.h"
+	"prov.h"
+	"beacon.h"
+	"foundation.h"
+	"access.h"
+	"proxy.h"
+	"crypto.h"
+	"mesh_log.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\settings.c
+	"adaptation.h"
+	"net.h"
+	"crypto.h"
+	"transport.h"
+	"access.h"
+	"foundation.h"
+	"proxy.h"
+	"settings.h"
+	"mesh_log.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\tinycrypt\source\aes_encrypt.c
+	<tinycrypt/aes.h>
+	<tinycrypt/utils.h>
+	<tinycrypt/constants.h>
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\tinycrypt\source\cmac_mode.c
+	<tinycrypt/aes.h>
+	<tinycrypt/cmac_mode.h>
+	<tinycrypt/constants.h>
+	<tinycrypt/utils.h>
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\tinycrypt\source\utils.c
+	<tinycrypt/utils.h>
+	<tinycrypt/constants.h>
+	<string.h>
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\sig_mesh\transport.c
+	"adaptation.h"
+	"crypto.h"
+	"adv.h"
+	"mesh.h"
+	"net.h"
+	"lpn.h"
+	"friend.h"
+	"access.h"
+	"foundation.h"
+	"settings.h"
+	"transport.h"
+	"mesh_log.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\update\testbox_update.c
+	"update_loader_download.h"
+	"update.h"
+	"btctrler_task.h"
+	"app_config.h"
+	"lib_profile_cfg.h"
+	"bt_profile_cfg.h"
+	"smartbox/smartbox_task.h"
+	"system/debug.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\update\update_loader_download.h
+	"typedef.h"
+	"system/task.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\task.h
+	"os/os_api.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\update\update.h
+	"typedef.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\btctrler\btctrler_task.h
+	"typedef.h"
+	"system/task.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\config\include\bt_profile_cfg.h
+	"app_config.h"
+	"btcontroller_modules.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\btctrler\btcontroller_modules.h
+	"hci_transport.h"
+	"btcontroller_mode.h"
+	"ble/hci_ll.h"
+	"classic/hci_lmp.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\btctrler\hci_transport.h
+	"generic/typedef.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\btctrler\classic\hci_lmp.h
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\update\update.c
+	"update.h"
+	"update_loader_download.h"
+	"asm/crc16.h"
+	"asm/wdt.h"
+	"os/os_api.h"
+	"app_config.h"
+	"cpu.h"
+	"syscfg_id.h"
+	"vm.h"
+	"btcontroller_modules.h"
+	"system/includes.h"
+	"uart_update.h"
+	"dual_bank_updata_api.h"
+	"smartbox_extra_flash_opt.h"
+	"ui/ui_api.h"
+	"rcsp_user_update.h"
+	"rcsp_adv_user_update.h"
+	"custom_cfg.h"
+	"update_tws.h"
+	"system/debug.h"
+	"tone_player.h"
+	"audio_config.h"
+	"asm/pwm_led.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\driver\cpu\br23\asm\crc16.h
+	"typedef.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\driver\cpu\br23\asm\wdt.h
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\syscfg_id.h
+	"typedef.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\includes.h
+	"init.h"
+	"event.h"
+	"malloc.h"
+	"spinlock.h"
+	"task.h"
+	"timer.h"
+	"wait.h"
+	"app_core.h"
+	"app_msg.h"
+	"database.h"
+	"fs/fs.h"
+	"power_manage.h"
+	"syscfg_id.h"
+	"bank_switch.h"
+	"generic/includes.h"
+	"device/includes.h"
+	"asm/includes.h"
+	"device/sdio_host_init.h"
+	"crypto_toolbox/crypto.h"
+	"crypto_toolbox/Crypto_hash.h"
+	"crypto_toolbox/hmac.h"
+	"crypto_toolbox/sha256.h"
+	"crypto_toolbox/bigint.h"
+	"crypto_toolbox/bigint_impl.h"
+	"crypto_toolbox/ecdh.h"
+	"crypto_toolbox/micro-ecc/uECC_new.h"
+	"crypto_toolbox/micro-ecc/uECC.h"
+	"crypto_toolbox/aes_cmac.h"
+	"crypto_toolbox/rijndael.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\spinlock.h
+	"typedef.h"
+	"cpu.h"
+	"irq.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\wait.h
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\app_core.h
+	"typedef.h"
+	"generic/list.h"
+	"system/event.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\app_msg.h
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\database.h
+	"typedef.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\fs\fs.h
+	"generic/typedef.h"
+	"generic/list.h"
+	"generic/ioctl.h"
+	"generic/atomic.h"
+	"system/task.h"
+	"system/malloc.h"
+	"system/sys_time.h"
+	"stdarg.h"
+	"fs_file_name.h"
+	"sdfile.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\sys_time.h
+	"typedef.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\fs\fs_file_name.h
+	"generic/typedef.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\fs\sdfile.h
+	"typedef.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\power_manage.h
+	"generic/typedef.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\bank_switch.h
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\generic\includes.h
+	"errno-base.h"
+	"typedef.h"
+	"ascii.h"
+	"atomic.h"
+	"ioctl.h"
+	"cpu.h"
+	"gpio.h"
+	"irq.h"
+	"jiffies.h"
+	"list.h"
+	"printf.h"
+	"rect.h"
+	"version.h"
+	"lbuf.h"
+	"lbuf_lite.h"
+	"circular_buf.h"
+	"index.h"
+	"debug_lite.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\generic\ascii.h
+	"typedef.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\generic\version.h
+	"typedef.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\generic\lbuf.h
+	"typedef.h"
+	"list.h"
+	"system/spinlock.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\generic\lbuf_lite.h
+	"typedef.h"
+	"list.h"
+	"system/spinlock.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\generic\circular_buf.h
+	"typedef.h"
+	"system/spinlock.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\generic\index.h
+	"typedef.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\generic\debug_lite.h
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\device\includes.h
+	"device.h"
+	"ioctl_cmds.h"
+	"key_driver.h"
+	"iokey.h"
+	"irkey.h"
+	"adkey.h"
+	"slidekey.h"
+	"touch_key.h"
+	"rdec_key.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\driver\cpu\br23\asm\includes.h
+	"asm/cpu.h"
+	"asm/crc16.h"
+	"asm/clock.h"
+	"asm/uart.h"
+	"asm/uart_dev.h"
+	"asm/gpio.h"
+	"asm/spiflash.h"
+	"asm/csfr.h"
+	"asm/power_interface.h"
+	"asm/efuse.h"
+	"asm/wdt.h"
+	"asm/timer.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\driver\cpu\br23\asm\uart.h
+	"device/uart.h"
+	"device/device.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\driver\device\uart.h
+	"typedef.h"
+	"device/device.h"
+	"generic/ioctl.h"
+	"system/task.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\driver\cpu\br23\asm\spiflash.h
+	"device/device.h"
+	"device/spiflash.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\driver\device\spiflash.h
+	"typedef.h"
+	"generic/list.h"
+	"generic/ioctl.h"
+	"device/device.h"
+	"system/task.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\driver\cpu\br23\asm\efuse.h
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\driver\cpu\br23\asm\timer.h
+	"typedef.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\driver\device\sdio_host_init.h
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\crypto_toolbox\crypto.h
+	"endian.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\crypto_toolbox\endian.h
+	"generic/typedef.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\crypto_toolbox\crypto_hash.h
+	"generic/typedef.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\crypto_toolbox\hmac.h
+	"crypto.h"
+	"sha256.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\crypto_toolbox\sha256.h
+	"crypto.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\crypto_toolbox\bigint.h
+	"bigint_impl.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\crypto_toolbox\bigint_impl.h
+	"generic/typedef.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\crypto_toolbox\ecdh.h
+	"bigint_impl.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\crypto_toolbox\micro-ecc\uecc_new.h
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\crypto_toolbox\micro-ecc\uecc.h
+	<stdint.h>
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\crypto_toolbox\aes_cmac.h
+	<stdint.h>
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\crypto_toolbox\rijndael.h
+	<stdint.h>
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\update\uart_update.h
+	"typedef.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\update\dual_bank_updata_api.h
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\third_party_profile\common\custom_cfg.h
+	"typedef.h"
+	<string.h>
+	"app_config.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\include\update_tws.h
+	"app_config.h"
+	"system/event.h"
+	"update_loader_download.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\driver\cpu\br23\asm\pwm_led.h
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\mesh\api\mesh_config_common.c
+	"app_config.h"
+	"bt_common.h"
+	"api/sig_mesh_api.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\common\include\bt_common.h
+	<stdint.h>
+	"app_config.h"
+	"lib_profile_cfg.h"
+	"bt_profile_cfg.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\mesh\api\model_api.c
+	"btstack/bluetooth.h"
+	"system/includes.h"
+	"device/vm.h"
+	"bt_common.h"
+	"api/sig_mesh_api.h"
+	"model_api.h"
+	"debug.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\mesh\api\model_api.h
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\mesh\api\unix_timestamp.c
+	"unix_timestamp.h"
+	"debug.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\mesh\api\unix_timestamp.h
+	"typedef.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\mesh\app_idle.c
+	"system/app_core.h"
+	"system/includes.h"
+	"server/server_core.h"
+	"app_config.h"
+	"app_action.h"
+	"debug.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\server\server_core.h
+	"generic/typedef.h"
+	"system/task.h"
+	"spinlock.h"
+	"list.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\mesh\include\app_action.h
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\mesh\app_main.c
+	"system/includes.h"
+	"app_config.h"
+	"app_action.h"
+	"app_main.h"
+	"update.h"
+	"update_loader_download.h"
+	"debug.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\mesh\include\app_main.h
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\mesh\app_mesh.c
+	"system/app_core.h"
+	"system/includes.h"
+	"server/server_core.h"
+	"app_config.h"
+	"app_action.h"
+	"os/os_api.h"
+	"btcontroller_config.h"
+	"btctrler/btctrler_task.h"
+	"config/config_transport.h"
+	"btstack/avctp_user.h"
+	"btstack/btstack_task.h"
+	"bt_common.h"
+	"debug.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\btctrler\port\br23\btcontroller_config.h
+	"btcontroller_modules.h"
+	"ble/ll_config.h"
+	"classic/lmp_config.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\btctrler\ble\ll_config.h
+	<stdint.h>
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\btctrler\classic\lmp_config.h
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\config\config_transport.h
+	"typedef.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\btstack\avctp_user.h
+	"typedef.h"
+	"btstack_typedef.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\btstack\btstack_task.h
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\mesh\board\br23\board_ac635n_demo.c
+	"app_config.h"
+	"system/includes.h"
+	"asm/charge.h"
+	"device/key_driver.h"
+	"asm/power/p33.h"
+	"asm/iic_soft.h"
+	"media/includes.h"
+	"debug.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\driver\cpu\br23\asm\charge.h
+	"typedef.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\driver\cpu\br23\asm\power\p33.h
+	"typedef.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\driver\cpu\br23\asm\iic_soft.h
+	"generic/typedef.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\media\media_develop\media\includes.h
+	"media/audio_decoder.h"
+	"media/audio_encoder.h"
+	"media/mixer.h"
+	"media/automute.h"
+	"effectrs_sync.h"
+	"audio_resample.h"
+	"asm/cpu_includes.h"
+	"asm/dac.h"
+	"asm/audio_adc.h"
+	"asm/audio_src.h"
+	"asm/audio_spdif.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\media\media_develop\media\audio_decoder.h
+	"generic/typedef.h"
+	"generic/list.h"
+	"media/audio_base.h"
+	"media/audio_stream.h"
+	"os/os_api.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\media\media_develop\media\audio_base.h
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\media\audio_stream.h
+	"generic/includes.h"
+	"media/audio_base.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\media\media_develop\media\audio_encoder.h
+	"generic/typedef.h"
+	"generic/list.h"
+	"generic/circular_buf.h"
+	"media/audio_base.h"
+	"os/os_api.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\media\media_develop\media\mixer.h
+	"generic/typedef.h"
+	"generic/list.h"
+	"media/audio_stream.h"
+	"application/audio_buf_sync.h"
+	"mixer_cyclic.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\media\media_develop\media\application\audio_buf_sync.h
+	"asm/includes.h"
+	"generic/includes.h"
+	"system/includes.h"
+	"asm/cpu_includes.h"
+	"asm/audio_src.h"
+	"media/audio_decoder.h"
+	"media/audio_encoder.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\media\media_develop\media\cpu\br23\asm\cpu_includes.h
+	"asm/audio_adc.h"
+	"asm/audio_linein.h"
+	"asm/audio_src.h"
+	"dac.h"
+	"asm/hw_eq.h"
+	"audio_sync.h"
+	"audio_iis.h"
+	"pitchshifter/pitchshifter_api.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\media\media_develop\media\cpu\br23\asm\audio_adc.h
+	"generic/typedef.h"
+	"generic/list.h"
+	"generic/atomic.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\media\media_develop\media\cpu\br23\asm\audio_linein.h
+	"generic/typedef.h"
+	"asm/audio_adc.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\media\media_develop\media\cpu\br23\asm\audio_src.h
+	"media/audio_stream.h"
+	"audio_resample.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\media\media_develop\media\audio_resample.h
+	"typedef.h"
+	"media/audio_stream.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\media\media_develop\media\cpu\br23\asm\dac.h
+	"generic/typedef.h"
+	"generic/atomic.h"
+	"os/os_api.h"
+	"media/audio_stream.h"
+	"media/audio_cfifo.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\media\media_develop\media\audio_cfifo.h
+	"generic/list.h"
+	"typedef.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\media\media_develop\media\cpu\br23\asm\hw_eq.h
+	"generic/typedef.h"
+	"generic/list.h"
+	"os/os_api.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\media\media_develop\media\cpu\br23\asm\audio_sync.h
+	"media/audio_stream.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\media\media_develop\media\cpu\br23\asm\audio_iis.h
+	"generic/typedef.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\media\media_develop\media\cpu\br23\pitchshifter\pitchshifter_api.h
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\media\media_develop\media\mixer_cyclic.h
+	"generic/typedef.h"
+	"generic/list.h"
+	"media/audio_stream.h"
+	"application/audio_buf_sync.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\media\media_develop\media\automute.h
+	"generic/typedef.h"
+	"generic/list.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\media\media_develop\media\effectrs_sync.h
+	"generic/typedef.h"
+	"generic/list.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\media\media_develop\media\cpu\br23\asm\audio_spdif.h
+	"generic/typedef.h"
+	"generic/list.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\mesh\examples\aligenie_socket.c
+	"btstack/bluetooth.h"
+	"system/includes.h"
+	"bt_common.h"
+	"system/crypto_toolbox/sha256.h"
+	"api/sig_mesh_api.h"
+	"model_api.h"
+	"unix_timestamp.h"
+	"debug.h"
+	"feature_correct.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\mesh\api\feature_correct.h
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\mesh\examples\generic_onoff_client.c
+	"btstack/bluetooth.h"
+	"system/includes.h"
+	"bt_common.h"
+	"api/sig_mesh_api.h"
+	"model_api.h"
+	"debug.h"
+	"feature_correct.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\mesh\examples\generic_onoff_server.c
+	"btstack/bluetooth.h"
+	"system/includes.h"
+	"bt_common.h"
+	"api/sig_mesh_api.h"
+	"model_api.h"
+	"debug.h"
+	"feature_correct.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\mesh\examples\light_lightness_server.c
+	"btstack/bluetooth.h"
+	"system/includes.h"
+	"bt_common.h"
+	"api/sig_mesh_api.h"
+	"model_api.h"
+	"debug.h"
+	"feature_correct.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\mesh\examples\vendor_client.c
+	"btstack/bluetooth.h"
+	"system/includes.h"
+	"bt_common.h"
+	"api/sig_mesh_api.h"
+	"model_api.h"
+	"debug.h"
+	"feature_correct.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\mesh\examples\vendor_server.c
+	"btstack/bluetooth.h"
+	"system/includes.h"
+	"bt_common.h"
+	"api/sig_mesh_api.h"
+	"model_api.h"
+	"debug.h"
+	"feature_correct.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\mesh\lib_config\lib_btctrler_config.c
+	"app_config.h"
+	"system/includes.h"
+	"btcontroller_config.h"
+	"bt_common.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\mesh\lib_config\lib_btstack_config.c
+	"app_config.h"
+	"system/includes.h"
+	"btcontroller_config.h"
+	"bt_common.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\mesh\lib_config\lib_driver_config.c
+	"app_config.h"
+	"system/includes.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\mesh\lib_config\lib_profile_config.c
+	"system/includes.h"
+	"app_config.h"
+	"btcontroller_config.h"
+	"btstack/bt_profile_config.h"
+	"bt_common.h"
+	"btstack/avctp_user.h"
+	"debug.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\btstack\bt_profile_config.h
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\mesh\lib_config\lib_system_config.c
+	"app_config.h"
+	"system/includes.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\mesh\lib_config\lib_update_config.c
+	"app_config.h"
+	"system/includes.h"
+	"update_loader_download.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\mesh\log_config.c
+	"system/includes.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\mesh\mshmdl\generic_level_srv.c
+	"btstack/bluetooth.h"
+	"system/includes.h"
+	"bt_common.h"
+	"api/sig_mesh_api.h"
+	"model_api.h"
+	"debug.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\mesh\mshmdl\generic_onoff_cli.c
+	"btstack/bluetooth.h"
+	"system/includes.h"
+	"bt_common.h"
+	"api/sig_mesh_api.h"
+	"model_api.h"
+	"debug.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\mesh\mshmdl\generic_onoff_srv.c
+	"btstack/bluetooth.h"
+	"system/includes.h"
+	"bt_common.h"
+	"api/sig_mesh_api.h"
+	"model_api.h"
+	"debug.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\mesh\mshmdl\generic_power_onoff_srv.c
+	"btstack/bluetooth.h"
+	"system/includes.h"
+	"bt_common.h"
+	"api/sig_mesh_api.h"
+	"model_api.h"
+	"debug.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\mesh\mshmdl\lightness_srv.c
+	"btstack/bluetooth.h"
+	"system/includes.h"
+	"bt_common.h"
+	"api/sig_mesh_api.h"
+	"model_api.h"
+	"debug.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\mesh\user_cfg.c
+	"app_config.h"
+	"user_cfg.h"
+	"fs.h"
+	"string.h"
+	"system/includes.h"
+	"vm.h"
+	"btcontroller_config.h"
+	"app_main.h"
+	"debug.h"
+
+1697436167 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\system\user_cfg.h
+	"typedef.h"
+	"app_config.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\apps\mesh\version.c
+	"system/includes.h"
+	"generic/log.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\cpu\br23\adc_api.c
+	"typedef.h"
+	"asm/clock.h"
+	"asm/adc_api.h"
+	"timer.h"
+	"init.h"
+	"asm/efuse.h"
+	"irq.h"
+	"asm/power/p33.h"
+	"asm/power_interface.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\cpu\br23\charge.c
+	"asm/clock.h"
+	"timer.h"
+	"asm/power/p33.h"
+	"asm/charge.h"
+	"uart.h"
+	"device/device.h"
+	"asm/power_interface.h"
+	"system/event.h"
+	"asm/efuse.h"
+	"gpio.h"
+	"app_config.h"
+	"debug.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\cpu\br23\chargestore.c
+	"generic/typedef.h"
+	"generic/gpio.h"
+	"asm/power/p33.h"
+	"asm/hwi.h"
+	"asm/gpio.h"
+	"asm/clock.h"
+	"asm/chargestore.h"
+	"update.h"
+	"app_config.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\driver\cpu\br23\asm\chargestore.h
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\cpu\br23\ctmu.c
+	"app_config.h"
+	"asm/ctmu.h"
+	"asm/gpio.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\cpu\br23\iic_hw.c
+	"asm/iic_hw.h"
+	"system/generic/gpio.h"
+	"system/generic/log.h"
+	"asm/clock.h"
+	"asm/cpu.h"
+	"update.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\driver\cpu\br23\asm\iic_hw.h
+	"system/generic/typedef.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\cpu\br23\iic_soft.c
+	"asm/iic_soft.h"
+	"generic/gpio.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\cpu\br23\led_spi.c
+	"system/includes.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\cpu\br23\ledc_test.c
+	"system/includes.h"
+	"audio_spectrum.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\cpu\br23\mcpwm.c
+	"asm/mcpwm.h"
+	"asm/clock.h"
+	"asm/gpio.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\driver\cpu\br23\asm\mcpwm.h
+	"typedef.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\cpu\br23\port_wkup.c
+	"typedef.h"
+	"irq.h"
+	"asm/gpio.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\cpu\br23\pwm_led.c
+	"generic/gpio.h"
+	"asm/includes.h"
+	"asm/power/p33.h"
+	"asm/pwm_led.h"
+	"system/timer.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\cpu\br23\setup.c
+	"asm/includes.h"
+	"asm/wdt.h"
+	"asm/debug.h"
+	"asm/efuse.h"
+	"asm/power/p33.h"
+	"system/task.h"
+	"timer.h"
+	"system/init.h"
+	"system/includes.h"
+	"app_config.h"
+	"gpio.h"
+	"debug.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\driver\cpu\br23\asm\debug.h
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\cpu\br23\spi.c
+	"system/debug.h"
+	"generic/gpio.h"
+	"asm/clock.h"
+	"asm/spi.h"
+	"update.h"
+
+1697436166 d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\include_lib\driver\cpu\br23\asm\spi.h
+	"typedef.h"
+	"generic/ioctl.h"
+
+1697436166 source:d:\项目资料\耀祥\时序器\zd0371-230802-时序器-蓝牙mp3\yaoxiang_8_relas_with_mp3\cpu\br23\uart_dev.c
+	"asm/clock.h"
+	"asm/uart_dev.h"
+	"asm/cpu.h"
+	"generic/gpio.h"
+	"spinlock.h"
+

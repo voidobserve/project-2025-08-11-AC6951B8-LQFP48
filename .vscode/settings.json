@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "app_config.h": "c",
+        "errno-base.h": "c",
+        "string.h": "c"
+    }
+}
