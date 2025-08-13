@@ -9,6 +9,8 @@
 #include "chgbox_ctrl.h"
 #include "update_loader_download.h"
 
+#include "../../user_app/ac_detection/ac_detection.h"
+
 
 extern void setup_arch();
 extern int audio_dec_init();
@@ -135,7 +137,7 @@ void mp3key_light_gpio_init(void)
 
 static void app_init()
 {
-   printf("app_init");
+    printf("app_init\n");
     int update;
 
     do_early_initcall();
@@ -148,7 +150,6 @@ static void app_init()
     do_module_initcall();
     do_late_initcall();
 
-
     audio_enc_init();
     audio_dec_init();
 
@@ -156,11 +157,11 @@ static void app_init()
 // ---------- 耀祥时序器  ---------
 
 
-
-
-    Uart0_Init(); //耀祥串口0  功率计
+    // Uart0_Init(); //耀祥串口0  功率计
     Uart1_Init(); //耀祥串口1  向下一级
     Uart2_Init(); //耀祥串口2  连接PC
+
+    ac_detection_init();
 
     power_light_gpio_init();
     mp3key_light_gpio_init();
@@ -171,13 +172,16 @@ static void app_init()
     read_flash_sequencers_status_init();
     extern void lcd1621_init(void);
     lcd1621_init();
-    set_open_machine_flag();   //上电开机
+    set_open_machine_flag();   // 上电初始化
    
     extern void  lcdseg_handle(void);
     extern void  printf_current_time(void);
     extern void relay_timer_handle(void);
     sys_timer_add(NULL, lcdseg_handle, 10);  //
     sys_timer_add(NULL, relay_timer_handle, 1000); 
+    sys_hi_timer_add(NULL, ac_detection_update, 2);
+    sys_hi_timer_add(NULL, ac_voltage_update, 500);
+
 // ---------- 耀祥时序器 END --------
 
 

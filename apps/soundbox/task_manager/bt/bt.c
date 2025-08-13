@@ -923,6 +923,14 @@ int bt_key_event_handler(struct sys_event *event)
 
    extern u8 loc_screen_f;
 
+    // if (key_event == KEW_PROW_IO)
+    // {
+    //     printf("KEW_PROW_IO press\n");
+    // }
+
+    // printf("key event: %u\n", key_event);
+    // printf("key value: %lu\n", key_value);
+
     if(key_event == KEW_PROW_IO  && sequencers.timeing_flag == 1)
     {
         sequencers.timeing_flag = 0;

@@ -44,7 +44,7 @@
 //*********************************************************************************//
 //                                 UART配置                                        //
 //*********************************************************************************//
-#define TCFG_UART0_ENABLE					DISABLE_THIS_MOUDLE                     //串口打印模块使能
+#define TCFG_UART0_ENABLE					ENABLE_THIS_MOUDLE                     //串口打印模块使能
 #define TCFG_UART0_RX_PORT					NO_CONFIG_PORT                         //串口接收脚配置（用于打印可以选择NO_CONFIG_PORT）
 #define TCFG_UART0_TX_PORT  				IO_PORT_DP                            //串口发送脚配置
 #define TCFG_UART0_BAUDRATE  				1000000                                //串口波特率配置
@@ -140,7 +140,7 @@
 //                                 USB 配置                                        //
 //*********************************************************************************//
 #define TCFG_PC_ENABLE                      TCFG_APP_PC_EN//PC模块使能
-#define TCFG_UDISK_ENABLE					ENABLE_THIS_MOUDLE//U盘模块使能
+#define TCFG_UDISK_ENABLE					DISABLE_THIS_MOUDLE//U盘模块使能
 #define TCFG_OTG_USB_DEV_EN                 BIT(0)//USB0 = BIT(0)  USB1 = BIT(1)
 
 #include "usb_std_class_def.h"
@@ -559,6 +559,7 @@ DAC硬件上的连接方式,可选的配置：
 
 
 #define TCFG_LOWPOWER_VDDIOM_LEVEL			VDDIOM_VOL_34V
+// #define TCFG_LOWPOWER_VDDIOM_LEVEL			VDDIOM_VOL_30V // 
 
 #define TCFG_LOWPOWER_VDDIOW_LEVEL			VDDIOW_VOL_28V               //弱VDDIO等级配置
 

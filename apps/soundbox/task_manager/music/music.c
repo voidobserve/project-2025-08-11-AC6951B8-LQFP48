@@ -580,7 +580,7 @@ static int music_key_event_opr(struct sys_event *event)
     int ret = true;
     int err = MUSIC_PLAYER_ERR_NULL;
     u8 vol, auto_next_dev;
-    int mode ;
+    int mode;
     char *logo = NULL;
 
     int msg[2];
@@ -597,7 +597,7 @@ static int music_key_event_opr(struct sys_event *event)
 
     extern u8 loc_screen_f;
   
-
+    // printf("%s\n", __func__);
 
     if(key_event == KEW_PROW_IO  && sequencers.timeing_flag == 1)
     { 
@@ -877,7 +877,7 @@ static int music_sys_event_handler(struct sys_event *event)
     char *evt_logo = NULL;
     switch (event->type) {
     case SYS_KEY_EVENT:
-music_key_event_opr(event);
+        music_key_event_opr(event);
 
         // return music_key_event_opr(event);
 

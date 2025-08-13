@@ -30,7 +30,7 @@ extern void app_status_handler(enum APP_STATUS status);
 extern SEQUENCER sequencers;
 
 extern void adkey_master_on_off(void);
-extern void adkey_16way_on_off(int keyevent);
+// extern void adkey_16way_on_off(int keyevent);
 //*----------------------------------------------------------------------------*/
 /**@brief    sleep 按键消息入口
   @param    无

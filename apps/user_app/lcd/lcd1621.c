@@ -178,6 +178,7 @@ void lcd1621_init(void)
     gpio_direction_output(lcd_light, 0); //背光灯默认关
 
 
+    // gpio_direction_output(lcd_light, 1); // 打开背光 -- 测试时使用
 }
 
 unsigned char dis_data[32];
@@ -382,8 +383,8 @@ void make_alphabet(u8 p)
 void lcd_open_frame(void)
 {
 
-	unsigned char i;
-    static u16 cnt_ = 20000;
+	// unsigned char i;
+    // static u16 cnt_ = 20000;
     gpio_direction_output(lcd_light, 1); //背光灯
     lcd1621_write_cmd(LCD_ON_1621);
  
@@ -542,8 +543,8 @@ extern u8 split_open_time[8][4];
 extern u8 split_close_time[8][4];
 extern u8 chose_relays_num;
 
-unsigned char voltage_array[3] = {0};
-unsigned char  power_array[4] = {0};
+unsigned char voltage_array[3] = {0}; // 存放要显示的电压
+unsigned char  power_array[4] = {0}; // 存放要显示的功率
 
 extern SEQUENCER  sequencers;
 u16 update_cnt = 0;
@@ -579,6 +580,7 @@ u8 BT_CONNECT_STATE = 0;
 //  LCD屏显示处理  10ms执行一次
 void  lcdseg_handle(void)
 {
+#if 1
 
 	if(sequencers.on_ff == 1)
 	{
@@ -1062,7 +1064,11 @@ void  lcdseg_handle(void)
 		clean_dis(clrbit(SEG_S1));
 	}
 
+#endif
 
+	// lcd_open_frame(); // 测试用 -- 打开背光，显示边框
+	// check_lcd_display(); // 测试用 
+	// printf("test \n");
 
 	lcd1621_write_data(dis_data, 16);
 

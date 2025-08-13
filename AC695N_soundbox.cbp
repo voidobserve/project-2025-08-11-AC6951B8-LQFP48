@@ -1706,6 +1706,10 @@
 		<Unit filename="apps/soundbox/version.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="apps/user_app/ac_detection/ac_detection.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="apps/user_app/ac_detection/ac_detection.h" />
 		<Unit filename="apps/user_app/hlw8032/HLW8032.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -2279,10 +2283,6 @@
 		<Unit filename="include_lib/update/uart_update.h" />
 		<Unit filename="include_lib/update/update.h" />
 		<Unit filename="include_lib/update/update_loader_download.h" />
-		<Extensions>
-			<code_completion />
-			<envvars />
-			<debugger />
-		</Extensions>
+		<Extensions />
 	</Project>
 </CodeBlocks_project_file>

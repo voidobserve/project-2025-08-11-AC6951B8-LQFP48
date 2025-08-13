@@ -257,7 +257,7 @@ int key_driver_init(void)
     extern struct key_driver_para adkey_scan_para;
     err = adkey_init(&adkey_data);
     if (err == 0) {
-        printf("key_driver_init");
+        // printf("key_driver_init");
         sys_s_hi_timer_add((void *)&adkey_scan_para, key_driver_scan, adkey_scan_para.scan_time); //注册按键扫描定时器
     }
 // //第二组

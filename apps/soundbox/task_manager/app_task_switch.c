@@ -64,7 +64,7 @@ int app_key_event_remap(struct sys_event *e)
 #if TCFG_ADKEY_ENABLE
 
         msg = adkey_event_to_msg(app_curr_task, key);   
-        printf("adkey_event_to_msg msg = %d", msg);
+        printf("adkey_event_to_msg msg = %d", msg);   
 #endif
         break;
 

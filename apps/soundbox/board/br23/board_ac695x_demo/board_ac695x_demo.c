@@ -974,14 +974,21 @@ extern void cfg_file_parse(u8 idx);
 void board_init()
 {
     board_power_init();
+
+    // printf("===========%d , %s\n ", __LINE__, __func__);
     adc_vbg_init();
+
+    // printf("===========%d , %s\n ", __LINE__, __func__);
     adc_init();
+
+    // printf("===========%d , %s\n ", __LINE__, __func__);
     cfg_file_parse(0);
 #if TCFG_CHARGE_ENABLE
     extern int charge_init(const struct dev_node *node, void *arg);
     charge_init(NULL, (void *)&charge_data);
 #endif
 
+    // printf("===========%d , %s\n ", __LINE__, __func__);
     if (!get_charge_online_flag()) {
         check_power_on_voltage();      //电量监测
     }
@@ -1006,14 +1013,23 @@ void board_init()
     sdfile_rec_ops_init();
 #endif
 
-	dev_manager_init();
-	board_devices_init();
-	if(get_charge_online_flag()){
+    // printf("===========%d , %s\n ", __LINE__, __func__);
+	
+    dev_manager_init();
+    
+    // printf("===========%d , %s\n ", __LINE__, __func__);
+	
+    board_devices_init();
+    
+    // printf("===========%d , %s\n ", __LINE__, __func__);
+	
+    if(get_charge_online_flag()){
     	power_set_mode(PWR_LDO15);
 	}else{
     	power_set_mode(TCFG_LOWPOWER_POWER_SEL);
 	}
 
+    // printf("===========%d , %s\n ", __LINE__, __func__);
     //针对硅mic要输出1给mic供电(按实际使用情况配置)
     /* if(!adc_data.mic_capless){ */
         /* gpio_set_pull_up(IO_PORTA_04, 0); */
@@ -1031,7 +1047,7 @@ void board_init()
 #ifdef AUDIO_PCM_DEBUG
 	uartSendInit();
 #endif
-
+    // printf("===========%d , %s\n ", __LINE__, __func__);
 #if TCFG_RTC_ENABLE
     alarm_init();
 #endif
@@ -1155,17 +1171,31 @@ void board_power_init(void)
 {
     log_info("Power init : %s", __FILE__);
 
+    // printf("\n 1158  ================ \n");
+
     power_init(&power_param);
+
+    
+    // printf("\n 1163  ================ \n");
 
     power_set_callback(TCFG_LOWPOWER_LOWPOWER_SEL, sleep_enter_callback, sleep_exit_callback, board_set_soft_poweroff);
 
+
+    // printf("\n 1168  ================ \n");
+
     power_keep_dacvdd_en(0);
+
+    // printf("\n 1172  ================ \n");
+
+
     P33_CON_SET(P3_PINR_CON, 0, 1, 0);
     /* power_wakeup_init(&wk_param); */
 
 #if (!TCFG_IOKEY_ENABLE && !TCFG_ADKEY_ENABLE)
     charge_check_and_set_pinr(0);
 #endif
+
+    // printf("board_power_init end \n");
 }
 
 static void board_power_wakeup_init(void)

@@ -645,6 +645,8 @@ void read_flash_sequencers_status_init(void)
         printf("read sequencers data");
     }
 
+    printf("read_flash_sequencers_status_init\n");
+
 }
 
 void save_sequencers_data_area3(void)
