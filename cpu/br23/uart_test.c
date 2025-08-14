@@ -597,7 +597,7 @@ void fd_relay_state(void);
 
 extern void relay_off_on(u32 relay_led, u8 relay_number);
 extern unsigned char voltage_array[3];
-extern unsigned char  power_array[4];
+// extern unsigned char  power_array[4];
 
 //功率计
 void parse_uart0_data(u8* RxBuf, u32 Len) // 分析串口 数据

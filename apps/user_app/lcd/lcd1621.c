@@ -389,12 +389,13 @@ void lcd_open_frame(void)
     lcd1621_write_cmd(LCD_ON_1621);
  
    	make_dis(SEG_S5); // "V"
-   	make_dis(SEG_S6); // "W"
+   	// make_dis(SEG_S6); // "W"
    	make_dis(SEG_T1); // 继电器通道边框
    	make_dis(SEG_T);   // 音符
-	make_dis(SEG_S2);   // 交流
-	make_dis(SEG_X2);  //
-	make_dis(SEG_X3);
+	// make_dis(SEG_S2);   // 交流
+
+	// make_dis(SEG_X2);  // 锁符号的下半部分
+	// make_dis(SEG_X3); // 锁符号的上半部分
 
 // 数字
 make_num(1,8);
@@ -606,16 +607,18 @@ void  lcdseg_handle(void)
 				clean_num(1);clean_num(2);clean_num(3);   //清
 				clean_num(4);clean_num(5);clean_num(6); clean_num(7);  // 清屏
  				clean_dis(clrbit(SEG_S3));clean_dis(clrbit(SEG_S4)); // 请 ' " 
+
+				clean_dis(clrbit(SEG_S6)); // 关闭"W""
 				
 				//电压
 				make_num(1,voltage_array[0]);
 				make_num(2,voltage_array[1]);
 				make_num(3,voltage_array[2]);
-				//功率
-				make_num(4,power_array[0]);
-				make_num(5,power_array[1]);
-				make_num(6,power_array[2]);
-				make_num(7,power_array[3]);
+				// //功率
+				// make_num(4,power_array[0]);
+				// make_num(5,power_array[1]);
+				// make_num(6,power_array[2]);
+				// make_num(7,power_array[3]);
 			}
 
 		}

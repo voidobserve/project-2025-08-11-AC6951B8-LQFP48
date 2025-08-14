@@ -19,14 +19,14 @@
 
 //继电器的灯
 #define sw0_led IO_PORTA_12   //总开关
-#define sw1_led IO_PORTC_07   //继电器
-#define sw2_led IO_PORTA_00
-#define sw3_led IO_PORTA_01
-#define sw4_led IO_PORTA_02
-#define sw5_led IO_PORTA_03
-#define sw6_led IO_PORTA_04
-#define sw7_led IO_PORTA_05
-#define sw8_led IO_PORTA_06
+#define sw1_led IO_PORTA_06   //继电器
+#define sw2_led IO_PORTA_05
+#define sw3_led IO_PORTA_04
+#define sw4_led IO_PORTA_03
+#define sw5_led IO_PORTA_02
+#define sw6_led IO_PORTA_01
+#define sw7_led IO_PORTA_00
+#define sw8_led IO_PORTC_07
 
 
 //mp3按键的灯
@@ -36,7 +36,7 @@
 
 
 #define ADKEY_MAX_NUM 11   //支持AD按键的数量
- 
+
 
 struct adkey_platform_data {
     u8 enable;
@@ -58,15 +58,15 @@ struct adkey_rtcvdd_platform_data {
 };
 
 //ADKEY API:
-extern int adkey_init(const struct adkey_platform_data *adkey_data);
-extern int adkey_init2(const struct adkey_platform_data *adkey_data);
+extern int adkey_init(const struct adkey_platform_data* adkey_data);
+extern int adkey_init2(const struct adkey_platform_data* adkey_data);
 extern u8 ad_get_key_value(void);
 extern u8 ad_get_key2_value(void);
 
 
 
 //RTCVDD ADKEY API:
-extern int adkey_rtcvdd_init(const struct adkey_rtcvdd_platform_data *rtcvdd_adkey_data);
+extern int adkey_rtcvdd_init(const struct adkey_rtcvdd_platform_data* rtcvdd_adkey_data);
 extern u8 adkey_rtcvdd_get_key_value(void);
 
 #endif

@@ -161,7 +161,7 @@ static void app_init()
     Uart1_Init(); //耀祥串口1  向下一级
     Uart2_Init(); //耀祥串口2  连接PC
 
-    ac_detection_init();
+    ac_detection_init(); // 交流电电压检测 
 
     power_light_gpio_init();
     mp3key_light_gpio_init();

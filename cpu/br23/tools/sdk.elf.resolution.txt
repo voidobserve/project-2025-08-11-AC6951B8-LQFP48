@@ -3851,7 +3851,11 @@ obj/Release/apps/soundbox/version.o
 -r=obj/Release/apps/soundbox/version.o,app_version_check,pl
 obj/Release/apps/user_app/ac_detection/ac_detection.o
 -r=obj/Release/apps/user_app/ac_detection/ac_detection.o,update_filter_samples_buff,pl
--r=obj/Release/apps/user_app/ac_detection/ac_detection.o,get_filter_adc_val,pl
+-r=obj/Release/apps/user_app/ac_detection/ac_detection.o,get_max_adc_val_in_samples,pl
+-r=obj/Release/apps/user_app/ac_detection/ac_detection.o,samples_init,pl
+-r=obj/Release/apps/user_app/ac_detection/ac_detection.o,ac_voltage_buff_init,pl
+-r=obj/Release/apps/user_app/ac_detection/ac_detection.o,ac_voltage_buff_add_new_val,pl
+-r=obj/Release/apps/user_app/ac_detection/ac_detection.o,ac_voltage_buff_get_filter_val,pl
 -r=obj/Release/apps/user_app/ac_detection/ac_detection.o,ac_detection_init,pl
 -r=obj/Release/apps/user_app/ac_detection/ac_detection.o,adc_add_sample_ch,l
 -r=obj/Release/apps/user_app/ac_detection/ac_detection.o,gpio_set_die,l
