@@ -37,40 +37,71 @@ extern void adkey_master_on_off(void);
   @return   1、消息已经处理，不需要发送到common  0、消息发送到common处理
   @note
  */
-/*----------------------------------------------------------------------------*/
-static int sleep_key_event_opr(struct sys_event *event)
+ /*----------------------------------------------------------------------------*/
+static int sleep_key_event_opr(struct sys_event* event)
 {
     int ret = false;
     int err = 0;
-// //使用處理事件/消息的思想，不是鍵值
+    // //使用處理事件/消息的思想，不是鍵值
     int key_event = event->u.key.event;
     int key_value = event->u.key.value;
     log_i("key_event:%d \n", key_event);
- 
 
-
-    if(key_event == KEW_PROW_IO  && sequencers.timeing_flag == 1)
-    { 
+    if (key_event == KEW_PROW_IO && sequencers.timeing_flag == 1)
+    {
         sequencers.timeing_flag = 0;
         adkey_master_on_off();
 
-        app_task_switch_to(APP_BT_TASK);
+        // app_task_switch_to(APP_BT_TASK);
     }
     //单击红外按键 仅开机
-    if( key_event == KEY1_IR_CLICK && sequencers.timeing_flag == 1)
+    if (key_event == KEY1_IR_CLICK && sequencers.timeing_flag == 1)
     {
         sequencers.timeing_flag = 0;
         irkey_16way_click(KEY1_IR_CLICK);
-        app_task_switch_to(APP_BT_TASK);
+        // app_task_switch_to(APP_BT_TASK);
     }
 
 
-    if(key_event == APP_CMD)  //上位机读取当前状态
+    if (key_event == APP_CMD)  //上位机读取当前状态
     {
         fd_relay_state();
     }
-    
 
+    extern u8 loc_screen_f;
+    //单击ad按键  开机状态且计时完成
+    if (sequencers.on_ff == DEVICE_ON && sequencers.timeing_flag == 1)
+    {
+        if (loc_screen_f == 0)
+        {
+            adkey_16way_on_off(key_event);
+
+        }
+    }
+
+    //长按ad按键 开机状态且计时完成
+    if (sequencers.on_ff == DEVICE_ON && sequencers.timeing_flag == 1)
+    {
+        if (loc_screen_f)
+        {
+            if (key_event == KEY9_AD_LONG)
+            {
+                loc_screen_f = 0;
+                dis_lock_screen();
+            }
+        }
+        else
+        {
+            adkey_16way_long(key_event);
+        }
+
+    }
+
+    //单击红外按键
+    if (sequencers.timeing_flag == 1)
+    {
+        irkey_16way_click(key_event);
+    }
 
     return ret;
 }
@@ -106,46 +137,50 @@ static void sleep_task_close()
 /**@brief    sleep 模式活跃状态 所有消息入口
    @param    无
    @return   1、当前消息已经处理，不需要发送comomon
-   			 0、当前消息不是linein处理的，发送到common统一处理
+             0、当前消息不是linein处理的，发送到common统一处理
    @note
 */
 /*----------------------------------------------------------------------------*/
-static int sleep_sys_event_handler(struct sys_event *event)
+static int sleep_sys_event_handler(struct sys_event* event)
 {
-    const char *logo = NULL;
+    const char* logo = NULL;
     int err = 0;
     switch (event->type)
     {
 
-        case SYS_KEY_EVENT:   //博朗时序器AD按键处理消息
-        
-            sleep_key_event_opr(event);
-            return 1;
+    case SYS_KEY_EVENT:   //博朗时序器AD按键处理消息
 
-        case SYS_DEVICE_EVENT:
-            ///所有设备相关的事件不能返回true， 必须给留给公共处理的地方响应设备上下线
-            // printf("event->arg = %d",event->arg);
-            switch ((u32)event->arg) 
+        sleep_key_event_opr(event);
+        return 1;
+
+    case SYS_DEVICE_EVENT:
+        ///所有设备相关的事件不能返回true， 必须给留给公共处理的地方响应设备上下线
+        // printf("event->arg = %d",event->arg);
+        switch ((u32)event->arg)
+        {
+        case DRIVER_EVENT_FROM_SD0:
+        case DRIVER_EVENT_FROM_SD1:
+        case DRIVER_EVENT_FROM_SD2:
+            logo = (char*)event->u.dev.value;
+        case DEVICE_EVENT_FROM_OTG:
+            if ((u32)event->arg == DEVICE_EVENT_FROM_OTG)
             {
-                case DRIVER_EVENT_FROM_SD0:
-                case DRIVER_EVENT_FROM_SD1:
-                case DRIVER_EVENT_FROM_SD2:
-                    logo = (char *)event->u.dev.value;
-                case DEVICE_EVENT_FROM_OTG:
-                    if ((u32)event->arg == DEVICE_EVENT_FROM_OTG) 
-                    {
-                        logo = (char *)"udisk0";
-                    }
-                    if (event->u.dev.event == DEVICE_EVENT_IN) 
-                    {
-                    } else if (event->u.dev.event == DEVICE_EVENT_OUT) 
-                    {
-                    }
-                    break;//DEVICE_EVENT_FROM_USB_HOST
-            }//switch((u32)event->arg)
-            break;//SYS_DEVICE_EVENT
-        default:
-            break;;
+                logo = (char*)"udisk0";
+            }
+            if (event->u.dev.event == DEVICE_EVENT_IN)
+            {
+            }
+            else if (event->u.dev.event == DEVICE_EVENT_OUT)
+            {
+            }
+            break;//DEVICE_EVENT_FROM_USB_HOST
+        }//switch((u32)event->arg)
+        break;//SYS_DEVICE_EVENT
+
+
+
+
+
     }//switch (event->type)
 
     return false;
@@ -165,28 +200,28 @@ void app_sleep_task()
     int msg[32];
     sleep_task_start();  //sleep模式初始化
 
- 
+
 
     while (1) {
         //while循环一次会阻塞在这里等待msg
         printf("sleep");
-    
-        gpio_direction_output(pwoer_light,1); //电源指示灯
+
+        gpio_direction_output(pwoer_light, 1); //电源指示灯
         // check_relay_start();
         app_task_get_msg(msg, ARRAY_SIZE(msg), 1);
         // printf("msg[0] = %d",msg[0]);
         switch (msg[0])
         {
-            case APP_MSG_SYS_EVENT:
-                // printf("msg[1] = %d",msg[1]);
-                if (sleep_sys_event_handler((struct sys_event *)(&msg[1])) == false)  //AD按键执行sys event
-                {
-                    app_default_event_deal((struct sys_event *)(&msg[1]));    //由common统一处理
-                    // printf("common handle");
-                }
-                break;
-            default:
-                break;
+        case APP_MSG_SYS_EVENT:
+            // printf("msg[1] = %d",msg[1]);
+            if (sleep_sys_event_handler((struct sys_event*)(&msg[1])) == false)  //AD按键执行sys event
+            {
+                app_default_event_deal((struct sys_event*)(&msg[1]));    //由common统一处理
+                // printf("common handle");
+            }
+            break;
+        default:
+            break;
         }
 
         if (app_task_exitting()) {

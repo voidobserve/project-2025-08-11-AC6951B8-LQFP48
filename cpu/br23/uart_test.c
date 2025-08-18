@@ -291,6 +291,8 @@ static void uart_event_handler(struct sys_event* e)
 
     //串口2  耀祥时序器设备与PC端通信
 #if UART_EN_NUM == 2
+
+    // 串口2接收缓冲区溢出
     if ((u32)e->arg == DEVICE_EVENT_FROM_UART2_RX_OVERFLOW) {
         if (e->u.dev.event == DEVICE_EVENT_CHANGE) {
             printf("uart event: DEVICE_EVENT_FROM_UART_RX_OVERFLOW\n");
@@ -306,6 +308,8 @@ static void uart_event_handler(struct sys_event* e)
 
         }
     }
+
+    // 串口2接收超时
     if ((u32)e->arg == DEVICE_EVENT_FROM_UART2_RX_OUTTIME) {
         if (e->u.dev.event == DEVICE_EVENT_CHANGE) {
             printf("uart event:DEVICE_EVENT_FROM_UART_RX_OUTTIME\n");
@@ -624,7 +628,7 @@ void parse_uart0_data(u8* RxBuf, u32 Len) // 分析串口 数据
 
 
 /**
- * @brief 串口1测试
+ * @brief 处理串口1接收到的数据
  *
  */
 void parse_uart1_data(u8* RxBuf, u32 Len)
@@ -632,7 +636,7 @@ void parse_uart1_data(u8* RxBuf, u32 Len)
     u8 data_len = Len;
     memset(&uart1_data, 0, Len);
     memcpy(&uart1_data, RxBuf, Len);
-    Uart2_Send_Tx(uart1_data, data_len);
+    Uart2_Send_Tx(uart1_data, data_len);// 转发数据
 }
 
 
@@ -663,7 +667,7 @@ void parse_uart2_data(u8* RxBuf, u32 Len)
 
     printf("sequencers.timeing_flag  = %d", sequencers.timeing_flag);
     printf("sequencers.addr = %d", sequencers.addr);
-    //开关设备  无条件转发给级联设备
+    // 开关设备  无条件转发给级联设备
     if (uart2_data[0] == 0xFE && uart2_data[1] == 0x03 && uart2_data[2] == 0x00 && uart2_data[3] == 0x02 && data_len == 6)
     {
         if (uart2_data[4] == 0x01 && sequencers.timeing_flag == 1 && sequencers.on_ff == DEVICE_OFF)   //开机
@@ -704,7 +708,10 @@ void parse_uart2_data(u8* RxBuf, u32 Len)
 
             Uart1_Send_Tx(uart2_data, data_len); //通过串口1发送给级联设备
 
-            app_task_switch_to(APP_BT_TASK);
+
+
+            // 关闭了音乐播放功能，不切换到蓝牙
+            // app_task_switch_to(APP_BT_TASK); // 
         }
         else if (uart2_data[4] == 0x00 && sequencers.timeing_flag == 1 && sequencers.on_ff == DEVICE_ON)
         {
@@ -713,7 +720,9 @@ void parse_uart2_data(u8* RxBuf, u32 Len)
             read_flash_sequencers_status_init();
             find_max_time(DEVICE_OFF);
             close_timer_test(); //关机时序
-            make_dis(SEG_T);   // 音符
+
+            // make_dis(SEG_T);   // 音符
+
             //实现开启设备，软件界面变化
             fb_information[0] = 0xFE;
             fb_information[1] = 0X04;
@@ -725,17 +734,17 @@ void parse_uart2_data(u8* RxBuf, u32 Len)
             Uart2_Send_Tx(fb_information, 7);  //应答返回
 
 
-            Uart1_Send_Tx(uart2_data, data_len);
+            Uart1_Send_Tx(uart2_data, data_len); //通过串口1发送给级联设备
 
         }
-    }
+    }// 开关设备  无条件转发给级联设备
 
-    if (sequencers.timeing_flag == 1)  //所有指令在AD计时时，不执行
+    // 所有指令在AD计时时，不执行下面的代码块
+    if (sequencers.timeing_flag == 1)  
     {
         //设置地址  不需要转发
         if (uart2_data[0] == 0xFE && uart2_data[1] == 0x04 && uart2_data[2] == 0x00 && uart2_data[3] == 0x01)
         {
-
             printf("set address");
             u8 next_address = 0;
             u8 fb_uart1[7];
@@ -1121,10 +1130,26 @@ static void close_timer_isr(void)
         gpio_direction_output(IO_PORTC_03, 0);
         gpio_direction_output(IO_PORTC_02, 0);
 
+        /*
+            测试发现，在显示交流电电压界面的时候，按下关机，
+            有概率关不掉交流电电压的显示，即使背光已经关闭，
+            还是会有显示交流电电压，此时这个电压不会更新
+        */
+        // 清除显示的第 1 ~ 7位数字
+        clean_num(1);clean_num(2);clean_num(3);
+        clean_num(4);clean_num(5);clean_num(6); clean_num(7);
+        clean_dis(SEG_S5); // 符号 V
+        clean_dis(SEG_T1); // 继电器通道边框
+        clean_dis(SEG_T);
+
+
         //关机 关闭 LCD屏的背光灯
         gpio_direction_output(IO_PORTA_07, 0);
 
+
+
         lcd1621_off();  //关闭lcd显示
+        // printf("lcd1621 off\n");
 
         app_task_switch_to(APP_SLEEP_TASK);
 
@@ -1326,23 +1351,23 @@ u8 split_open_time[8][4] = { 0 };
 u8 split_close_time[8][4] = { 0 };
 extern u16 blink_cnt;
 
-void make_lock_screen(void)
-{
-    clean_dis(clrbit(SEG_X3));
-    make_dis(SEG_X1);  //
-    make_dis(SEG_X2);
+// void make_lock_screen(void)
+// {
+//     clean_dis(clrbit(SEG_X3));
+//     make_dis(SEG_X1);  //
+//     make_dis(SEG_X2);
 
-}
-
-
-void dis_lock_screen(void)
-{
-    clean_dis(clrbit(SEG_X1));
-    make_dis(SEG_X2);  //
-    make_dis(SEG_X3);
+// }
 
 
-}
+// void dis_lock_screen(void)
+// {
+//     clean_dis(clrbit(SEG_X1));
+//     make_dis(SEG_X2);  //
+//     make_dis(SEG_X3);
+
+
+// }
 
 
 #define pre_tiem 20
@@ -1374,7 +1399,7 @@ u8 set_countdown_close_sec[8][2] = { 0 };
 
 
 u8 m_arry[8] = { 0,0,0,0,0,0,0,0 };
-u8 show_e_f = 0;
+u8 show_e_f = 0; // 显示e还是显示f
 /**
  * @brief AD按键控制16路继电器
  *
@@ -2562,6 +2587,7 @@ void adkey_16way_long(int keyevent)
 {
     static u8 m = 0;
 
+#if 0    
     switch (keyevent)
     {
 
@@ -2571,20 +2597,22 @@ void adkey_16way_long(int keyevent)
         clean_num(1);clean_num(2);clean_num(3);   //清
         clean_num(4);clean_num(5);clean_num(6); clean_num(7);  // 清屏
 
+        printf("m_arry[chose_relays_num] == %u\n", (u16)m_arry[chose_relays_num]);
+
         //设置开机时间模式
         if (m_arry[chose_relays_num] == 0)
         {
             time_unit = 0; //确保每次进入，都是从分开始
             make_alphabet(0);  make_num(3, chose_relays_num + 1);  // 显示P  对应的第几个继电器
             clean_dis(clrbit(SEG_S5)); clean_dis(clrbit(SEG_S6)); // 关闭“V”"W""
-            make_dis(SEG_S3);make_dis(SEG_S4);  // 显示 “ " ”  “ ' ”
+            // make_dis(SEG_S3);make_dis(SEG_S4);  // 显示 “ " ”  “ ' ”
             split_open_minute_second();
 
             //读取当前的开机时序数据
-            make_num(4, split_open_time[chose_relays_num][0]);
-            make_num(5, split_open_time[chose_relays_num][1]);
-            make_num(6, split_open_time[chose_relays_num][2]);
-            make_num(7, split_open_time[chose_relays_num][3]);
+            // make_num(4, split_open_time[chose_relays_num][0]);
+            // make_num(5, split_open_time[chose_relays_num][1]);
+            // make_num(6, split_open_time[chose_relays_num][2]);
+            // make_num(7, split_open_time[chose_relays_num][3]);
 
             lcd_now_state = open_dev_time;
             m_arry[chose_relays_num] = 1;
@@ -2594,15 +2622,15 @@ void adkey_16way_long(int keyevent)
         {
             time_unit = 0;
             make_alphabet(1);  make_num(3, chose_relays_num + 1);
-            make_dis(SEG_S3);make_dis(SEG_S4);  // 显 ’ ”
+            // make_dis(SEG_S3);make_dis(SEG_S4);  // 显 ’ ”
             clean_dis(clrbit(SEG_S5)); clean_dis(clrbit(SEG_S6));  // 清 v w
             split_close_minute_second();
 
             //读取当前的关机时序
-            make_num(4, split_close_time[chose_relays_num][0]);
-            make_num(5, split_close_time[chose_relays_num][1]);
-            make_num(6, split_close_time[chose_relays_num][2]);
-            make_num(7, split_close_time[chose_relays_num][3]);
+            // make_num(4, split_close_time[chose_relays_num][0]);
+            // make_num(5, split_close_time[chose_relays_num][1]);
+            // make_num(6, split_close_time[chose_relays_num][2]);
+            // make_num(7, split_close_time[chose_relays_num][3]);
 
             lcd_now_state = close_dev_time;
             m_arry[chose_relays_num] = 2;
@@ -2641,7 +2669,7 @@ void adkey_16way_long(int keyevent)
             write_relays_countdown_open_time();     // 记录8路定时开的时间
             write_relays_countdown_close_time();    // 记录8路定时关的时间
 
-            clean_dis(clrbit(SEG_S3));clean_dis(clrbit(SEG_S4));  // 清 ” ‘
+            // clean_dis(clrbit(SEG_S3));clean_dis(clrbit(SEG_S4));  // 清 ” ‘
             make_dis(SEG_S5); // "V"
             make_dis(SEG_S6); // "W"
             lcd_now_state = show_power;
@@ -2663,14 +2691,14 @@ void adkey_16way_long(int keyevent)
             time_unit = 0; //确保每次进入，都是从分开始
             make_alphabet(0);  make_num(3, chose_relays_num + 1);  // 显示P  对应的第几个继电器
             clean_dis(clrbit(SEG_S5)); clean_dis(clrbit(SEG_S6)); // 关闭“V”"W""
-            make_dis(SEG_S3);make_dis(SEG_S4);  // 显示 “ " ”  “ ' ”
+            // make_dis(SEG_S3);make_dis(SEG_S4);  // 显示 “ " ”  “ ' ”
             split_open_minute_second();
 
             //读取当前的开机时序数据
-            make_num(4, split_open_time[chose_relays_num][0]);
-            make_num(5, split_open_time[chose_relays_num][1]);
-            make_num(6, split_open_time[chose_relays_num][2]);
-            make_num(7, split_open_time[chose_relays_num][3]);
+            // make_num(4, split_open_time[chose_relays_num][0]);
+            // make_num(5, split_open_time[chose_relays_num][1]);
+            // make_num(6, split_open_time[chose_relays_num][2]);
+            // make_num(7, split_open_time[chose_relays_num][3]);
 
             lcd_now_state = open_dev_time;
             m_arry[chose_relays_num] = 1;
@@ -2680,15 +2708,15 @@ void adkey_16way_long(int keyevent)
         {
             time_unit = 0;
             make_alphabet(1);  make_num(3, chose_relays_num + 1);
-            make_dis(SEG_S3);make_dis(SEG_S4);
-            clean_dis(clrbit(SEG_S5)); clean_dis(clrbit(SEG_S6));
+            // make_dis(SEG_S3);make_dis(SEG_S4); 
+            clean_dis(clrbit(SEG_S5)); clean_dis(clrbit(SEG_S6)); // 清 v w
             split_close_minute_second();
 
             //读取当前的关机时序
-            make_num(4, split_close_time[chose_relays_num][0]);
-            make_num(5, split_close_time[chose_relays_num][1]);
-            make_num(6, split_close_time[chose_relays_num][2]);
-            make_num(7, split_close_time[chose_relays_num][3]);
+            // make_num(4, split_close_time[chose_relays_num][0]);
+            // make_num(5, split_close_time[chose_relays_num][1]);
+            // make_num(6, split_close_time[chose_relays_num][2]);
+            // make_num(7, split_close_time[chose_relays_num][3]);
 
             lcd_now_state = close_dev_time;
             m_arry[chose_relays_num] = 2;
@@ -2748,15 +2776,15 @@ void adkey_16way_long(int keyevent)
             time_unit = 0; //确保每次进入，都是从分开始
             make_alphabet(0);  make_num(3, chose_relays_num + 1);  // 显示P  对应的第几个继电器
             clean_dis(clrbit(SEG_S5)); clean_dis(clrbit(SEG_S6)); // 关闭“V”"W""
-            make_dis(SEG_S3);make_dis(SEG_S4);  // 显示 “ " ”  “ ' ”
+            // make_dis(SEG_S3);make_dis(SEG_S4);  // 显示 “ " ”  “ ' ”
             split_open_minute_second();
 
 
             //读取当前的开机时序数据
-            make_num(4, split_open_time[chose_relays_num][0]);
-            make_num(5, split_open_time[chose_relays_num][1]);
-            make_num(6, split_open_time[chose_relays_num][2]);
-            make_num(7, split_open_time[chose_relays_num][3]);
+            // make_num(4, split_open_time[chose_relays_num][0]);
+            // make_num(5, split_open_time[chose_relays_num][1]);
+            // make_num(6, split_open_time[chose_relays_num][2]);
+            // make_num(7, split_open_time[chose_relays_num][3]);
 
             lcd_now_state = open_dev_time;
             m_arry[chose_relays_num] = 1;
@@ -2766,15 +2794,15 @@ void adkey_16way_long(int keyevent)
         {
             time_unit = 0;
             make_alphabet(1);  make_num(3, chose_relays_num + 1);
-            make_dis(SEG_S3);make_dis(SEG_S4);
+            // make_dis(SEG_S3);make_dis(SEG_S4); // 显示 “ " ”  “ ' ”
             clean_dis(clrbit(SEG_S5)); clean_dis(clrbit(SEG_S6));
             split_close_minute_second();
 
             //读取当前的关机时序
-            make_num(4, split_close_time[chose_relays_num][0]);
-            make_num(5, split_close_time[chose_relays_num][1]);
-            make_num(6, split_close_time[chose_relays_num][2]);
-            make_num(7, split_close_time[chose_relays_num][3]);
+            // make_num(4, split_close_time[chose_relays_num][0]);
+            // make_num(5, split_close_time[chose_relays_num][1]);
+            // make_num(6, split_close_time[chose_relays_num][2]);
+            // make_num(7, split_close_time[chose_relays_num][3]);
 
             lcd_now_state = close_dev_time;
             m_arry[chose_relays_num] = 2;
@@ -2835,14 +2863,14 @@ void adkey_16way_long(int keyevent)
             time_unit = 0; //确保每次进入，都是从分开始
             make_alphabet(0);  make_num(3, chose_relays_num + 1);  // 显示P  对应的第几个继电器
             clean_dis(clrbit(SEG_S5)); clean_dis(clrbit(SEG_S6)); // 关闭“V”"W""
-            make_dis(SEG_S3);make_dis(SEG_S4);  // 显示 “ " ”  “ ' ”
+            // make_dis(SEG_S3);make_dis(SEG_S4);  // 显示 “ " ”  “ ' ”
             split_open_minute_second();
 
             //读取当前的开机时序数据
-            make_num(4, split_open_time[chose_relays_num][0]);
-            make_num(5, split_open_time[chose_relays_num][1]);
-            make_num(6, split_open_time[chose_relays_num][2]);
-            make_num(7, split_open_time[chose_relays_num][3]);
+            // make_num(4, split_open_time[chose_relays_num][0]);
+            // make_num(5, split_open_time[chose_relays_num][1]);
+            // make_num(6, split_open_time[chose_relays_num][2]);
+            // make_num(7, split_open_time[chose_relays_num][3]);
 
             lcd_now_state = open_dev_time;
             m_arry[chose_relays_num] = 1;
@@ -2852,15 +2880,15 @@ void adkey_16way_long(int keyevent)
         {
             time_unit = 0;
             make_alphabet(1);  make_num(3, chose_relays_num + 1);
-            make_dis(SEG_S3);make_dis(SEG_S4);
+            // make_dis(SEG_S3);make_dis(SEG_S4); // 显示 “ " ”  “ ' ”
             clean_dis(clrbit(SEG_S5)); clean_dis(clrbit(SEG_S6));
             split_close_minute_second();
 
             //读取当前的关机时序
-            make_num(4, split_close_time[chose_relays_num][0]);
-            make_num(5, split_close_time[chose_relays_num][1]);
-            make_num(6, split_close_time[chose_relays_num][2]);
-            make_num(7, split_close_time[chose_relays_num][3]);
+            // make_num(4, split_close_time[chose_relays_num][0]);
+            // make_num(5, split_close_time[chose_relays_num][1]);
+            // make_num(6, split_close_time[chose_relays_num][2]);
+            // make_num(7, split_close_time[chose_relays_num][3]);
 
             lcd_now_state = close_dev_time;
             m_arry[chose_relays_num] = 2;
@@ -2920,15 +2948,15 @@ void adkey_16way_long(int keyevent)
             time_unit = 0; //确保每次进入，都是从分开始
             make_alphabet(0);  make_num(3, chose_relays_num + 1);  // 显示P  对应的第几个继电器
             clean_dis(clrbit(SEG_S5)); clean_dis(clrbit(SEG_S6)); // 关闭“V”"W""
-            make_dis(SEG_S3);make_dis(SEG_S4);  // 显示 “ " ”  “ ' ”
+            // make_dis(SEG_S3);make_dis(SEG_S4);  // 显示 “ " ”  “ ' ”
             split_open_minute_second();
 
 
             //读取当前的开机时序数据
-            make_num(4, split_open_time[chose_relays_num][0]);
-            make_num(5, split_open_time[chose_relays_num][1]);
-            make_num(6, split_open_time[chose_relays_num][2]);
-            make_num(7, split_open_time[chose_relays_num][3]);
+            // make_num(4, split_open_time[chose_relays_num][0]);
+            // make_num(5, split_open_time[chose_relays_num][1]);
+            // make_num(6, split_open_time[chose_relays_num][2]);
+            // make_num(7, split_open_time[chose_relays_num][3]);
 
             lcd_now_state = open_dev_time;
             m_arry[chose_relays_num] = 1;
@@ -2938,15 +2966,15 @@ void adkey_16way_long(int keyevent)
         {
             time_unit = 0;
             make_alphabet(1);  make_num(3, chose_relays_num + 1);
-            make_dis(SEG_S3);make_dis(SEG_S4);
+            // make_dis(SEG_S3);make_dis(SEG_S4); // 显示 “ " ”  “ ' ”
             clean_dis(clrbit(SEG_S5)); clean_dis(clrbit(SEG_S6));
             split_close_minute_second();
 
             //读取当前的关机时序
-            make_num(4, split_close_time[chose_relays_num][0]);
-            make_num(5, split_close_time[chose_relays_num][1]);
-            make_num(6, split_close_time[chose_relays_num][2]);
-            make_num(7, split_close_time[chose_relays_num][3]);
+            // make_num(4, split_close_time[chose_relays_num][0]);
+            // make_num(5, split_close_time[chose_relays_num][1]);
+            // make_num(6, split_close_time[chose_relays_num][2]);
+            // make_num(7, split_close_time[chose_relays_num][3]);
 
             lcd_now_state = close_dev_time;
             m_arry[chose_relays_num] = 2;
@@ -3007,15 +3035,15 @@ void adkey_16way_long(int keyevent)
             time_unit = 0; //确保每次进入，都是从分开始
             make_alphabet(0);  make_num(3, chose_relays_num + 1);  // 显示P  对应的第几个继电器
             clean_dis(clrbit(SEG_S5)); clean_dis(clrbit(SEG_S6)); // 关闭“V”"W""
-            make_dis(SEG_S3);make_dis(SEG_S4);  // 显示 “ " ”  “ ' ”
+            // make_dis(SEG_S3);make_dis(SEG_S4);  // 显示 “ " ”  “ ' ”
             split_open_minute_second();
 
 
             //读取当前的开机时序数据
-            make_num(4, split_open_time[chose_relays_num][0]);
-            make_num(5, split_open_time[chose_relays_num][1]);
-            make_num(6, split_open_time[chose_relays_num][2]);
-            make_num(7, split_open_time[chose_relays_num][3]);
+            // make_num(4, split_open_time[chose_relays_num][0]);
+            // make_num(5, split_open_time[chose_relays_num][1]);
+            // make_num(6, split_open_time[chose_relays_num][2]);
+            // make_num(7, split_open_time[chose_relays_num][3]);
 
             lcd_now_state = open_dev_time;
             m_arry[chose_relays_num] = 1;
@@ -3025,14 +3053,14 @@ void adkey_16way_long(int keyevent)
         {
             time_unit = 0;
             make_alphabet(1);  make_num(3, chose_relays_num + 1);
-            make_dis(SEG_S3);make_dis(SEG_S4);
+            // make_dis(SEG_S3);make_dis(SEG_S4); // 显示 “ " ”  “ ' ”
             clean_dis(clrbit(SEG_S5)); clean_dis(clrbit(SEG_S6));
             split_close_minute_second();
             //读取当前的关机时序
-            make_num(4, split_close_time[chose_relays_num][0]);
-            make_num(5, split_close_time[chose_relays_num][1]);
-            make_num(6, split_close_time[chose_relays_num][2]);
-            make_num(7, split_close_time[chose_relays_num][3]);
+            // make_num(4, split_close_time[chose_relays_num][0]);
+            // make_num(5, split_close_time[chose_relays_num][1]);
+            // make_num(6, split_close_time[chose_relays_num][2]);
+            // make_num(7, split_close_time[chose_relays_num][3]);
             lcd_now_state = close_dev_time;
             m_arry[chose_relays_num] = 2;
 
@@ -3091,15 +3119,15 @@ void adkey_16way_long(int keyevent)
             time_unit = 0; //确保每次进入，都是从分开始
             make_alphabet(0);  make_num(3, chose_relays_num + 1);  // 显示P  对应的第几个继电器
             clean_dis(clrbit(SEG_S5)); clean_dis(clrbit(SEG_S6)); // 关闭“V”"W""
-            make_dis(SEG_S3);make_dis(SEG_S4);  // 显示 “ " ”  “ ' ”
+            // make_dis(SEG_S3);make_dis(SEG_S4);  // 显示 “ " ”  “ ' ”
             split_open_minute_second();
 
 
             //读取当前的开机时序数据
-            make_num(4, split_open_time[chose_relays_num][0]);
-            make_num(5, split_open_time[chose_relays_num][1]);
-            make_num(6, split_open_time[chose_relays_num][2]);
-            make_num(7, split_open_time[chose_relays_num][3]);
+            // make_num(4, split_open_time[chose_relays_num][0]);
+            // make_num(5, split_open_time[chose_relays_num][1]);
+            // make_num(6, split_open_time[chose_relays_num][2]);
+            // make_num(7, split_open_time[chose_relays_num][3]);
             lcd_now_state = open_dev_time;
             m_arry[chose_relays_num] = 1;
         }
@@ -3108,15 +3136,15 @@ void adkey_16way_long(int keyevent)
         {
             time_unit = 0;
             make_alphabet(1);  make_num(3, chose_relays_num + 1);
-            make_dis(SEG_S3);make_dis(SEG_S4);
+            // make_dis(SEG_S3);make_dis(SEG_S4);// 显示 “ " ”  “ ' ”
             clean_dis(clrbit(SEG_S5)); clean_dis(clrbit(SEG_S6));
             split_close_minute_second();
 
             //读取当前的关机时序
-            make_num(4, split_close_time[chose_relays_num][0]);
-            make_num(5, split_close_time[chose_relays_num][1]);
-            make_num(6, split_close_time[chose_relays_num][2]);
-            make_num(7, split_close_time[chose_relays_num][3]);
+            // make_num(4, split_close_time[chose_relays_num][0]);
+            // make_num(5, split_close_time[chose_relays_num][1]);
+            // make_num(6, split_close_time[chose_relays_num][2]);
+            // make_num(7, split_close_time[chose_relays_num][3]);
 
             lcd_now_state = close_dev_time;
             m_arry[chose_relays_num] = 2;
@@ -3177,15 +3205,15 @@ void adkey_16way_long(int keyevent)
             time_unit = 0; //确保每次进入，都是从分开始
             make_alphabet(0);  make_num(3, chose_relays_num + 1);  // 显示P  对应的第几个继电器
             clean_dis(clrbit(SEG_S5)); clean_dis(clrbit(SEG_S6)); // 关闭“V”"W""
-            make_dis(SEG_S3);make_dis(SEG_S4);  // 显示 “ " ”  “ ' ”
+            // make_dis(SEG_S3);make_dis(SEG_S4);  // 显示 “ " ”  “ ' ”
             split_open_minute_second();
 
 
             //读取当前的开机时序数据
-            make_num(4, split_open_time[chose_relays_num][0]);
-            make_num(5, split_open_time[chose_relays_num][1]);
-            make_num(6, split_open_time[chose_relays_num][2]);
-            make_num(7, split_open_time[chose_relays_num][3]);
+            // make_num(4, split_open_time[chose_relays_num][0]);
+            // make_num(5, split_open_time[chose_relays_num][1]);
+            // make_num(6, split_open_time[chose_relays_num][2]);
+            // make_num(7, split_open_time[chose_relays_num][3]);
 
             lcd_now_state = open_dev_time;
             m_arry[chose_relays_num] = 1;
@@ -3195,15 +3223,15 @@ void adkey_16way_long(int keyevent)
         {
             time_unit = 0;
             make_alphabet(1);  make_num(3, chose_relays_num + 1);
-            make_dis(SEG_S3);make_dis(SEG_S4);
+            // make_dis(SEG_S3);make_dis(SEG_S4);// 显示 “ " ”  “ ' ”
             clean_dis(clrbit(SEG_S5)); clean_dis(clrbit(SEG_S6));
             split_close_minute_second();
 
             //读取当前的关机时序
-            make_num(4, split_close_time[chose_relays_num][0]);
-            make_num(5, split_close_time[chose_relays_num][1]);
-            make_num(6, split_close_time[chose_relays_num][2]);
-            make_num(7, split_close_time[chose_relays_num][3]);
+            // make_num(4, split_close_time[chose_relays_num][0]);
+            // make_num(5, split_close_time[chose_relays_num][1]);
+            // make_num(6, split_close_time[chose_relays_num][2]);
+            // make_num(7, split_close_time[chose_relays_num][3]);
 
             lcd_now_state = close_dev_time;
             m_arry[chose_relays_num] = 2;
@@ -3274,6 +3302,8 @@ void adkey_16way_long(int keyevent)
     default: break;
 
     }
+
+#endif
 }
 
 /**

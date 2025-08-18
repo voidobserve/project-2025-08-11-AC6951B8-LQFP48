@@ -50,15 +50,7 @@ u16 get_max_adc_val_in_samples(void)
     return max_adc_val;
 }
 
-
-void samples_init(u16 adc_val)
-{
-    u16 i = 0;
-    for (i = 0; i < SAMPLE_COUNT; i++)
-    {
-        samples[i] = adc_val;
-    }
-}
+ 
 
 void ac_voltage_buff_init(u16 ac_voltage)
 {
@@ -170,6 +162,12 @@ void ac_voltage_update(void)
 
     ac_voltage_buff_add_new_val(ac_voltage);
     ac_voltage = ac_voltage_buff_get_filter_val();
+
+    // 如果交流电电压小于90V，直接显示0V
+    if (ac_voltage < 90)
+    {
+        ac_voltage = 0;
+    }
 
     // 将采集好的电压值放到LCD显示对应的数组中
     extern void get_voltage_array(unsigned long p_v);
