@@ -913,8 +913,6 @@ int bt_key_event_handler(struct sys_event *event)
     int key_event = event->u.key.event;
     int key_value = event->u.key.value;
 
-
-
     log_debug("bt key_event:%d %d %d %d\n", key_event, key->value, key->event, key->init);
 
     if (bt_key_event_filter_after(key_event) == true) {
@@ -964,6 +962,7 @@ int bt_key_event_handler(struct sys_event *event)
         }
 
     }
+
     //单击红外按键
     if( sequencers.timeing_flag == 1)
     {

@@ -81,6 +81,10 @@ int app_key_event_remap(struct sys_event *e)
 
         msg = irkey_event_to_msg(app_curr_task, key);
         printf("irkey_event_to_msg msg = %d", msg);
+
+        printf("ir key val %x\n", key->value);
+        printf("app_curr_task %u\n", app_curr_task);
+
 #endif
         break;
     case KEY_DRIVER_TYPE_TOUCH:

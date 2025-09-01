@@ -4,6 +4,21 @@
 #include "board_config.h"
 #include "app_task.h"
 
+// // 定义红外按键键值
+// enum
+// {
+//     IR_KEY_ON_OFF = 0xA2, // 开机/关机按键
+//     IR_KEY_NUM_1 = 0x30, // 数字1
+//     IR_KEY_NUM_2 = 0x18,
+//     IR_KEY_NUM_3 = 0x7A,
+//     IR_KEY_NUM_4 = 0x10,
+//     IR_KEY_NUM_5 = 0x38,
+//     IR_KEY_NUM_6 = 0x5A,
+//     IR_KEY_NUM_7 = 0x42,
+//     IR_KEY_NUM_8 = 0x4A,
+// };
+
+
 #ifdef CONFIG_BOARD_AC695X_DEMO
 /***********************************************************
  *				bt 模式的 irkey table
@@ -12,22 +27,22 @@
 const u16 bt_key_ir_table[KEY_IR_NUM_MAX][KEY_EVENT_MAX] = {
     [69] = {
         KEY1_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
-    },
+    }, /* 开机/关机 */
     [70] = {
         KEY2_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
-    },
+    }, /*  */
     [71] = {
         KEY3_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
-    },
+    }, /*  */
     [68] = {
         KEY4_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
-    },
-    [64] = {
-        KEY5_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
-    },
-    [67] = {
-        KEY6_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
-    },
+    },/*  */
+    // [64] = {
+    //     KEY5_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
+    // },
+    // [67] = {
+    //     KEY6_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
+    // },
     [7] = {
         KEY7_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
     },
@@ -48,7 +63,7 @@ const u16 bt_key_ir_table[KEY_IR_NUM_MAX][KEY_EVENT_MAX] = {
     },
     [12] = {
         KEY13_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
-    },
+    }, /* 继电器 1 */
     [24] = {
         KEY14_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
     },
@@ -304,12 +319,12 @@ const u16 music_key_ir_table[KEY_IR_NUM_MAX][KEY_EVENT_MAX] = {
     [68] = {
         KEY4_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
     },
-    [64] = {
-        KEY5_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
-    },
-    [67] = {
-        KEY6_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
-    },
+    // [64] = {
+    //     KEY5_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
+    // },
+    // [67] = {
+    //     KEY6_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
+    // },
     [7] = {
         KEY7_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
     },
@@ -659,12 +674,12 @@ const u16 idle_key_ir_table[KEY_IR_NUM_MAX][KEY_EVENT_MAX] = {
     [68] = {
         KEY4_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
     },
-    [64] = {
-        KEY5_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
-    },
-    [67] = {
-        KEY6_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
-    },
+    // [64] = {
+    //     KEY5_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
+    // },
+    // [67] = {
+    //     KEY6_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
+    // },
     [7] = {
         KEY7_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
     },

@@ -668,9 +668,15 @@ void parse_uart2_data(u8* RxBuf, u32 Len)
     printf("sequencers.timeing_flag  = %d", sequencers.timeing_flag);
     printf("sequencers.addr = %d", sequencers.addr);
     // 开关设备  无条件转发给级联设备
-    if (uart2_data[0] == 0xFE && uart2_data[1] == 0x03 && uart2_data[2] == 0x00 && uart2_data[3] == 0x02 && data_len == 6)
+    if (uart2_data[0] == 0xFE &&
+        uart2_data[1] == 0x03 &&
+        uart2_data[2] == 0x00 &&
+        uart2_data[3] == 0x02 &&
+        data_len == 6)
     {
-        if (uart2_data[4] == 0x01 && sequencers.timeing_flag == 1 && sequencers.on_ff == DEVICE_OFF)   //开机
+        if (uart2_data[4] == 0x01 &&
+            sequencers.timeing_flag == 1 &&
+            sequencers.on_ff == DEVICE_OFF)   /* 开机 */
         {
             printf("open");
             sequencers.timeing_flag = 0;
@@ -713,8 +719,12 @@ void parse_uart2_data(u8* RxBuf, u32 Len)
             // 关闭了音乐播放功能，不切换到蓝牙
             // app_task_switch_to(APP_BT_TASK); // 
         }
-        else if (uart2_data[4] == 0x00 && sequencers.timeing_flag == 1 && sequencers.on_ff == DEVICE_ON)
+        else if (uart2_data[4] == 0x00 &&
+            sequencers.timeing_flag == 1 &&
+            sequencers.on_ff == DEVICE_ON)
         {
+            /* 关机 */
+
             printf("close");
             sequencers.timeing_flag = 0;
             read_flash_sequencers_status_init();
@@ -740,10 +750,13 @@ void parse_uart2_data(u8* RxBuf, u32 Len)
     }// 开关设备  无条件转发给级联设备
 
     // 所有指令在AD计时时，不执行下面的代码块
-    if (sequencers.timeing_flag == 1)  
+    if (sequencers.timeing_flag == 1)
     {
         //设置地址  不需要转发
-        if (uart2_data[0] == 0xFE && uart2_data[1] == 0x04 && uart2_data[2] == 0x00 && uart2_data[3] == 0x01)
+        if (uart2_data[0] == 0xFE &&
+            uart2_data[1] == 0x04 &&
+            uart2_data[2] == 0x00 &&
+            uart2_data[3] == 0x01)
         {
             printf("set address");
             u8 next_address = 0;
@@ -779,7 +792,12 @@ void parse_uart2_data(u8* RxBuf, u32 Len)
         }
 
         //查看本地地址   //不需要转发
-        if (uart2_data[0] == 0xFE && uart2_data[1] == 0x03 && uart2_data[2] == 0x00 && uart2_data[3] == 0x00 && uart2_data[4] == 0x00 && uart2_data[5] == 0xFF)
+        if (uart2_data[0] == 0xFE &&
+            uart2_data[1] == 0x03 &&
+            uart2_data[2] == 0x00 &&
+            uart2_data[3] == 0x00 &&
+            uart2_data[4] == 0x00 &&
+            uart2_data[5] == 0xFF)
         {
             printf("check address");
             fb_information[0] = 0xFE;
@@ -793,7 +811,9 @@ void parse_uart2_data(u8* RxBuf, u32 Len)
         }
 
         //1设置开机时序
-        if (uart2_data[0] == 0xFE && sequencers.addr == uart2_data[2] && uart2_data[3] == 0x04)
+        if (uart2_data[0] == 0xFE &&
+            sequencers.addr == uart2_data[2] &&
+            uart2_data[3] == 0x04)
         {
             printf("set open time ");
             // printf("sequencers.on_ff = %d",sequencers.on_ff);
@@ -821,7 +841,9 @@ void parse_uart2_data(u8* RxBuf, u32 Len)
         }
 
         //2设置关机时序
-        if (uart2_data[0] == 0xFE && sequencers.addr == uart2_data[2] && uart2_data[3] == 0x06)
+        if (uart2_data[0] == 0xFE &&
+            sequencers.addr == uart2_data[2] &&
+            uart2_data[3] == 0x06)
         {
             // read_flash_sequencers_status_init();
             sequencers.close_timeing = 0;
@@ -845,7 +867,10 @@ void parse_uart2_data(u8* RxBuf, u32 Len)
 
 
         //3查看开机时序
-        if (uart2_data[0] == 0xFE && uart2_data[1] == 0x03 && sequencers.addr == uart2_data[2] && uart2_data[3] == 0x03)
+        if (uart2_data[0] == 0xFE &&
+            uart2_data[1] == 0x03 &&
+            sequencers.addr == uart2_data[2] &&
+            uart2_data[3] == 0x03)
         {
 
             fb_information[0] = 0xFE;
@@ -865,7 +890,10 @@ void parse_uart2_data(u8* RxBuf, u32 Len)
 
 
         //4查看关机时序
-        if (uart2_data[0] == 0xFE && uart2_data[1] == 0x03 && sequencers.addr == uart2_data[2] && uart2_data[3] == 0x05)
+        if (uart2_data[0] == 0xFE &&
+            uart2_data[1] == 0x03 &&
+            sequencers.addr == uart2_data[2] &&
+            uart2_data[3] == 0x05)
         {
             fb_information[0] = 0xFE;
             fb_information[1] = sequencers.relay_number + 2;
@@ -884,7 +912,12 @@ void parse_uart2_data(u8* RxBuf, u32 Len)
 
 
         //5查看设备运行状态
-        if (uart2_data[0] == 0xFE && uart2_data[1] == 0x03 && sequencers.addr == uart2_data[2] && uart2_data[3] == 0x08 && uart2_data[4] == 0x00 && uart2_data[5] == 0xFF)
+        if (uart2_data[0] == 0xFE &&
+            uart2_data[1] == 0x03 &&
+            sequencers.addr == uart2_data[2] &&
+            uart2_data[3] == 0x08 &&
+            uart2_data[4] == 0x00 &&
+            uart2_data[5] == 0xFF)
         {
             printf("check status");
             fb_information[0] = 0xFE;
@@ -909,7 +942,11 @@ void parse_uart2_data(u8* RxBuf, u32 Len)
         if (sequencers.on_ff == DEVICE_ON)
         {
             //6供电控制
-            if (uart2_data[0] == 0xFE && uart2_data[1] == 0x03 && sequencers.addr == uart2_data[2] && uart2_data[3] != 0x00 && uart2_data[4] != 0x00)// && data_len == 6)
+            if (uart2_data[0] == 0xFE &&
+                uart2_data[1] == 0x03 &&
+                sequencers.addr == uart2_data[2] &&
+                uart2_data[3] != 0x00 &&
+                uart2_data[4] != 0x00)// && data_len == 6)
             {
                 printf("control");
                 u32 sw;
@@ -930,7 +967,10 @@ void parse_uart2_data(u8* RxBuf, u32 Len)
             }
 
             //7关联控制 即一台控制单元，由两个供电来同时控制，且为互斥
-            if (uart2_data[0] == 0xFE && uart2_data[1] == 0x04 && sequencers.addr == uart2_data[2] && uart2_data[3] == 0x07)
+            if (uart2_data[0] == 0xFE &&
+                uart2_data[1] == 0x04 &&
+                sequencers.addr == uart2_data[2] &&
+                uart2_data[3] == 0x07)
             {
                 if (uart2_data[4] != uart2_data[5])
                 {
@@ -3406,8 +3446,6 @@ void irkey_16way_click(int keyevent)
             //lcd屏幕显示轮廓
             lcd_open_frame();
 
-
-
             read_flash_sequencers_status_init();  //读取开机时序信息
             find_max_time(DEVICE_ON);
             open_timer_test();//开始时序
@@ -3471,40 +3509,66 @@ void irkey_16way_click(int keyevent)
         break;
     case KEY4_IR_CLICK:
         break;
-    case KEY7_IR_CLICK:  // 上一曲
-        bt_key_music_prev();
-        break;
-    case KEY9_IR_CLICK:  // 播放/暂停
-        bt_key_music_pp();
+        // case KEY7_IR_CLICK:  // 上一曲
+        //     bt_key_music_prev();
+        //     break;
+        // case KEY9_IR_CLICK:  // 播放/暂停
+        //     bt_key_music_pp();
 
-        break;
-    case KEY8_IR_CLICK:  //下一曲
-        bt_key_music_next();
-        break;
+        //     break;
+        // case KEY8_IR_CLICK:  //下一曲
+        //     bt_key_music_next();
+        //     break;
 
     case KEY13_IR_CLICK:   //继电器1
-        adkey_control(sw1_led, 0);   fd_relay_state();
+        if (sequencers.on_ff == DEVICE_ON)
+        {
+            adkey_control(sw1_led, 0);   fd_relay_state();
+        }
+
         break;
     case KEY14_IR_CLICK:
-        adkey_control(sw2_led, 1);   fd_relay_state();
+        if (sequencers.on_ff == DEVICE_ON)
+        {
+            adkey_control(sw2_led, 1);   fd_relay_state();
+        }
+
         break;
     case KEY15_IR_CLICK:
-        adkey_control(sw3_led, 2);   fd_relay_state();
+        if (sequencers.on_ff == DEVICE_ON)
+        {
+            adkey_control(sw3_led, 2);   fd_relay_state();
+        }
         break;
     case KEY16_IR_CLICK:
-        adkey_control(sw4_led, 3);   fd_relay_state();
+        if (sequencers.on_ff == DEVICE_ON)
+        {
+            adkey_control(sw4_led, 3);   fd_relay_state();
+        }
         break;
     case KEY17_IR_CLICK:
-        adkey_control(sw5_led, 4);   fd_relay_state();
+        if (sequencers.on_ff == DEVICE_ON)
+        {
+            adkey_control(sw5_led, 4);   fd_relay_state();
+        }
         break;
     case KEY18_IR_CLICK:
-        adkey_control(sw6_led, 5);   fd_relay_state();
+        if (sequencers.on_ff == DEVICE_ON)
+        {
+            adkey_control(sw6_led, 5);   fd_relay_state();
+        }
         break;
     case KEY19_IR_CLICK:
-        adkey_control(sw7_led, 6);   fd_relay_state();
+        if (sequencers.on_ff == DEVICE_ON)
+        {
+            adkey_control(sw7_led, 6);   fd_relay_state();
+        }
         break;
     case KEY20_IR_CLICK:
-        adkey_control(sw8_led, 7);   fd_relay_state();
+        if (sequencers.on_ff == DEVICE_ON)
+        {
+            adkey_control(sw8_led, 7);   fd_relay_state();
+        }
         break;
 
 
@@ -3567,7 +3631,7 @@ void irket_on_off(int keyevent)
 //music模式
 void irkey_16way_click_music(int keyevent)
 {
-
+    // printf("%s \n =======================================\n", __func__); // 测试还会不会进入这里
 
 
     u8 next_data[7];

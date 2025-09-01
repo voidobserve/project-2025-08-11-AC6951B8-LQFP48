@@ -5290,9 +5290,6 @@ obj/Release/cpu/br23/uart_test.o
 -r=obj/Release/cpu/br23/uart_test.o,all_shutdowm,pl
 -r=obj/Release/cpu/br23/uart_test.o,master_led_flashing,pl
 -r=obj/Release/cpu/br23/uart_test.o,irkey_16way_click,pl
--r=obj/Release/cpu/br23/uart_test.o,bt_key_music_prev,l
--r=obj/Release/cpu/br23/uart_test.o,bt_key_music_pp,l
--r=obj/Release/cpu/br23/uart_test.o,bt_key_music_next,l
 -r=obj/Release/cpu/br23/uart_test.o,irket_on_off,pl
 -r=obj/Release/cpu/br23/uart_test.o,irkey_16way_click_music,pl
 -r=obj/Release/cpu/br23/uart_test.o,app_task_put_key_msg,l
