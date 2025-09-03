@@ -70,6 +70,8 @@ extern void adkey_ctrl_lcd_relays_close(u8 relay_number);
 
 SEQUENCER  sequencers;
 extern u8 display_data[16];   //lcd数据
+
+// 继电器对应的按键灯位置（索引）
 const u8 relay_table[RELAYS_MAX] = {
     //按键灯（继电器
 
@@ -83,7 +85,7 @@ const u8 relay_table[RELAYS_MAX] = {
     [7] = sw8_led,
 
 
-};
+}; // 继电器对应的按键灯位置（索引）
 
 static void uart_event_handler(struct sys_event* e);
 
@@ -385,7 +387,7 @@ static void Uart1_isr_hook(void* arg, u32 status)
 {
     const uart_bus_t* ubus = arg;
     struct sys_event e;
-    printf("Uart1_isr_hook");
+    printf("Uart1_isr_hook\n");
     //当CONFIG_UARTx_ENABLE_TX_DMA（x = 0, 1）为1时，不要在中断里面调用ubus->write()，因为中断不能pend信号量
     if (status == UT_RX) {
         printf("uart1_rx_isr\n");
@@ -585,7 +587,6 @@ void find_max_time(ON_OFF_FLAG temp)
     }
     if (temp == DEVICE_OFF)
     {
-
         for (i = 0; i < sequencers.relay_number; i++)
         {
             if (sequencers.realy[i].close_time > sequencers.close_timeing)
@@ -651,22 +652,329 @@ void set_open_machine_flag(void)
 ON_OFF_FLAG temp_on_off[16];  //继电器的开关
 
 /**
- * @brief 串口指令解释
+ * @brief 串口指令解释 (解析串口2接收到的数据)
  *
  * @param RxBuf
  * @param Len
  */
 void parse_uart2_data(u8* RxBuf, u32 Len)
 {
+    // u8 // 标志位，是否要处理接收到的数据
+    // u8 // 标志位，是否要转发接收到的数据
+
 
     u8 data_len = Len;
     memset(&uart2_data, 0, Len);
     memcpy(&uart2_data, RxBuf, Len);
-    u8 fb_information[30];
-    u8 fb_uart1[30];
+    u8 fb_information[30]; // 通过串口2 发送给PC或是上一级设备的信息
+    u8 fb_uart1[30]; // 通过串口1发送给下一级设备的信息
 
     printf("sequencers.timeing_flag  = %d", sequencers.timeing_flag);
     printf("sequencers.addr = %d", sequencers.addr);
+
+#if 1
+    if (uart2_data[0] != 0xFE)
+    {
+        // 格式头不正确，直接返回
+        return;
+    }
+
+    if (uart2_data[1] == 0x03)
+    {
+        // 如果是PC或上一级设备发给 当前设备的指令
+
+    }
+    else if (uart2_data[1] == 0x04)
+    {
+        // 如果是下一次设备 发给 当前设备的指令
+
+
+    }
+
+    if (data_len == 6)
+    {
+        if (uart2_data[5] != 0xFF)
+        {
+            // 最后一个字节不是0xFF
+            return;
+        }
+    }
+
+    if (uart2_data[2] == 0x01) /* 开机 / 关机 */
+    {
+        if (uart2_data[3] == sequencers.addr ||  /* 设备地址一致（设备ID一致） */
+            uart2_data[3] == 0x00) /* 0x00 表示广播，控制所有设备 */
+        {
+            if (uart2_data[4] == 0x01 &&
+                sequencers.timeing_flag == 1 &&
+                sequencers.on_ff == DEVICE_OFF)
+            {
+                // 开机
+                // printf("open\n");
+                sequencers.timeing_flag = 0;
+                read_flash_sequencers_status_init();
+
+                // for (int i = 0; i < 16; i++)
+                //     printf("sequencers.realy[%d].open_on_off = %d", i, sequencers.realy[i].open_on_off);
+
+                //开机，点亮三个mp3按键的灯
+                gpio_direction_output(IO_PORTA_11, 1);
+                gpio_direction_output(IO_PORTC_03, 1);
+                gpio_direction_output(IO_PORTC_02, 1);
+
+                //开机点亮LCD屏的背光灯
+                gpio_direction_output(lcd_light, 1); //背光灯默认关
+
+                //lcd屏幕显示轮廓
+                lcd_open_frame();
+
+
+                find_max_time(DEVICE_ON);
+                open_timer_test();          //开始时序
+
+                //实现开启设备，软件界面变化  
+                fb_information[0] = 0xFE;
+                fb_information[1] = 0X04;
+                fb_information[2] = 0x01;
+                fb_information[3] = sequencers.addr;
+                fb_information[4] = DEVICE_ON; // 表示设备开机
+                fb_information[5] = 0xFF;
+                Uart2_Send_Tx(fb_information, 6);  //应答返回
+
+
+                // Uart1_Send_Tx(uart2_data, data_len); //通过串口1发送给级联设备
+            }
+            else if (uart2_data[4] == 0x00 &&
+                sequencers.timeing_flag == 1 &&
+                sequencers.on_ff == DEVICE_ON)
+            {
+                /* 关机 */
+                // printf("close\n");
+                sequencers.timeing_flag = 0;
+                read_flash_sequencers_status_init();
+                find_max_time(DEVICE_OFF);
+                close_timer_test(); //关机时序 
+
+                //实现开启设备，软件界面变化
+                fb_information[0] = 0xFE;
+                fb_information[1] = 0X04;
+                fb_information[2] = 0x01;
+                fb_information[3] = sequencers.addr;
+                fb_information[4] = DEVICE_OFF; // 表示设备关机
+                fb_information[5] = 0xFF;
+                Uart2_Send_Tx(fb_information, 6);  //应答返回
+
+                // Uart1_Send_Tx(uart2_data, data_len); //通过串口1发送给级联设备
+            }
+
+        } /* 设备地址一致，或者是收到广播 */
+        else if (uart2_data[3] == 0x00 || uart2_data[3] != sequencers.addr)
+        {
+            // 如果收到广播，或者设备地址不一致，通过串口1发送给级联设备
+            Uart1_Send_Tx(uart2_data, data_len);
+        }
+    } // if (uart2_data[2] == 0x01) /* 开机 / 关机 */
+    else if (sequencers.timeing_flag == 1) /* 如果正在计时，可能在执行开机/关机动画 */
+    {
+        if (uart2_data[2] == 0x02 &&  /* 命令 -- 设置地址 */
+            uart2_data[3] == 0x00 /* 广播地址 */
+            )
+        {
+            printf("set device addr\n");
+
+            u8 next_device_addr = 0;
+            sequencers.addr = uart2_data[4]; // 设置设备地址
+            if (sequencers.addr < 0xFF)
+            {
+                next_device_addr = sequencers.addr + 1;
+            }
+            else
+            {
+                next_device_addr = 0xFF;
+            }
+
+            // 需要将期间地址写回flash
+            save_sequencers_data_area3();
+
+            fb_information[0] = 0xFE;
+            fb_information[1] = 0X04;
+            fb_information[2] = 0x02;
+            fb_information[3] = sequencers.addr; // 设置之后的设备地址
+            fb_information[4] = 0x00;
+            fb_information[5] = 0xFF;
+            Uart2_Send_Tx(fb_information, 6);
+
+            fb_uart1[0] = 0xFE;
+            fb_uart1[1] = 0x03;
+            fb_uart1[2] = 0x02; /* 命令 */
+            fb_uart1[3] = 0x00; /* 广播地址 */
+            fb_uart1[5] = next_device_addr;
+            fb_uart1[6] = 0xFF;
+            Uart1_Send_Tx(fb_uart1, 7);  //发送给级联设备
+        } /* 设置地址 */
+        else if (uart2_data[2] == 0x03 && /* 命令 -- 查看当前设备的地址 */
+            uart2_data[3] == 0x00 /* 广播地址 */
+            )
+        {
+            fb_information[0] = 0xFE;
+            fb_information[1] = 0X04;
+            fb_information[2] = 0x03; /* 命令 */
+            fb_information[3] = sequencers.addr; // 设备地址
+            fb_information[4] = 0x00;
+            fb_information[5] = 0xFF;
+            Uart2_Send_Tx(fb_information, 6);
+        }/* 查看当前设备的地址 */
+        else if (uart2_data[2] == 0x04 && /* 命令 -- 设置指定设备的所有继电器的开机时序 */
+            (uart2_data[3] == sequencers.addr || uart2_data[3] == 0x00)  /* 设备地址一致，或是广播地址 */
+            )
+        {
+            if (data_len != 13)
+            {
+                // 指令长度不一致，直接退出
+                return;
+            }
+
+            // if (sequencers.on_ff != DEVICE_ON)
+            // {
+            //     return;
+            // }
+
+            printf("recv cmd set relays open time\n");
+
+            for (u8 i = 0; i < 8; i++)
+            {
+                sequencers.realy[i].open_time = uart2_data[4 + i]; // 继电器开机延时时间
+                if (uart2_data[4 + i] != 0)
+                {
+                    sequencers.realy[i].open_on_off = DEVICE_ON; // 继电器开启时的开关状态
+                }
+
+                if (sequencers.realy[i].open_time > sequencers.open_timeing)
+                    sequencers.open_timeing = sequencers.realy[i].open_time;
+            }
+
+
+        }
+
+        else if (uart2_data[2] == 0x08 &&  /* 命令 -- 查看 指定设备的继电器的状态 */
+            (uart2_data[3] == sequencers.addr || uart2_data[3] == 0x00) /* 设备地址一致，或是广播地址 */
+            )
+        {
+            if (sequencers.on_ff == DEVICE_OFF)
+            {
+                return;
+            }
+
+            fb_information[0] = 0xFE;
+            fb_information[1] = 0X04;
+            fb_information[2] = 0x08; /* 命令 */
+            fb_information[3] = sequencers.addr; // 设备地址
+            // fb_information[4] = sequencers.realy[0].open_on_off;
+            // fb_information[5] = sequencers.realy[1].open_on_off;
+            // fb_information[6] = sequencers.realy[2].open_on_off;
+            // fb_information[7] = sequencers.realy[3].open_on_off;
+            // fb_information[8] = sequencers.realy[4].open_on_off;
+            // fb_information[9] = sequencers.realy[5].open_on_off;
+            // fb_information[10] = sequencers.realy[6].open_on_off;
+            // fb_information[11] = sequencers.realy[7].open_on_off;
+            // fb_information[12] = sequencers.realy[8].open_on_off;
+
+            // fb_information[4] = (sequencers.realy[0].open_on_off == DEVICE_ON) ? sequencers.realy[0].open_on_off : sequencers.realy[0].clod_on_off;
+            fb_information[4] = temp_on_off[0];
+            fb_information[5] = temp_on_off[1];
+            fb_information[6] = temp_on_off[2];
+            fb_information[7] = temp_on_off[3];
+            fb_information[8] = temp_on_off[4];
+            fb_information[9] = temp_on_off[5];
+            fb_information[10] = temp_on_off[6];
+            fb_information[11] = temp_on_off[7];
+            fb_information[12] = temp_on_off[8];
+            fb_information[13] = 0xFF;
+            Uart2_Send_Tx(fb_information, 14);
+        }
+
+        else if (uart2_data[2] == 0x09) /* 命令 -- 开/关 设备对应的继电器 */
+        {
+            if (uart2_data[3] == sequencers.addr ||
+                uart2_data[3] == 0x00 /* 广播地址 */)
+            {
+                // 地址一致
+
+                if (data_len != 7)
+                {
+                    // 指令长度不一致，直接退出
+                    return;
+                }
+
+                if (uart2_data[4] > 8)
+                {
+                    // 继电器编号错误，超过了8个继电器，直接退出
+                    return;
+                }
+
+                if (uart2_data[5] > 0x01)
+                {
+                    // 继电器状态错误，只能是0或1，直接退出
+                    return;
+                }
+
+                if (sequencers.on_ff == DEVICE_OFF)
+                {
+                    // 如果设备没有开机，直接退出
+                    return;
+                }
+
+                u8 relay_index = uart2_data[4] - 1;// 继电器索引，范围：0~7（继电器索引，LCD对应的继电器图标索引，都使用这个，范围：0~7）
+                u8 sw_led_index = sw1_led; // 继电器对应的按键灯的索引
+                u8 relay_ctl = uart2_data[5]; // 继电器控制命令，开启/关闭对应的继电器
+                printf("relay_inded %u\n", (u16)relay_index);
+                temp_on_off[relay_index] = relay_ctl; // 根据传入的指令，开启/关闭对应的继电器
+
+                switch (relay_index + 1) // 计算继电器对应的按键灯的索引
+                {
+                case 1: sw_led_index = sw1_led; break;
+                case 2: sw_led_index = sw2_led; break;
+                case 3: sw_led_index = sw3_led; break;
+                case 4: sw_led_index = sw4_led; break;
+                case 5: sw_led_index = sw5_led; break;
+                case 6: sw_led_index = sw6_led; break;
+                case 7: sw_led_index = sw8_led; break;
+                case 8: sw_led_index = sw8_led; break;
+                }
+                relay_off_on((u32)sw_led_index, relay_index); // 开启/关闭 继电器对应的按键灯 和 LCD对应的继电器图标
+
+                fb_information[0] = 0xFE; // 帧头
+                fb_information[1] = 0x04;
+                fb_information[2] = 0x09; /* 命令 */
+                fb_information[3] = sequencers.addr; /* 设备地址 */
+                fb_information[4] = relay_index + 1; // 继电器编号（不是索引，编号从1开始，这里要加一）
+                fb_information[5] = relay_ctl; // 继电器状态
+                fb_information[6] = 0xFF; // 帧尾
+                Uart2_Send_Tx(fb_information, 7);
+            } // if (uart2_data[3] == sequencers.addr)
+
+            if (uart2_data[3] != sequencers.addr ||
+                uart2_data[3] == 0x00 /* 广播地址 */)
+            {
+                // 地址不一致，或者是广播地址，转发给下一级设备
+
+                fb_uart1[0] = 0xFE; // 帧头
+                fb_uart1[1] = 0x04;
+                fb_uart1[2] = 0x09; /* 命令 */
+                fb_uart1[3] = uart2_data[3]; // 设备地址
+                fb_uart1[4] = uart2_data[4]; // 设备对应的继电器编号（范围：1~8）
+                fb_uart1[5] = uart2_data[5]; // 继电器控制命令，开启/关闭对应的继电器
+                fb_uart1[6] = 0xFF; // 帧尾
+                Uart1_Send_Tx(fb_uart1, 7); // 发送给级联设备
+            }
+        }
+
+    }
+
+#endif
+
+
+#if 0
     // 开关设备  无条件转发给级联设备
     if (uart2_data[0] == 0xFE &&
         uart2_data[1] == 0x03 &&
@@ -701,7 +1009,7 @@ void parse_uart2_data(u8* RxBuf, u32 Len)
             find_max_time(DEVICE_ON);
             open_timer_test();          //开始时序
 
-            //实现开启设备，软件界面变化
+            //实现开启设备，软件界面变化 
             fb_information[0] = 0xFE;
             fb_information[1] = 0X04;
             fb_information[2] = 0x01;
@@ -748,10 +1056,13 @@ void parse_uart2_data(u8* RxBuf, u32 Len)
 
         }
     }// 开关设备  无条件转发给级联设备
+#endif
+
 
     // 所有指令在AD计时时，不执行下面的代码块
     if (sequencers.timeing_flag == 1)
     {
+#if 0
         //设置地址  不需要转发
         if (uart2_data[0] == 0xFE &&
             uart2_data[1] == 0x04 &&
@@ -790,7 +1101,9 @@ void parse_uart2_data(u8* RxBuf, u32 Len)
             save_sequencers_data_area3();
 
         }
+#endif
 
+#if 0
         //查看本地地址   //不需要转发
         if (uart2_data[0] == 0xFE &&
             uart2_data[1] == 0x03 &&
@@ -809,6 +1122,7 @@ void parse_uart2_data(u8* RxBuf, u32 Len)
             fb_information[6] = 0xFF;
             Uart2_Send_Tx(fb_information, 7);  //应答返回
         }
+#endif
 
         //1设置开机时序
         if (uart2_data[0] == 0xFE &&
@@ -820,6 +1134,13 @@ void parse_uart2_data(u8* RxBuf, u32 Len)
             // read_flash_sequencers_status_init();
             // printf("sequencers.on_ff = %d",sequencers.on_ff);
             sequencers.open_timeing = 0;
+            /*
+                给当前设备的每一路继电器都单独设置时序，
+
+                例如，第一路继电器时序 == uart2_data[4]
+                     第二路继电器时序 == uart2_data[5]
+                     第三路继电器时序 == uart2_data[6]
+            */
             for (int i = 4, j = 0; i <= (3 + sequencers.relay_number); i++, j++)
             {
                 sequencers.realy[j].open_time = uart2_data[i];
@@ -847,6 +1168,13 @@ void parse_uart2_data(u8* RxBuf, u32 Len)
         {
             // read_flash_sequencers_status_init();
             sequencers.close_timeing = 0;
+            /*
+                给当前设备的每一路继电器都单独设置时序，
+
+                例如，第一路继电器时序 == uart2_data[4]
+                     第二路继电器时序 == uart2_data[5]
+                     第三路继电器时序 == uart2_data[6]
+            */
             for (int i = 4, j = 0; i <= (3 + sequencers.relay_number); i++, j++)
             {
                 sequencers.realy[j].close_time = uart2_data[i];
@@ -924,10 +1252,10 @@ void parse_uart2_data(u8* RxBuf, u32 Len)
             fb_information[1] = sequencers.relay_number + 7;
             fb_information[2] = sequencers.addr;
             fb_information[3] = 0x08;
-            fb_information[4] = 0x5A;  //z
-            fb_information[5] = 0x44;  //d
-            fb_information[6] = 0x00;  //正式版本号
-            fb_information[7] = 0x02;   //送测版本号
+            fb_information[4] = 0x5A; // 大写 Z 
+            fb_information[5] = 0x44; // 大写 D 
+            fb_information[6] = 0x00; // 正式版本号 
+            fb_information[7] = 0x02; // 送测版本号 
             fb_information[8] = sequencers.on_ff;
             for (int i = 9, j = 0; i <= (8 + sequencers.relay_number); i++, j++)
             {
@@ -938,10 +1266,10 @@ void parse_uart2_data(u8* RxBuf, u32 Len)
             Uart2_Send_Tx(fb_information, (10 + sequencers.relay_number));
         }
 
-
+        // 如果当前设备是开着的
         if (sequencers.on_ff == DEVICE_ON)
         {
-            //6供电控制
+            //6供电控制 /* 这里面没有考虑继电器索引错误的情况，容易越界访问数组 */ 
             if (uart2_data[0] == 0xFE &&
                 uart2_data[1] == 0x03 &&
                 sequencers.addr == uart2_data[2] &&
@@ -950,22 +1278,23 @@ void parse_uart2_data(u8* RxBuf, u32 Len)
             {
                 printf("control");
                 u32 sw;
-                if (uart2_data[3] == 0x01)
+                if (uart2_data[3] == 0x01) // 闭合
                 {
-                    printf("bihe");
+                    // printf("bihe"); // 闭合
                     temp_on_off[uart2_data[4] - 1] = DEVICE_ON;
-                    sw = relay_table[uart2_data[4] - 1];
-                    relay_off_on(sw, uart2_data[4] - 1);
+                    sw = relay_table[uart2_data[4] - 1]; // 按键灯的索引
+                    relay_off_on(sw, uart2_data[4] - 1); // 打开对应的按键灯，打开对应的继电器
                 }
-                if (uart2_data[3] == 0x02)
+                if (uart2_data[3] == 0x02) // 断开
                 {
-                    printf("duankai");
+                    // printf("duankai"); // 断开
                     temp_on_off[uart2_data[4] - 1] = DEVICE_OFF;
-                    sw = relay_table[uart2_data[4] - 1];
-                    relay_off_on(sw, uart2_data[4] - 1);
+                    sw = relay_table[uart2_data[4] - 1]; // 按键灯的索引
+                    relay_off_on(sw, uart2_data[4] - 1); // 关闭对应的按键灯，关闭对应的继电器
                 }
             }
 
+#if 1 /* 这里面没有考虑继电器索引错误的情况，容易越界访问数组 */ 
             //7关联控制 即一台控制单元，由两个供电来同时控制，且为互斥
             if (uart2_data[0] == 0xFE &&
                 uart2_data[1] == 0x04 &&
@@ -986,9 +1315,8 @@ void parse_uart2_data(u8* RxBuf, u32 Len)
 
                     fd_relay_state();
                 }
-
             }
-
+#endif
         }
 
         //地址不是本地设备，发送到级联设备
@@ -997,9 +1325,7 @@ void parse_uart2_data(u8* RxBuf, u32 Len)
             Uart1_Send_Tx(uart2_data, data_len);
         }
 
-    }  //时序计时时，所有指令不相应
-
-
+    }  //时序计时时，所有指令不相应 
 }
 
 /**
@@ -1012,7 +1338,7 @@ void sequencers_data_init()
     u8 open_set_cnt;
     u8 close_set_cnt;
     u8 i = RELAYS_MAX;
-    sequencers.addr = 1; //0：作用是：地址需要设置了才能用
+    sequencers.addr = 1; // 0：作用是：地址需要设置了才能用
     sequencers.on_ff = DEVICE_OFF;
     sequencers.relay_number = RELAYS_MAX;
     sequencers.timeing_flag = 1;
@@ -1090,23 +1416,23 @@ void relay_off_on(u32 relay_led, u8 relay_number)
 
 void fd_relay_state(void)
 {
-    u8 fb_temp[50];
-    fb_temp[0] = 0xFE;
-    fb_temp[1] = sequencers.relay_number + 7;
-    fb_temp[2] = sequencers.addr;
-    fb_temp[3] = 0x08;
-    fb_temp[4] = 0x5A;  //z
-    fb_temp[5] = 0x44;  //d
-    fb_temp[6] = 0x00;  //正式版本号
-    fb_temp[7] = 0x01;   //送测版本号
-    fb_temp[8] = sequencers.on_ff;
-    for (int i = 9, j = 0; i <= (8 + sequencers.relay_number); i++, j++)
-    {
-        fb_temp[i] = temp_on_off[j];
-    }
+    // u8 fb_temp[50];
+    // fb_temp[0] = 0xFE;
+    // fb_temp[1] = sequencers.relay_number + 7;
+    // fb_temp[2] = sequencers.addr;
+    // fb_temp[3] = 0x08;
+    // fb_temp[4] = 0x5A;  //z
+    // fb_temp[5] = 0x44;  //d
+    // fb_temp[6] = 0x00;  //正式版本号
+    // fb_temp[7] = 0x01;   //送测版本号
+    // fb_temp[8] = sequencers.on_ff;
+    // for (int i = 9, j = 0; i <= (8 + sequencers.relay_number); i++, j++)
+    // {
+    //     fb_temp[i] = temp_on_off[j];
+    // }
 
-    fb_temp[(9 + sequencers.relay_number)] = 0xFF;
-    Uart2_Send_Tx(fb_temp, (10 + sequencers.relay_number));
+    // fb_temp[(9 + sequencers.relay_number)] = 0xFF;
+    // Uart2_Send_Tx(fb_temp, (10 + sequencers.relay_number));
 }
 
 
@@ -1155,13 +1481,11 @@ static void close_timer_isr(void)
 
     if (timer_cnt >= sequencers.close_timeing)  //条件必须是有等于，可能关机时序时0秒
     {
-        sequencers.timeing_flag = 1;
-
+        sequencers.timeing_flag = 1; // 表示时序执行完成 
     }
+
     if (delay_2s_close_f)
     {
-
-
         sys_s_hi_timer_del(timer_id);   // 注销定时器  停止计时
         timer_id = 0;                   // 防止重复注册
 
@@ -1172,8 +1496,8 @@ static void close_timer_isr(void)
 
         /*
             测试发现，在显示交流电电压界面的时候，按下关机，
-            有概率关不掉交流电电压的显示，即使背光已经关闭，
             还是会有显示交流电电压，此时这个电压不会更新
+            有概率关不掉交流电电压的显示，即使背光已经关闭，
         */
         // 清除显示的第 1 ~ 7位数字
         clean_num(1);clean_num(2);clean_num(3);
@@ -1254,6 +1578,7 @@ void close_timer_test(void)
 
 static void open_timer_isr(void)
 {
+    // 500ms进入一次
     sequencers.timeing_flag = 0;
     if (timer_cnt >= sequencers.open_timeing)//条件必须是有等于，可能开机时序时0秒
     {
@@ -1292,7 +1617,6 @@ void open_timer_test(void)
     {
         timer_cnt = 0;
         timer_id = sys_s_hi_timer_add(NULL, open_timer_isr, 500); // 注册定时器  500ms
-
     }
 }
 
@@ -1326,6 +1650,7 @@ void adkey_master_on_off(void)
         find_max_time(DEVICE_ON);
         open_timer_test();//开始时序
 
+        // USER_TO_DO:
         //实现一键开机
         next_data[0] = 0xFE;
         next_data[1] = 0x03;
@@ -2625,9 +2950,10 @@ extern u16 update_cnt;
  */
 void adkey_16way_long(int keyevent)
 {
+#if 0
     static u8 m = 0;
 
-#if 0    
+
     switch (keyevent)
     {
 
@@ -3353,8 +3679,11 @@ void adkey_16way_long(int keyevent)
  */
 extern ON_OFF_FLAG temp_on_off[16];
 
+// 继电器操作（开启、关闭）
 void need_handle_relays(ON_OFF_FLAG temp)
 {
+    // printf("%s %d\n", __func__, __LINE__);
+
     u32 sw;
     if (temp == DEVICE_ON)   //开机
     {
@@ -3765,214 +4094,3 @@ void irkey_16way_click_music(int keyevent)
 
 
 
-
-#if 0
-/*
-    [[  注意!!!  ]]
-    * 如果当系统任务较少时使用本demo，需要将低功耗关闭（#define TCFG_LOWPOWER_LOWPOWER_SEL    0//SLEEP_EN ），否则任务被串口接收函数调用信号量pend时会导致cpu休眠，串口中断和DMA接收将遗漏数据或数据不正确
-*/
-
-#define UART_DEV_USAGE_TEST_SEL         2       //uart_dev.c api接口使用方法选择
-//  选择1  串口中断回调函数推送事件，由事件响应函数接收串口数据
-//  选择2  由task接收串口数据
-
-#define UART_DEV_TEST_MULTI_BYTE        1       //uart_dev.c 读写多个字节api / 读写1个字节api 选择
-
-#define UART_DEV_FLOW_CTRL				0
-
-static u8 uart_cbuf[512] __attribute__((aligned(4)));
-static u8 uart_rxbuf[512] __attribute__((aligned(4)));
-
-static void my_put_u8hex(u8 dat)
-{
-    u8 tmp;
-    tmp = dat / 16;
-    if (tmp < 10) {
-        putchar(tmp + '0');
-    }
-    else {
-        putchar(tmp - 10 + 'A');
-    }
-    tmp = dat % 16;
-    if (tmp < 10) {
-        putchar(tmp + '0');
-    }
-    else {
-        putchar(tmp - 10 + 'A');
-    }
-    putchar(0x20);
-}
-
-//设备事件响应demo
-static void uart_event_handler(struct sys_event* e)
-{
-    const uart_bus_t* uart_bus;
-    u32 uart_rxcnt = 0;
-
-    if ((u32)e->arg == DEVICE_EVENT_FROM_UART_RX_OVERFLOW) {
-        if (e->u.dev.event == DEVICE_EVENT_CHANGE) {
-            /* printf("uart event: DEVICE_EVENT_FROM_UART_RX_OVERFLOW\n"); */
-            uart_bus = (const uart_bus_t*)e->u.dev.value;
-            uart_rxcnt = uart_bus->read(uart_rxbuf, sizeof(uart_rxbuf), 0);
-            if (uart_rxcnt) {
-                printf("get_buffer:\n");
-                for (int i = 0; i < uart_rxcnt; i++) {
-                    my_put_u8hex(uart_rxbuf[i]);
-                    if (i % 16 == 15) {
-                        putchar('\n');
-                    }
-                }
-                if (uart_rxcnt % 16) {
-                    putchar('\n');
-                }
-#if (!UART_DEV_FLOW_CTRL)
-                uart_bus->write(uart_rxbuf, uart_rxcnt);
-#endif
-            }
-            printf("uart out\n");
-        }
-    }
-    if ((u32)e->arg == DEVICE_EVENT_FROM_UART_RX_OUTTIME) {
-        if (e->u.dev.event == DEVICE_EVENT_CHANGE) {
-            /* printf("uart event:DEVICE_EVENT_FROM_UART_RX_OUTTIME\n"); */
-            uart_bus = (const uart_bus_t*)e->u.dev.value;
-            uart_rxcnt = uart_bus->read(uart_rxbuf, sizeof(uart_rxbuf), 0);
-            if (uart_rxcnt) {
-                printf("get_buffer:\n");
-                for (int i = 0; i < uart_rxcnt; i++) {
-                    my_put_u8hex(uart_rxbuf[i]);
-                    if (i % 16 == 15) {
-                        putchar('\n');
-                    }
-                }
-                if (uart_rxcnt % 16) {
-                    putchar('\n');
-                }
-#if (!UART_DEV_FLOW_CTRL)
-                uart_bus->write(uart_rxbuf, uart_rxcnt);
-#endif
-            }
-            printf("uart out\n");
-        }
-    }
-}
-SYS_EVENT_HANDLER(SYS_DEVICE_EVENT, uart_event_handler, 0);
-
-static void uart_u_task(void* arg)
-{
-    const uart_bus_t* uart_bus = arg;
-    int ret;
-    u32 uart_rxcnt = 0;
-
-    printf("uart_u_task start\n");
-    while (1) {
-#if !UART_DEV_TEST_MULTI_BYTE
-        //uart_bus->getbyte()在尚未收到串口数据时会pend信号量，挂起task，直到UART_RX_PND或UART_RX_OT_PND中断发生，post信号量，唤醒task
-        ret = uart_bus->getbyte(&uart_rxbuf[0], 0);
-        if (ret) {
-            uart_rxcnt = 1;
-            printf("get_byte: %02x\n", uart_rxbuf[0]);
-            uart_bus->putbyte(uart_rxbuf[0]);
-        }
-#else
-        //uart_bus->read()在尚未收到串口数据时会pend信号量，挂起task，直到UART_RX_PND或UART_RX_OT_PND中断发生，post信号量，唤醒task
-        uart_rxcnt = uart_bus->read(uart_rxbuf, sizeof(uart_rxbuf), 0);
-        if (uart_rxcnt) {
-            printf("get_buffer:\n");
-            for (int i = 0; i < uart_rxcnt; i++) {
-                my_put_u8hex(uart_rxbuf[i]);
-                if (i % 16 == 15) {
-                    putchar('\n');
-                }
-            }
-            if (uart_rxcnt % 16) {
-                putchar('\n');
-            }
-#if (!UART_DEV_FLOW_CTRL)
-            uart_bus->write(uart_rxbuf, uart_rxcnt);
-#endif
-        }
-#endif
-    }
-}
-
-static void uart_isr_hook(void* arg, u32 status)
-{
-    const uart_bus_t* ubus = arg;
-    struct sys_event e;
-
-    //当CONFIG_UARTx_ENABLE_TX_DMA（x = 0, 1）为1时，不要在中断里面调用ubus->write()，因为中断不能pend信号量
-    if (status == UT_RX) {
-        printf("uart_rx_isr\n");
-#if (UART_DEV_USAGE_TEST_SEL == 1)
-        e.type = SYS_DEVICE_EVENT;
-        e.arg = (void*)DEVICE_EVENT_FROM_UART_RX_OVERFLOW;
-        e.u.dev.event = DEVICE_EVENT_CHANGE;
-        e.u.dev.value = (int)ubus;
-        sys_event_notify(&e);
-#endif
-    }
-    if (status == UT_RX_OT) {
-        printf("uart_rx_ot_isr\n");
-#if (UART_DEV_USAGE_TEST_SEL == 1)
-        e.type = SYS_DEVICE_EVENT;
-        e.arg = (void*)DEVICE_EVENT_FROM_UART_RX_OUTTIME;
-        e.u.dev.event = DEVICE_EVENT_CHANGE;
-        e.u.dev.value = (int)ubus;
-        sys_event_notify(&e);
-#endif
-    }
-}
-
-static void uart_flow_ctrl_task(void* arg)
-{
-    const uart_bus_t* uart_bus = arg;
-    while (1) {
-        uart_bus->write("flow control test ", sizeof("flow control test "));
-        os_time_dly(100);
-    }
-}
-
-void uart_dev_test_main()
-{
-    const uart_bus_t* uart_bus;
-    struct uart_platform_data_t u_arg = { 0 };
-    u_arg.tx_pin = IO_PORTA_01;
-    u_arg.rx_pin = IO_PORTA_02;
-    u_arg.rx_cbuf = uart_cbuf;
-    u_arg.rx_cbuf_size = 512;
-    u_arg.frame_length = 32;
-    u_arg.rx_timeout = 100;
-    u_arg.isr_cbfun = uart_isr_hook;
-    u_arg.baud = 9600;
-    u_arg.is_9bit = 0;
-#if UART_DEV_FLOW_CTRL
-    u_arg.tx_pin = IO_PORTA_00;
-    u_arg.rx_pin = IO_PORTA_01;
-    u_arg.baud = 1000000;
-    extern void flow_ctl_hw_init(void);
-    flow_ctl_hw_init();
-#endif
-    uart_bus = uart_dev_open(&u_arg);
-    if (uart_bus != NULL) {
-        printf("uart_dev_open() success\n");
-#if (UART_DEV_USAGE_TEST_SEL == 2)
-        os_task_create(uart_u_task, (void*)uart_bus, 31, 512, 0, "uart_u_task");
-#endif
-#if UART_DEV_FLOW_CTRL
-        os_task_create(uart_flow_ctrl_task, (void*)uart_bus, 31, 128, 0, "flow_ctrl");
-#endif
-    }
-}
-
-#if UART_DEV_FLOW_CTRL
-void uart_change_rts_state(void)
-{
-    static u8 rts_state = 1;
-    extern void change_rts_state(u8 state);
-    change_rts_state(rts_state);
-    rts_state = !rts_state;
-}
-#endif
-
-#endif

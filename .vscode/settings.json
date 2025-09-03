@@ -8,6 +8,7 @@
         "debug.h": "c",
         "app_charge.h": "c",
         "user_cfg.h": "c",
-        "power_interface.h": "c"
+        "power_interface.h": "c",
+        "lcd1621.h": "c"
     }
 }

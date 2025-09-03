@@ -491,7 +491,7 @@ void app_default_event_deal(struct sys_event *event)
     SYS_EVENT_HANDLER_SPECIFIC(event);
     printf("event->type = %d",event->type);
     switch (event->type) {
-    case SYS_DEVICE_EVENT:
+    case SYS_DEVICE_EVENT: // event->type == 4
         /*默认公共设备事件处理*/
         printf(">>>>>>>>>>>>>%s %d \n", __FUNCTION__, __LINE__);
         app_common_device_event_handler(event);

@@ -23,8 +23,11 @@ typedef enum
 #include "sys_time.h"
 typedef struct 
 {
-    ON_OFF_FLAG open_on_off;  //继电器的开启时的开关状态
-    ON_OFF_FLAG clod_on_off;  //继电器的关闭时的开关状态
+    ON_OFF_FLAG open_on_off;  //继电器的开启时的开关状态（开关对应的状态）
+    ON_OFF_FLAG clod_on_off;  //继电器的关闭时的开关状态（开关对应的状态）
+
+    // u8 status_on_off; // 继电器当前状态，0--关闭，1--开启
+
     uint8_t open_time;   // 继电器开机延时时间
     uint8_t close_time;  // 继电器关机延时时间
    struct sys_time countdown_open_time;   // 继电器的定时开机的时间  月 日 时 分 秒  
