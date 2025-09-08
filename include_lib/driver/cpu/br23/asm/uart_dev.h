@@ -31,7 +31,7 @@ typedef struct
     uint8_t open_time;   // 继电器开机延时时间
     uint8_t close_time;  // 继电器关机延时时间
    struct sys_time countdown_open_time;   // 继电器的定时开机的时间  月 日 时 分 秒  
-   struct sys_time countdown_close_time;  // 继电器的定时关机的时间  月 日 时 分 秒 
+   struct sys_time countdown_close_time;  // 继电器的定时关机的时间  月 日 时 分 秒  
 
 }RELAYS;
 
@@ -39,11 +39,13 @@ typedef struct
 {
     ON_OFF_FLAG on_ff;  //总开关
     uint8_t addr;  //设备地址
-    RELAYS  realy[RELAYS_MAX];  //继电器
+    RELAYS  realy[RELAYS_MAX];  // 继电器 relay（原本的工程中是realy）
     uint8_t timeing_flag;  //0:计时中 1：计时结束
-    uint8_t open_timeing;   //开机时序的计时时间
-    uint8_t close_timeing;   //关机时序而定计时时间
-    uint8_t relay_number;    //多少路继电器
+    // uint8_t open_timeing;   // 开机时序的计时时间
+    u16 open_timeing; // 继电器开机时序的计时时间
+    // uint8_t close_timeing;   // 关机时序而定计时时间
+    u16 close_timeing; // 继电器关机时序的计时时间
+    uint8_t relay_number;    //多少路继电器 （继电器总数）
 }SEQUENCER;
 
 

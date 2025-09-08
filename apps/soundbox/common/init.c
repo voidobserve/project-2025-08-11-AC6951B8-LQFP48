@@ -169,7 +169,7 @@ static void app_init()
     read_sys_current_time();
 
     extern void set_open_machine_flag(void);
-    read_flash_sequencers_status_init();
+    read_flash_sequencers_status_init(); // 读取flash信息，初始化相应变量
     extern void lcd1621_init(void);
     lcd1621_init();
     set_open_machine_flag();   // 上电初始化

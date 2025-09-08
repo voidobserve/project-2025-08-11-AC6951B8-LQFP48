@@ -919,7 +919,7 @@ int bt_key_event_handler(struct sys_event *event)
         return true;
     }
 
-   extern u8 loc_screen_f;
+//    extern u8 loc_screen_f; 
 
     // if (key_event == KEW_PROW_IO)
     // {
@@ -937,9 +937,10 @@ int bt_key_event_handler(struct sys_event *event)
     }
 
     //单击ad按键  开机状态且计时完成
-    if(sequencers.on_ff == DEVICE_ON && sequencers.timeing_flag == 1)
+    // if(sequencers.on_ff == DEVICE_ON && sequencers.timeing_flag == 1)
+    if (sequencers.timeing_flag)
     {
-        if(loc_screen_f == 0)
+        // if(loc_screen_f == 0)
         {
             adkey_16way_on_off(key_event);
 
@@ -948,18 +949,18 @@ int bt_key_event_handler(struct sys_event *event)
     //长按ad按键 开机状态且计时完成
     if(sequencers.on_ff == DEVICE_ON && sequencers.timeing_flag == 1)
     {
-        if(loc_screen_f)
+        // if(loc_screen_f)
         {
-            if(key_event == KEY9_AD_LONG)
-            {
-                loc_screen_f  = 0;
-                dis_lock_screen();
-            }
+            // if(key_event == KEY9_AD_LONG)
+            // {
+            //     // loc_screen_f  = 0;
+            //     dis_lock_screen();
+            // }
         }
-        else
-        {
-            adkey_16way_long(key_event);
-        }
+        // else
+        // {
+        //     adkey_16way_long(key_event);
+        // }
 
     }
 
