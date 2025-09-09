@@ -5,8 +5,8 @@ extern u8 lcd1621_sendbuf[16];
 
 
 
-typedef enum{
-	
+typedef enum {
+
 	show_power,     // ��ʾ�����͵�ѹ
 	open_dev_time, // ��ʾ������ʱʱ��
 	close_dev_time, // ��ʾ�ػ���ʱʱ��
@@ -46,9 +46,9 @@ typedef enum
 	SEG11,
 	SEG12,
 	SEG13,  //
-    SEG14,
-    SEG15,
-    SEG16,
+	SEG14,
+	SEG15,
+	SEG16,
 }seg_e;
 
 #define SEG_SET(com, seg)  ( ((1<<com)<<8) | seg)
@@ -145,13 +145,13 @@ typedef enum
 #define SEG_4A SEG_SET(COM4,SEG16)
 
 
+extern  unsigned char dis_data[32];
 
-
-void lcd1621_value_set(u8 *buff, u8 len);
+void lcd1621_value_set(u8* buff, u8 len);
 void lcd1621_init(void);
 
-
-void lcd1621_icon_update(void);
-void lcd1621_flash_icon(void);
+extern void lcd_clear_relay_icon(u8 relay_number);
+// void lcd1621_icon_update(void);
+// void lcd1621_flash_icon(void);
 
 #endif

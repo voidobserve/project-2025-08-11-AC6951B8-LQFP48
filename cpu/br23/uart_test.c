@@ -4,6 +4,9 @@
 #include "app_task.h"
 #include "key_event_deal.h"
 
+#include "../../apps/user_app/lcd/lcd1621.h"
+#include "../../apps/user_app/sequencer/sequencer.h" // 时序器相关变量类型和变量定义
+
 #define UART_DEV_USAGE_TEST_SEL         1       //uart_dev.c api接口使用方法选择
 //  选择1  串口中断回调函数推送事件，由事件响应函数接收串口数据
 //  选择2  由task接收串口数据
@@ -66,9 +69,9 @@ static volatile uint8_t uart2_rcv_flag = 1;
 
 #include "adkey.h"
 #include "lcd1621.h"
-extern void adkey_ctrl_lcd_relays_close(u8 relay_number);
 
-SEQUENCER  sequencers;
+
+
 extern u8 display_data[16];   //lcd数据
 
 // 继电器对应的按键灯位置（索引）
@@ -676,7 +679,7 @@ void set_open_machine_flag(void)
 }
 
 
-ON_OFF_FLAG temp_on_off[16];  //继电器的开关
+
 
 /*
     USER_TO_DO 232RECV 232 RECV
@@ -1397,23 +1400,20 @@ void sequencers_data_init()
  * @param relay_led   AD按键 灯
  * @param le_state    继电器
  */
-extern  ON_OFF_FLAG temp_on_off[16];  //继电器的开关
+ // extern  ON_OFF_FLAG temp_on_off[16];  //继电器的开关
 
 void relay_off_on(u32 relay_led, u8 relay_number)
 {
-
     if (temp_on_off[relay_number] == DEVICE_ON)
     {
-        gpio_direction_output(relay_led, 1); //开灯
-        adkey_ctrl_lcd_relays_open(relay_number); // lcd点亮对应的通道
+        gpio_direction_output(relay_led, 1); // 开灯
+        lcd_show_relay_icon(relay_number); // lcd点亮对应的通道
     }
-
     else
     {
-        gpio_direction_output(relay_led, 0); //关灯
-        adkey_ctrl_lcd_relays_close(relay_number); // lcd点亮对应的通道
+        gpio_direction_output(relay_led, 0); // 关灯
+        lcd_clear_relay_icon(relay_number); // LCD清除单个继电器图标(不显示对应的继电器图标)
     }
-
 }
 
 
@@ -1450,12 +1450,13 @@ void adkey_control(u32 relay_led, u8 relay_number)
     if (temp_on_off[relay_number] == DEVICE_ON)
     {
         gpio_direction_output(relay_led, 1); //开灯
-        adkey_ctrl_lcd_relays_open(relay_number); // lcd点亮对应的通道
+
+        lcd_show_relay_icon(relay_number); // lcd点亮对应的通道
     }
     else
     {
         gpio_direction_output(relay_led, 0); //关灯
-        adkey_ctrl_lcd_relays_close(relay_number); // lcd点亮对应的通道
+        lcd_clear_relay_icon(relay_number); // lcd点亮对应的通道
     }
 
 }
@@ -1499,10 +1500,10 @@ static void close_timer_isr(void)
             timer_cnt = 0;
             timer_id = 0;                   // 防止重复注册
 
-            //关机，点亮三个mp3按键的灯
-            gpio_direction_output(IO_PORTA_11, 0);
-            gpio_direction_output(IO_PORTC_03, 0);
-            gpio_direction_output(IO_PORTC_02, 0);
+            // //关机，点亮三个mp3按键的灯
+            // gpio_direction_output(IO_PORTA_11, 0);
+            // gpio_direction_output(IO_PORTC_03, 0);
+            // gpio_direction_output(IO_PORTC_02, 0);
 
             /*
                 测试发现，在显示交流电电压界面的时候，按下关机，
@@ -1604,7 +1605,7 @@ static void open_timer_isr(void)
         gpio_direction_output(sw0_led, 1); // 开灯（总开关对应的按键灯）
         clean_dis(clrbit(SEG_T));  //开机完后，关闭音符
         sequencers.on_ff = DEVICE_ON;
-        app_task_put_key_msg(APP_CMD, 0);  //推送按键消息
+        // app_task_put_key_msg(APP_CMD, 0);  //推送按键消息
 
         timer_cnt = 0;
         cur_relay_index = 0;
@@ -1659,25 +1660,28 @@ void open_timer_test(void)
 void adkey_master_on_off(void)
 {
 
-    u8 next_data[7];
-    printf("io key_master_on_off\n");
+    // u8 next_data[7];
+    // printf("io key_master_on_off\n");
     if (sequencers.on_ff == DEVICE_OFF)    // ---------------------- 开机
+        // if (0 == flag_is_lcd_screen_on)
     {
-        printf("io key_master_on_off   open");
+        printf("io key_master_on_off   open\n");
         //开机，点亮三个mp3按键的灯
-        gpio_direction_output(IO_PORTA_11, 1);
-        gpio_direction_output(IO_PORTC_03, 1);
-        gpio_direction_output(IO_PORTC_02, 1);
+        // gpio_direction_output(IO_PORTA_11, 1);
+        // gpio_direction_output(IO_PORTC_03, 1);
+        // gpio_direction_output(IO_PORTC_02, 1);
 
         //开机点亮LCD屏的背光灯
-        gpio_direction_output(lcd_light, 1); //背光灯默认关
-
+        gpio_direction_output(lcd_light, 1);
         //lcd屏幕显示轮廓
         lcd_open_frame();
-
         read_flash_sequencers_status_init();  //读取开机时序信息
         find_max_time(DEVICE_ON);
         open_timer_test();//开始时序
+
+        // gpio_direction_output(sw0_led, 1); // 开灯（总开关对应的按键灯）
+
+        // flag_is_lcd_screen_on = 1; // 表示lcd开启
 
         // // USER_TO_DO:
         // //实现一键开机
@@ -1701,13 +1705,31 @@ void adkey_master_on_off(void)
 
     }
     else if (sequencers.on_ff == DEVICE_ON)   // -------------------------- 关机
+        // else // 1 == flag_is_lcd_screen_on
     {
-        printf("adkey_master_on_off   off");
+        printf("io key_master_on_off   off\n");
 
         read_flash_sequencers_status_init();  //读取关机时序信息
         find_max_time(DEVICE_OFF);
         close_timer_test(); //关机时序
-        make_dis(SEG_T);   // 音符
+
+        // all_shutdowm();  // 确保所有继电器的状态是关机状态
+        // gpio_direction_output(sw0_led, 0); //关闭总开关的指示灯 
+        // // 清除显示的第 1 ~ 7位数字
+        // clean_num(1);clean_num(2);clean_num(3);
+        // clean_num(4);clean_num(5);clean_num(6); clean_num(7);
+        // clean_dis(SEG_S5); // 符号 V
+        // clean_dis(SEG_T1); // 继电器通道边框
+        // clean_dis(SEG_T);
+
+        // //关机 关闭 LCD屏的背光灯
+        // gpio_direction_output(IO_PORTA_07, 0);
+
+        // lcd1621_off();  //关闭lcd显示
+        // flag_is_lcd_screen_on = 0; // 表示lcd关闭
+
+        // make_dis(SEG_T);   // 音符
+
         // //实现一键关机
         // next_data[0] = 0xFE;
         // next_data[1] = 0x03;
@@ -1803,27 +1825,50 @@ void adkey_16way_on_off(int keyevent)
     {
         // USER_TO_DO 后续需要添加独立的开机和关机延时， 加上 232 的反馈信息
         //继电器                  //控灯                       向上位机反馈
-    case KEY0_AD_CLICK:
+    case KEY0_AD_CLICK: // 第一路对应的继电器按键
         // if (lcd_now_state == show_power) 
     {
         adkey_control(sw1_led, 0); // 继电器、继电器对应的按键灯和对应的LCD图标，状态取反
         fd_relay_state(); // 向上位机反馈
-
-        if (DEVICE_ON == temp_on_off[0])  // 如果继电器开启，认为设备已经开启
-        {
-            sequencers.on_ff = DEVICE_ON;
-        }
     }
     break;
-    case KEY1_AD_CLICK: if (lcd_now_state == show_power) { adkey_control(sw2_led, 1); fd_relay_state(); } break;
-    case KEY2_AD_CLICK: if (lcd_now_state == show_power) { adkey_control(sw3_led, 2); fd_relay_state(); } break;
-    case KEY3_AD_CLICK: if (lcd_now_state == show_power) { adkey_control(sw4_led, 3); fd_relay_state(); } break;
-    case KEY4_AD_CLICK: if (lcd_now_state == show_power) { adkey_control(sw5_led, 4); fd_relay_state(); } break;
-    case KEY5_AD_CLICK: if (lcd_now_state == show_power) { adkey_control(sw6_led, 5); fd_relay_state(); } break;
-    case KEY6_AD_CLICK: if (lcd_now_state == show_power) { adkey_control(sw7_led, 6); fd_relay_state(); } break;
-    case KEY7_AD_CLICK: if (lcd_now_state == show_power) { adkey_control(sw8_led, 7); fd_relay_state(); } break;
+    case KEY1_AD_CLICK:
+    {
+        adkey_control(sw2_led, 1); fd_relay_state();
+    }
+    break;
+    case KEY2_AD_CLICK:
+    {
+        adkey_control(sw3_led, 2); fd_relay_state();
+    }
+    break;
+    case KEY3_AD_CLICK:
+    {
+        adkey_control(sw4_led, 3); fd_relay_state();
+    }
+    break;
+    case KEY4_AD_CLICK:
+    {
+        adkey_control(sw5_led, 4); fd_relay_state();
+    }
+    break;
+    case KEY5_AD_CLICK:
+    {
+        adkey_control(sw6_led, 5); fd_relay_state();
+    }
+    break;
+    case KEY6_AD_CLICK:
+    {
+        adkey_control(sw7_led, 6); fd_relay_state();
+    }
+    break;
+    case KEY7_AD_CLICK:
+    {
+        adkey_control(sw8_led, 7); fd_relay_state();
+    }
+    break;
 
-        //mp3的按键
+    //mp3的按键
 // --------------------------------------------------------------- 上调
     case KEY8_AD_CLICK:
         //调开机时序
@@ -2787,7 +2832,53 @@ void adkey_16way_on_off(int keyevent)
 
     default: break;
 
+    }// switch (keyevent)
+
+
+#if 0
+    /*
+        检查继电器是否全部关闭 或是 有一个继电器开启
+    */
+    u8 flag_is_all_relays_colse = 1;
+    u8 i = 0;
+    for (i = 0; i < RELAYS_MAX; i++)
+    {
+        if (temp_on_off[i] == DEVICE_ON)
+        {
+            flag_is_all_relays_colse = 0;
+            break;
+        }
     }
+
+
+    if (flag_is_all_relays_colse && DEVICE_ON == sequencers.on_ff)
+    {
+        // 所有继电器都关闭，但是设备还是开着的 
+
+        all_shutdowm();  //确保所有继电器的状态是关机状态
+        gpio_direction_output(sw0_led, 0); //关闭总开关的指示灯 
+        // 清除显示的第 1 ~ 7位数字
+        clean_num(1);clean_num(2);clean_num(3);
+        clean_num(4);clean_num(5);clean_num(6); clean_num(7);
+        clean_dis(SEG_S5); // 符号 V
+        clean_dis(SEG_T1); // 继电器通道边框
+        clean_dis(SEG_T);
+
+        //关机 关闭 LCD屏的背光灯
+        gpio_direction_output(IO_PORTA_07, 0);
+
+        lcd1621_off();  //关闭lcd显示
+        sequencers.on_ff = DEVICE_OFF;
+    }
+    else if (0 == flag_is_all_relays_colse && DEVICE_OFF == sequencers.on_ff)
+    {
+        // 至少有一个继电器开启，但是设备是关闭的
+        gpio_direction_output(lcd_light, 1);  //开机点亮LCD屏的背光灯
+        gpio_direction_output(sw0_led, 1); // 开灯（总开关对应的按键灯）
+        lcd_open_frame();//lcd屏幕显示轮廓
+        sequencers.on_ff = DEVICE_ON;
+    }
+#endif
 }
 
 //将开机时拆分成分秒的格式
@@ -3715,9 +3806,9 @@ void adkey_16way_long(int keyevent)
  *
  * @param temp
  */
-extern ON_OFF_FLAG temp_on_off[16];
+ // extern ON_OFF_FLAG temp_on_off[16];
 
-// 继电器操作（开启、关闭）
+ // 继电器操作（开启、关闭）
 void need_handle_relays(ON_OFF_FLAG temp)
 {
     // printf("%s %d\n", __func__, __LINE__);
@@ -3793,18 +3884,21 @@ void master_led_flashing(void)
 //bt模式
 void irkey_16way_click(int keyevent)
 {
+    // printf("%s\n", __func__);
 
-    u8 next_data[7];
+    // u8 next_data[7];
     switch (keyevent)
     {
     case KEY1_IR_CLICK:  //开机
         if (sequencers.on_ff == DEVICE_OFF)    // ---------------------- 开机
+            // if (0 == flag_is_lcd_screen_on)
         {
             printf("ir key_master_on_off open\n");
+#if 1
             //开机，点亮三个mp3按键的灯 
-            gpio_direction_output(IO_PORTA_11, 1);
-            gpio_direction_output(IO_PORTC_03, 1);
-            gpio_direction_output(IO_PORTC_02, 1);
+            // gpio_direction_output(IO_PORTA_11, 1);
+            // gpio_direction_output(IO_PORTC_03, 1);
+            // gpio_direction_output(IO_PORTC_02, 1);
 
             //开机点亮LCD屏的背光灯
             gpio_direction_output(lcd_light, 1); //背光灯默认关
@@ -3815,15 +3909,41 @@ void irkey_16way_click(int keyevent)
             read_flash_sequencers_status_init();  //读取开机时序信息
             find_max_time(DEVICE_ON);
             open_timer_test();//开始时序
+#endif
+
+            // //开机点亮LCD屏的背光灯
+            // gpio_direction_output(lcd_light, 1);
+            // //lcd屏幕显示轮廓
+            // lcd_open_frame();
+            // gpio_direction_output(sw0_led, 1); // 开灯（总开关对应的按键灯）
+
+            // flag_is_lcd_screen_on = 1; // 表示lcd开启
         }
         else if (sequencers.on_ff == DEVICE_ON)   // -------------------------- 关机
+            // else if (flag_is_lcd_screen_on)
         {
             printf("ir key_master_on_off off\n");
-
+#if 1
             read_flash_sequencers_status_init();  //读取关机时序信息
             find_max_time(DEVICE_OFF);
             close_timer_test(); //关机时序
             make_dis(SEG_T);   // 音符
+#endif
+
+            // gpio_direction_output(sw0_led, 0); //关闭总开关的指示灯 
+            // // 清除显示的第 1 ~ 7位数字
+            // clean_num(1);clean_num(2);clean_num(3);
+            // clean_num(4);clean_num(5);clean_num(6); clean_num(7);
+            // clean_dis(SEG_S5); // 符号 V
+            // clean_dis(SEG_T1); // 继电器通道边框
+            // clean_dis(SEG_T);
+
+            // //关机 关闭 LCD屏的背光灯
+            // gpio_direction_output(IO_PORTA_07, 0);
+
+            // lcd1621_off();  //关闭lcd显示
+            // flag_is_lcd_screen_on = 0; // 表示lcd关闭
+
         }
 
 
@@ -3850,66 +3970,107 @@ void irkey_16way_click(int keyevent)
         //     break;
 
     case KEY13_IR_CLICK:   //继电器1  USER_TO_DO 后续需要添加独立的开机和关机延时
-        // if (sequencers.on_ff == DEVICE_ON)
-    {
-        adkey_control(sw1_led, 0);   fd_relay_state();
-    }
+        if (sequencers.on_ff == DEVICE_ON)
+        {
+            adkey_control(sw1_led, 0);   fd_relay_state();
+        }
 
-    break;
+        break;
     case KEY14_IR_CLICK: // USER_TO_DO 后续需要添加独立的开机和关机延时
-        // if (sequencers.on_ff == DEVICE_ON)
-    {
-        adkey_control(sw2_led, 1);   fd_relay_state();
-    }
+        if (sequencers.on_ff == DEVICE_ON)
+        {
+            adkey_control(sw2_led, 1);   fd_relay_state();
+        }
 
-    break;
+        break;
 
     case KEY15_IR_CLICK: // USER_TO_DO 后续需要添加独立的开机和关机延时
-        // if (sequencers.on_ff == DEVICE_ON)
-    {
-        adkey_control(sw3_led, 2);   fd_relay_state();
-    }
-    break;
+        if (sequencers.on_ff == DEVICE_ON)
+        {
+            adkey_control(sw3_led, 2);   fd_relay_state();
+        }
+        break;
     case KEY16_IR_CLICK: // USER_TO_DO 后续需要添加独立的开机和关机延时
-        // if (sequencers.on_ff == DEVICE_ON)
-    {
-        adkey_control(sw4_led, 3);   fd_relay_state();
-    }
-    break;
+        if (sequencers.on_ff == DEVICE_ON)
+        {
+            adkey_control(sw4_led, 3);   fd_relay_state();
+        }
+        break;
     case KEY17_IR_CLICK: // USER_TO_DO 后续需要添加独立的开机和关机延时
-        // if (sequencers.on_ff == DEVICE_ON)
-    {
-        adkey_control(sw5_led, 4);   fd_relay_state();
-    }
-    break;
+        if (sequencers.on_ff == DEVICE_ON)
+        {
+            adkey_control(sw5_led, 4);   fd_relay_state();
+        }
+        break;
     case KEY18_IR_CLICK: // USER_TO_DO 后续需要添加独立的开机和关机延时
-        // if (sequencers.on_ff == DEVICE_ON)
-    {
-        adkey_control(sw6_led, 5);   fd_relay_state();
-    }
-    break;
+        if (sequencers.on_ff == DEVICE_ON)
+        {
+            adkey_control(sw6_led, 5);   fd_relay_state();
+        }
+        break;
     case KEY19_IR_CLICK: // USER_TO_DO 后续需要添加独立的开机和关机延时
-        // if (sequencers.on_ff == DEVICE_ON)
-    {
-        adkey_control(sw7_led, 6);   fd_relay_state();
-    }
-    break;
+        if (sequencers.on_ff == DEVICE_ON)
+        {
+            adkey_control(sw7_led, 6);   fd_relay_state();
+        }
+        break;
     case KEY20_IR_CLICK: // USER_TO_DO 后续需要添加独立的开机和关机延时
-        // if (sequencers.on_ff == DEVICE_ON)
+        if (sequencers.on_ff == DEVICE_ON)
+        {
+            adkey_control(sw8_led, 7);   fd_relay_state();
+        }
+        break;
+
+
+
+
+    }// switch (keyevent)
+
+#if 0
+
+    /*
+        检查继电器是否全部关闭 或是 有一个继电器开启
+    */
+    u8 flag_is_all_relays_colse = 1;
+    u8 i = 0;
+    for (i = 0; i < RELAYS_MAX; i++)
     {
-        adkey_control(sw8_led, 7);   fd_relay_state();
-    }
-    break;
-
-
-
-
+        if (temp_on_off[i] == DEVICE_ON)
+        {
+            flag_is_all_relays_colse = 0;
+            break;
+        }
     }
 
 
+    if (flag_is_all_relays_colse && DEVICE_ON == sequencers.on_ff)
+    {
+        // 所有继电器都关闭，但是设备还是开着的 
 
+        all_shutdowm();  //确保所有继电器的状态是关机状态
+        gpio_direction_output(sw0_led, 0); //关闭总开关的指示灯 
+        // 清除显示的第 1 ~ 7位数字
+        clean_num(1);clean_num(2);clean_num(3);
+        clean_num(4);clean_num(5);clean_num(6); clean_num(7);
+        clean_dis(SEG_S5); // 符号 V
+        clean_dis(SEG_T1); // 继电器通道边框
+        clean_dis(SEG_T);
 
+        //关机 关闭 LCD屏的背光灯
+        gpio_direction_output(IO_PORTA_07, 0);
 
+        lcd1621_off();  //关闭lcd显示
+        sequencers.on_ff = DEVICE_OFF;
+    }
+    else if (0 == flag_is_all_relays_colse && DEVICE_OFF == sequencers.on_ff)
+    {
+        // 至少有一个继电器开启，但是设备是关闭的
+        gpio_direction_output(lcd_light, 1);  //开机点亮LCD屏的背光灯
+        gpio_direction_output(sw0_led, 1); // 开灯（总开关对应的按键灯）
+        lcd_open_frame();//lcd屏幕显示轮廓
+        sequencers.on_ff = DEVICE_ON;
+    }
+#endif
 
 
 }

@@ -9,7 +9,10 @@
 #include "chgbox_ctrl.h"
 #include "update_loader_download.h"
 
-#include "../../user_app/ac_detection/ac_detection.h"
+#include "../../apps/soundbox/include/key_event_deal.h" // 按键消息类型定义
+#include "../../user_app/lcd/lcd1621.h"
+#include "../../user_app/sequencer/sequencer.h" // 时序器变量类型和变量定义
+#include "../../user_app/ac_detection/ac_detection.h" // 交流电电压检测
 
 
 extern void setup_arch();
@@ -59,7 +62,8 @@ int eSystemConfirmStopStatus(void)
         log_i("Endless Sleep");
         power_set_soft_poweroff();
         return 1;
-    } else {
+    }
+    else {
         log_i("100 ms wakeup");
         return 0;
     }
@@ -83,7 +87,8 @@ static void check_power_on_key(void)
             if (delay_10ms_cnt > 70) {
                 return;
             }
-        } else {
+        }
+        else {
             putchar('-');
             delay_10ms_cnt = 0;
 
@@ -102,11 +107,11 @@ static void check_power_on_key(void)
 //耀祥时序器，电源指示灯，通电就亮
 void power_light_gpio_init(void)
 {
-    gpio_set_pull_down(pwoer_light,0);
-    gpio_set_pull_up(pwoer_light,0);
-    gpio_direction_output(pwoer_light,0);
+    gpio_set_pull_down(pwoer_light, 0);
+    gpio_set_pull_up(pwoer_light, 0);
+    gpio_direction_output(pwoer_light, 0);
 
-    
+
 }
 
 
@@ -114,26 +119,54 @@ void power_light_gpio_init(void)
 void mp3key_light_gpio_init(void)
 {
     //上
-    gpio_set_pull_down(mp3_light_shang,0);
-    gpio_set_pull_up(mp3_light_shang,0);
-    gpio_direction_output(mp3_light_shang,0);
+    gpio_set_pull_down(mp3_light_shang, 0);
+    gpio_set_pull_up(mp3_light_shang, 0);
+    gpio_direction_output(mp3_light_shang, 0);
     //中
-    gpio_set_pull_down(mp3_light_zhong,0);
-    gpio_set_pull_up(mp3_light_zhong,0);
-    gpio_direction_output(mp3_light_zhong,0);
+    gpio_set_pull_down(mp3_light_zhong, 0);
+    gpio_set_pull_up(mp3_light_zhong, 0);
+    gpio_direction_output(mp3_light_zhong, 0);
     //下
-    gpio_set_pull_down(mp3_light_xia,0);
-    gpio_set_pull_up(mp3_light_xia,0);
-    gpio_direction_output(mp3_light_xia,0);
+    gpio_set_pull_down(mp3_light_xia, 0);
+    gpio_set_pull_up(mp3_light_xia, 0);
+    gpio_direction_output(mp3_light_xia, 0);
 
-    gpio_direction_output(mp3_light_shang,0);
-    gpio_direction_output(mp3_light_zhong,0);
-    gpio_direction_output(mp3_light_xia,0);
+    gpio_direction_output(mp3_light_shang, 0);
+    gpio_direction_output(mp3_light_zhong, 0);
+    gpio_direction_output(mp3_light_xia, 0);
+}
+
+#if 1 // 刚上电，如果要马上开机，使用这段：
+volatile u16 lcd_first_pwr_on_timer_id = 0;
+volatile u8 lcd_first_pwr_on_time_cnt = 0;
+void lcd_first_pwr_on_isr(void)
+{
+    lcd_first_pwr_on_time_cnt++;
+    if (lcd_first_pwr_on_time_cnt >= 2)
+    {
+        lcd_first_pwr_on_time_cnt = 0;
+        sys_hi_timer_del(lcd_first_pwr_on_timer_id);
+        lcd_open_frame();
+
+        if (sequencers.on_ff == DEVICE_ON)
+        {
+            // 如果断电之前是开机的状态
+            // find_max_time(DEVICE_ON);
+            // open_timer_test();//开始时序
+        }
+    }
 }
 
 
-
-
+// 刚上电不能马上开机，否则图标会全亮
+void lcd_handle_when_first_power_on()
+{
+    if (lcd_first_pwr_on_timer_id == 0)                  // 防止重复注册
+    {
+        lcd_first_pwr_on_timer_id = sys_hi_timer_add(NULL, lcd_first_pwr_on_isr, 500); // 注册定时器  500ms
+    }
+}
+#endif // 刚上电，如果要马上开机
 
 static void app_init()
 {
@@ -153,18 +186,18 @@ static void app_init()
     audio_enc_init();
     audio_dec_init();
 
-  
-// ---------- 耀祥时序器  ---------
+
+    // ---------- 耀祥时序器  ---------
 
 
-    // Uart0_Init(); //耀祥串口0  功率计
+        // Uart0_Init(); //耀祥串口0  功率计
     Uart1_Init(); //耀祥串口1  向下一级
     Uart2_Init(); //耀祥串口2  连接PC
 
     ac_detection_init(); // 交流电电压检测 
 
     power_light_gpio_init();
-    mp3key_light_gpio_init();
+    // mp3key_light_gpio_init();
     User_rtc_load_save(1); // 初始化系统时间 
     read_sys_current_time();
 
@@ -173,16 +206,41 @@ static void app_init()
     extern void lcd1621_init(void);
     lcd1621_init();
     set_open_machine_flag();   // 上电初始化
-   
+
     extern void  lcdseg_handle(void);
     extern void  printf_current_time(void);
     extern void relay_timer_handle(void);
-    sys_timer_add(NULL, lcdseg_handle, 10);  //
-    sys_timer_add(NULL, relay_timer_handle, 1000); 
+    sys_timer_add(NULL, lcdseg_handle, 10);  // LCD屏显示处理
+    // sys_timer_add(NULL, relay_timer_handle, 1000); // 继电器定时开关机处理
     sys_hi_timer_add(NULL, ac_detection_update, 2); // 采集交流电检测脚上的ad值
     sys_hi_timer_add(NULL, ac_voltage_update, 500); // 计算、更新交流电电压值
 
-// ---------- 耀祥时序器 END --------
+    lcd_handle_when_first_power_on();
+    /*
+        上电之后，只点亮LCD屏幕和主开关对应的灯
+        但是刚上电就点亮LCD会导致lcd所有内容都显示出来
+    */
+
+    // os_time_dly(100);
+    // gpio_direction_output(lcd_light, 1);     // 开机点亮LCD屏的背光灯 
+    // lcd_open_frame();//lcd屏幕显示轮廓
+    // // // read_flash_sequencers_status_init();  //读取开机时序信息
+    // // // find_max_time(DEVICE_ON); 
+    // gpio_direction_output(sw0_led, 1); // 开灯（总开关对应的按键灯）
+    // flag_is_lcd_screen_on = 1; // 表示屏幕开启
+
+    // read_flash_sequencers_status_init();  //读取开机时序信息
+    //开机点亮LCD屏的背光灯
+    // gpio_direction_output(lcd_light, 1);
+    //lcd屏幕显示轮廓
+    // memset(dis_data, 0, sizeof(dis_data));
+
+    // lcd
+    // lcd1621_write_cmd(0x02); // #define LCD_OFF_1621    0x02
+    // lcd_open_frame();
+    // find_max_time(DEVICE_ON);
+    // open_timer_test();//开始时序
+    // ---------- 耀祥时序器 END --------
 
 
     if (!UPDATE_SUPPORT_DEV_IS_NULL()) {
@@ -202,7 +260,8 @@ static void app_init()
         if (!update && cpu_reset_by_soft()) {
 #endif
             app_var.play_poweron_tone = 0;
-        } else {
+        }
+        else {
             check_power_on_key();
         }
 #endif
@@ -219,7 +278,7 @@ static void app_init()
      */
     if (update || (power_reset_src & BIT(0)) || (power_reset_src & BIT(4))) {
         // log_info("reset_flag:0x%x",power_reset_src);
-        printf("reset_flag:0x%x",power_reset_src);
+        printf("reset_flag:0x%x", power_reset_src);
         cur_por_flag = 0xA5;
     }
     int ret = syscfg_read(CFG_POR_FLAG, &por_flag, 1);
@@ -235,7 +294,8 @@ static void app_init()
         extern u8 get_charge_online_flag(void);
         if (get_charge_online_flag()) { //关机时，充电插入
 
-        } else { //关机时，充电拔出
+        }
+        else { //关机时，充电拔出
             power_set_soft_poweroff();
         }
     }
@@ -245,15 +305,18 @@ static void app_init()
     /* clock_add_set(CHARGE_BOX_CLK); */
     chgbox_init_app();
 #endif
+
+
+    // app_task_put_key_msg(KEW_PROW_IO, 0);  //推送按键消息
 }
 
-static void app_task_handler(void *p)
+static void app_task_handler(void* p)
 {
     app_init();  //app初始化
     app_main();
 }
 
-__attribute__((used)) int *__errno()
+__attribute__((used)) int* __errno()
 {
     static int err;
     return &err;

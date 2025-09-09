@@ -49,18 +49,20 @@ static int sleep_key_event_opr(struct sys_event* event)
 
     if (key_event == KEW_PROW_IO && sequencers.timeing_flag == 1)
     {
-        sequencers.timeing_flag = 0;
+        // sequencers.timeing_flag = 0;
         adkey_master_on_off();
 
         // app_task_switch_to(APP_BT_TASK);
     }
+
     //单击红外按键 仅开机
-    if (key_event == KEY1_IR_CLICK && sequencers.timeing_flag == 1)
-    {
-        sequencers.timeing_flag = 0;
-        irkey_16way_click(KEY1_IR_CLICK);
-        // app_task_switch_to(APP_BT_TASK);
-    }
+    // if (key_event == KEY1_IR_CLICK && sequencers.timeing_flag == 1)
+    // {
+    //     // sequencers.timeing_flag = 0;
+    //     printf("%s\n", __func__);
+    //     irkey_16way_click(KEY1_IR_CLICK);
+    //     // app_task_switch_to(APP_BT_TASK);
+    // }
 
 
     if (key_event == APP_CMD)  //上位机读取当前状态
@@ -70,8 +72,8 @@ static int sleep_key_event_opr(struct sys_event* event)
 
     // extern u8 loc_screen_f;
     //单击ad按键  开机状态且计时完成
-    // if (sequencers.on_ff == DEVICE_ON && sequencers.timeing_flag == 1)
-    if (sequencers.timeing_flag) // 
+    if (sequencers.on_ff == DEVICE_ON && sequencers.timeing_flag == 1)
+    // if (sequencers.timeing_flag) // 如果没有在开关机的延时中
     {
         // if (loc_screen_f == 0)
         {
@@ -101,6 +103,7 @@ static int sleep_key_event_opr(struct sys_event* event)
     //单击红外按键
     if (sequencers.timeing_flag == 1)
     {
+        // printf("%s\n", __func__);
         irkey_16way_click(key_event);
     }
 

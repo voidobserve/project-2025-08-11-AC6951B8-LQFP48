@@ -385,13 +385,13 @@ void lcd_open_frame(void)
 
 	// unsigned char i;
 	// static u16 cnt_ = 20000;
-	gpio_direction_output(lcd_light, 1); //背光灯
-	lcd1621_write_cmd(LCD_ON_1621);
 
+	lcd1621_write_cmd(LCD_ON_1621);
+	// os_time_dly(1000);
 	make_dis(SEG_S5); // "V"
 	// make_dis(SEG_S6); // "W"
-	make_dis(SEG_T1); // 继电器通道边框
-	make_dis(SEG_T);   // 音符
+	// make_dis(SEG_T1); // 继电器通道边框
+	// make_dis(SEG_T);   // 音符
 	// make_dis(SEG_S2);   // 交流
 
 	// make_dis(SEG_X2);  // 锁符号的下半部分
@@ -406,7 +406,7 @@ void lcd_open_frame(void)
 	// make_num(6, 8); 
 	// make_num(7, 8); 
 
-
+	gpio_direction_output(lcd_light, 1); //背光灯
 }
 
 // 点亮继电器通道边框，点亮背光
@@ -434,9 +434,15 @@ void lcd1621_off(void)
 
 
 
-void adkey_ctrl_lcd_relays_open(u8 relay_number)
+
+/**
+ * @brief LCD显示单个继电器图标
+ *
+ * @param relay_index 继电器的索引
+ */
+void lcd_show_relay_icon(u8 relay_index)
 {
-	switch (relay_number)
+	switch (relay_index)
 	{
 	case 0:make_dis(SEG_1);break;
 	case 1:make_dis(SEG_2);break;
@@ -469,9 +475,15 @@ u16 clrbit(u16 x)
 
 
 //关闭lcd的继电器通道显示
-void adkey_ctrl_lcd_relays_close(u8 relay_number)
+// void adkey_ctrl_lcd_relays_close(u8 relay_number)
+/**
+ * @brief LCD清除单个继电器图标(不显示对应的继电器图标)
+ *
+ * @param relay_index 单个继电器的索引
+ */
+void lcd_clear_relay_icon(u8 relay_index)
 {
-	switch (relay_number)
+	switch (relay_index)
 	{
 	case 0:clean_dis(clrbit(SEG_1));break;
 	case 1:clean_dis(clrbit(SEG_2));break;
@@ -481,8 +493,6 @@ void adkey_ctrl_lcd_relays_close(u8 relay_number)
 	case 5:clean_dis(clrbit(SEG_6));break;
 	case 6:clean_dis(clrbit(SEG_7));break;
 	case 7:clean_dis(clrbit(SEG_8));break;
-
-
 
 	}
 }
@@ -584,7 +594,31 @@ void  lcdseg_handle(void)
 {
 #if 1
 
-	if (sequencers.on_ff == 1)
+	// if (flag_is_lcd_screen_on)
+	// {
+	// 	// 屏幕开启，刷新对应的继电器状态
+
+	// 	u8 i = 0;
+	// 	for (i = 0; i < RELAYS_MAX; i++)
+	// 	{
+	// 		// lcd1621_icon_update();
+	// 		if (temp_on_off[i] == DEVICE_ON)
+	// 		{
+	// 			lcd_show_relay_icon(i);
+	// 		}
+	// 		else
+	// 		{
+	// 			lcd_clear_relay_icon(i);
+	// 		}
+	// 	}
+	// }
+	// else
+	// {
+	// 	// 屏幕未开启，关闭屏幕
+	// }
+
+	if (sequencers.on_ff == DEVICE_ON)
+		// if (flag_is_lcd_screen_on)
 	{
 
 		blink_cnt++;
@@ -600,31 +634,31 @@ void  lcdseg_handle(void)
 		// printf("lcd_now_state = %d\n", lcd_now_state); 
 
 		// 显示
-		if (lcd_now_state == show_power)
-		{
+		// if (lcd_now_state == show_power)
+		// {
 
 
-			if (update_cnt >= 1000) //1s
-			{
-				update_cnt = 0;
-				clean_num(1);clean_num(2);clean_num(3);   //清
-				clean_num(4);clean_num(5);clean_num(6); clean_num(7);  // 清屏
-				clean_dis(clrbit(SEG_S3));clean_dis(clrbit(SEG_S4)); // 请 ' " 
+		// 	if (update_cnt >= 1000) //1s
+		// 	{
+		// 		update_cnt = 0;
+		// 		clean_num(1);clean_num(2);clean_num(3);   //清
+		// 		clean_num(4);clean_num(5);clean_num(6); clean_num(7);  // 清屏
+		// 		clean_dis(clrbit(SEG_S3));clean_dis(clrbit(SEG_S4)); // 请 ' " 
 
-				clean_dis(clrbit(SEG_S6)); // 关闭"W""
+		// 		clean_dis(clrbit(SEG_S6)); // 关闭"W""
 
-				//电压
-				make_num(1, voltage_array[0]);
-				make_num(2, voltage_array[1]);
-				make_num(3, voltage_array[2]);
-				// //功率
-				// make_num(4,power_array[0]);
-				// make_num(5,power_array[1]);
-				// make_num(6,power_array[2]);
-				// make_num(7,power_array[3]);
-			}
+		// 		//电压
+		// 		make_num(1, voltage_array[0]);
+		// 		make_num(2, voltage_array[1]);
+		// 		make_num(3, voltage_array[2]);
+		// 		// //功率
+		// 		// make_num(4,power_array[0]);
+		// 		// make_num(5,power_array[1]);
+		// 		// make_num(6,power_array[2]);
+		// 		// make_num(7,power_array[3]);
+		// 	}
 
-		}
+		// }
 		// 设置开机延时
 		else if (lcd_now_state == open_dev_time)
 		{
@@ -704,8 +738,8 @@ void  lcdseg_handle(void)
 			if (blink_f)
 			{
 				clean_num(1);clean_num(2);clean_num(3);   //清
-				clean_num(4);clean_num(5);clean_num(6); clean_num(7);  // 清屏
-				clean_dis(clrbit(SEG_S5)); clean_dis(clrbit(SEG_S6)); // 关闭“V”"W""
+				clean_num(4);clean_num(5);clean_num(6); clean_num(7); // 清屏
+				clean_dis(clrbit(SEG_S5)); clean_dis(clrbit(SEG_S6)); // 关闭 “V” "W" 
 
 #if 0
 				//显示年份
@@ -1066,20 +1100,30 @@ void  lcdseg_handle(void)
 
 	}
 
-	if (BT_CONNECT_STATE)
-	{
-		make_dis(SEG_S1); // "IR"
-	}
-	else
-	{
-		clean_dis(clrbit(SEG_S1));
-	}
+	// if (BT_CONNECT_STATE)
+	// {
+	// 	make_dis(SEG_S1); // "IR"
+	// }
+	// else
+	// {
+	// 	clean_dis(clrbit(SEG_S1));
+	// }
 
 #endif
 
 	// lcd_open_frame(); // 测试用 -- 打开背光，显示边框
 	// check_lcd_display(); // 测试用 
 	// printf("test \n");
+
+	// 上电期间，一直显示LCD，显示交流电电压：
+	clean_num(1);clean_num(2);clean_num(3);   //清
+	clean_num(4);clean_num(5);clean_num(6); clean_num(7);  // 清屏
+	clean_dis(clrbit(SEG_S3));clean_dis(clrbit(SEG_S4)); // 不显示： ' " 
+	clean_dis(clrbit(SEG_S6)); // 关闭"W"
+	//电压
+	make_num(1, voltage_array[0]);
+	make_num(2, voltage_array[1]);
+	make_num(3, voltage_array[2]);
 
 	lcd1621_write_data(dis_data, 16);
 

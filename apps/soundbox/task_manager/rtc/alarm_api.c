@@ -1042,7 +1042,7 @@ void relay_timer_handle(void)
                                 // 开启继电器
                                 printf("open ----------------");
                                 gpio_direction_output(i, 1); //开灯
-                                adkey_ctrl_lcd_relays_open(i); // lcd点亮对应的通道
+                                lcd_show_relay_icon(i); // lcd点亮对应的通道
                                 if(sequencers.on_ff == 0)
                                 {
                                    liangbiankuang();
@@ -1076,7 +1076,7 @@ void relay_timer_handle(void)
                                 // 关闭继电器
                                 printf("close ----------------");
                                 gpio_direction_output(i, 0); //关灯
-                                adkey_ctrl_lcd_relays_close(i); // lcd点亮对应的通道
+                                lcd_clear_relay_icon(i); // lcd点亮对应的通道
 
                             }//秒
                         }//分

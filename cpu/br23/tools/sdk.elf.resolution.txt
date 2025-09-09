@@ -1991,7 +1991,6 @@ obj/Release/apps/soundbox/common/init.o
 -r=obj/Release/apps/soundbox/common/init.o,set_open_machine_flag,l
 -r=obj/Release/apps/soundbox/common/init.o,sys_timer_add,l
 -r=obj/Release/apps/soundbox/common/init.o,lcdseg_handle,l
--r=obj/Release/apps/soundbox/common/init.o,relay_timer_handle,l
 -r=obj/Release/apps/soundbox/common/init.o,usr_timer_add,l
 -r=obj/Release/apps/soundbox/common/init.o,ac_detection_update,l
 -r=obj/Release/apps/soundbox/common/init.o,ac_voltage_update,l
@@ -3611,9 +3610,9 @@ obj/Release/apps/soundbox/task_manager/rtc/alarm_api.o
 -r=obj/Release/apps/soundbox/task_manager/rtc/alarm_api.o,read_sys_current_time,pl
 -r=obj/Release/apps/soundbox/task_manager/rtc/alarm_api.o,relay_timer_handle,pl
 -r=obj/Release/apps/soundbox/task_manager/rtc/alarm_api.o,gpio_direction_output,l
--r=obj/Release/apps/soundbox/task_manager/rtc/alarm_api.o,adkey_ctrl_lcd_relays_open,l
+-r=obj/Release/apps/soundbox/task_manager/rtc/alarm_api.o,lcd_show_relay_icon,l
 -r=obj/Release/apps/soundbox/task_manager/rtc/alarm_api.o,liangbiankuang,l
--r=obj/Release/apps/soundbox/task_manager/rtc/alarm_api.o,adkey_ctrl_lcd_relays_close,l
+-r=obj/Release/apps/soundbox/task_manager/rtc/alarm_api.o,lcd_clear_relay_icon,l
 -r=obj/Release/apps/soundbox/task_manager/rtc/alarm_api.o,syscfg_write,l
 -r=obj/Release/apps/soundbox/task_manager/rtc/alarm_api.o,syscfg_read,l
 -r=obj/Release/apps/soundbox/task_manager/rtc/alarm_api.o,p33_soft_reset,l
@@ -3707,9 +3706,9 @@ obj/Release/apps/soundbox/task_manager/sleep/sleep.o
 -r=obj/Release/apps/soundbox/task_manager/sleep/sleep.o,sys_key_event_enable,l
 -r=obj/Release/apps/soundbox/task_manager/sleep/sleep.o,clock_idle,l
 -r=obj/Release/apps/soundbox/task_manager/sleep/sleep.o,adkey_master_on_off,l
--r=obj/Release/apps/soundbox/task_manager/sleep/sleep.o,irkey_16way_click,l
 -r=obj/Release/apps/soundbox/task_manager/sleep/sleep.o,fd_relay_state,l
 -r=obj/Release/apps/soundbox/task_manager/sleep/sleep.o,adkey_16way_on_off,l
+-r=obj/Release/apps/soundbox/task_manager/sleep/sleep.o,irkey_16way_click,l
 -r=obj/Release/apps/soundbox/task_manager/sleep/sleep.o,sequencers,l
 obj/Release/apps/soundbox/task_manager/spdif/hdmi_cec_drv.o
 obj/Release/apps/soundbox/task_manager/spdif/spdif.o
@@ -3897,9 +3896,9 @@ obj/Release/apps/user_app/lcd/lcd1621.o
 -r=obj/Release/apps/user_app/lcd/lcd1621.o,liangbiankuang,pl
 -r=obj/Release/apps/user_app/lcd/lcd1621.o,check_lcd_display,pl
 -r=obj/Release/apps/user_app/lcd/lcd1621.o,lcd1621_off,pl
--r=obj/Release/apps/user_app/lcd/lcd1621.o,adkey_ctrl_lcd_relays_open,pl
+-r=obj/Release/apps/user_app/lcd/lcd1621.o,lcd_show_relay_icon,pl
 -r=obj/Release/apps/user_app/lcd/lcd1621.o,clrbit,pl
--r=obj/Release/apps/user_app/lcd/lcd1621.o,adkey_ctrl_lcd_relays_close,pl
+-r=obj/Release/apps/user_app/lcd/lcd1621.o,lcd_clear_relay_icon,pl
 -r=obj/Release/apps/user_app/lcd/lcd1621.o,clean_num,pl
 -r=obj/Release/apps/user_app/lcd/lcd1621.o,lcdseg_handle,pl
 -r=obj/Release/apps/user_app/lcd/lcd1621.o,lcd1621_sendbuf,pl
@@ -3922,6 +3921,10 @@ obj/Release/apps/user_app/lcd/lcd1621.o
 -r=obj/Release/apps/user_app/lcd/lcd1621.o,BT_CONNECT_STATE,pl
 -r=obj/Release/apps/user_app/lcd/lcd1621.o,sequencers,l
 obj/Release/apps/user_app/lcd/lcd_user_driver.o
+obj/Release/apps/user_app/sequencer/sequencer.o
+-r=obj/Release/apps/user_app/sequencer/sequencer.o,flag_is_lcd_screen_on,pl
+-r=obj/Release/apps/user_app/sequencer/sequencer.o,temp_on_off,pl
+-r=obj/Release/apps/user_app/sequencer/sequencer.o,sequencers,pl
 obj/Release/cpu/br23/adc_api.o
 -r=obj/Release/cpu/br23/adc_api.o,adc_add_sample_ch,pl
 -r=obj/Release/cpu/br23/adc_api.o,printf,l
@@ -5254,8 +5257,8 @@ obj/Release/cpu/br23/uart_test.o
 -r=obj/Release/cpu/br23/uart_test.o,sequencers_data_init,pl
 -r=obj/Release/cpu/br23/uart_test.o,relay_off_on,pl
 -r=obj/Release/cpu/br23/uart_test.o,gpio_direction_output,l
--r=obj/Release/cpu/br23/uart_test.o,adkey_ctrl_lcd_relays_open,l
--r=obj/Release/cpu/br23/uart_test.o,adkey_ctrl_lcd_relays_close,l
+-r=obj/Release/cpu/br23/uart_test.o,lcd_show_relay_icon,l
+-r=obj/Release/cpu/br23/uart_test.o,lcd_clear_relay_icon,l
 -r=obj/Release/cpu/br23/uart_test.o,fd_relay_state,pl
 -r=obj/Release/cpu/br23/uart_test.o,adkey_control,pl
 -r=obj/Release/cpu/br23/uart_test.o,close_timer_test,pl
@@ -5263,7 +5266,6 @@ obj/Release/cpu/br23/uart_test.o
 -r=obj/Release/cpu/br23/uart_test.o,open_timer_test,pl
 -r=obj/Release/cpu/br23/uart_test.o,adkey_master_on_off,pl
 -r=obj/Release/cpu/br23/uart_test.o,lcd_open_frame,l
--r=obj/Release/cpu/br23/uart_test.o,make_dis,l
 -r=obj/Release/cpu/br23/uart_test.o,adkey_16way_on_off,pl
 -r=obj/Release/cpu/br23/uart_test.o,clean_num,l
 -r=obj/Release/cpu/br23/uart_test.o,make_alphabet,l
@@ -5281,6 +5283,7 @@ obj/Release/cpu/br23/uart_test.o
 -r=obj/Release/cpu/br23/uart_test.o,all_shutdowm,pl
 -r=obj/Release/cpu/br23/uart_test.o,master_led_flashing,pl
 -r=obj/Release/cpu/br23/uart_test.o,irkey_16way_click,pl
+-r=obj/Release/cpu/br23/uart_test.o,make_dis,l
 -r=obj/Release/cpu/br23/uart_test.o,irket_on_off,pl
 -r=obj/Release/cpu/br23/uart_test.o,irkey_16way_click_music,pl
 -r=obj/Release/cpu/br23/uart_test.o,app_task_put_key_msg,l
@@ -5296,10 +5299,10 @@ obj/Release/cpu/br23/uart_test.o
 -r=obj/Release/cpu/br23/uart_test.o,uart2_bus,pl
 -r=obj/Release/cpu/br23/uart_test.o,relay_table,pl
 -r=obj/Release/cpu/br23/uart_test.o,__event_handler_uart_event_handler,pl
--r=obj/Release/cpu/br23/uart_test.o,sequencers,pl
+-r=obj/Release/cpu/br23/uart_test.o,sequencers,l
 -r=obj/Release/cpu/br23/uart_test.o,uart1_data,pl
 -r=obj/Release/cpu/br23/uart_test.o,uart2_data,pl
--r=obj/Release/cpu/br23/uart_test.o,temp_on_off,pl
+-r=obj/Release/cpu/br23/uart_test.o,temp_on_off,l
 -r=obj/Release/cpu/br23/uart_test.o,timer_id,pl
 -r=obj/Release/cpu/br23/uart_test.o,timer_cnt,pl
 -r=obj/Release/cpu/br23/uart_test.o,temp_time,pl

@@ -10,51 +10,13 @@
 
 //---------耀祥时序器
 
+#include "../../apps/user_app/sequencer/sequencer.h" // 时序器相关变量类型和变量定义
 
-#define RELAYS_MAX 8
-
-typedef enum
-{
-    DEVICE_OFF,     //关机
-    DEVICE_ON,      //开机
-}ON_OFF_FLAG;
-
-
-#include "sys_time.h"
-typedef struct 
-{
-    ON_OFF_FLAG open_on_off;  //继电器的开启时的开关状态（开关对应的状态）
-    ON_OFF_FLAG clod_on_off;  //继电器的关闭时的开关状态（开关对应的状态）
-
-    // u8 status_on_off; // 继电器当前状态，0--关闭，1--开启
-
-    uint8_t open_time;   // 继电器开机延时时间
-    uint8_t close_time;  // 继电器关机延时时间
-   struct sys_time countdown_open_time;   // 继电器的定时开机的时间  月 日 时 分 秒  
-   struct sys_time countdown_close_time;  // 继电器的定时关机的时间  月 日 时 分 秒  
-
-}RELAYS;
-
-typedef struct 
-{
-    ON_OFF_FLAG on_ff;  //总开关
-    uint8_t addr;  //设备地址
-    RELAYS  realy[RELAYS_MAX];  // 继电器 relay（原本的工程中是realy）
-    uint8_t timeing_flag;  //0:计时中 1：计时结束
-    // uint8_t open_timeing;   // 开机时序的计时时间
-    u16 open_timeing; // 继电器开机时序的计时时间
-    // uint8_t close_timeing;   // 关机时序而定计时时间
-    u16 close_timeing; // 继电器关机时序的计时时间
-    uint8_t relay_number;    //多少路继电器 （继电器总数）
-}SEQUENCER;
+ 
 
 
 
-
-
-
-
-void uart_event_handler(struct sys_event *e);
+void uart_event_handler(struct sys_event* e);
 //-----耀祥时序器 END-----
 
 #pragma region 
@@ -94,31 +56,32 @@ static inline u32 ut_msecs_to_jiffies(u32 msecs)
 {
     if (msecs >= 10) {
         msecs /= 10;
-    } else if (msecs) {
+    }
+    else if (msecs) {
         msecs = 1;
     }
     return msecs;
 }
 
 #if CONFIG_ENABLE_UART_SEM
-typedef OS_SEM UT_Semaphore ;
-static inline void UT_OSSemCreate(UT_Semaphore *sem, u32 count)
+typedef OS_SEM UT_Semaphore;
+static inline void UT_OSSemCreate(UT_Semaphore* sem, u32 count)
 {
     os_sem_create(sem, count);
 }
-static inline void UT_OSSemPost(UT_Semaphore *sem)
+static inline void UT_OSSemPost(UT_Semaphore* sem)
 {
     os_sem_post(sem);
 }
-static inline u32 UT_OSSemPend(UT_Semaphore *sem, u32 timeout)
+static inline u32 UT_OSSemPend(UT_Semaphore* sem, u32 timeout)
 {
     return os_sem_pend(sem, timeout);
 }
-static inline void UT_OSSemSet(UT_Semaphore *sem, u32 count)
+static inline void UT_OSSemSet(UT_Semaphore* sem, u32 count)
 {
     os_sem_set(sem, count);
 }
-static inline void UT_OSSemClose(UT_Semaphore *sem)
+static inline void UT_OSSemClose(UT_Semaphore* sem)
 {
 
 }
@@ -129,21 +92,21 @@ static inline void ut_sleep()
 
 #else
 typedef volatile u32 UT_Semaphore;
-static inline void UT_OSSemCreate(UT_Semaphore *sem, u32 count)
+static inline void UT_OSSemCreate(UT_Semaphore* sem, u32 count)
 {
     *sem = count;
 }
-static inline void UT_OSSemPost(UT_Semaphore *sem)
+static inline void UT_OSSemPost(UT_Semaphore* sem)
 {
     (*sem)++;
 }
-static inline u32 UT_OSSemPend(UT_Semaphore *sem, u32 timeout)
+static inline u32 UT_OSSemPend(UT_Semaphore* sem, u32 timeout)
 {
     u32 _timeout = timeout + ut_get_jiffies();
     extern void clr_wdt();
     while (1) {
         if (*sem) {
-            (*sem) --;
+            (*sem)--;
             break;
         }
         if ((timeout != 0) && time_before(_timeout, ut_get_jiffies())) {
@@ -153,11 +116,11 @@ static inline u32 UT_OSSemPend(UT_Semaphore *sem, u32 timeout)
     }
     return 0;
 }
-static inline void UT_OSSemSet(UT_Semaphore *sem, u32 count)
+static inline void UT_OSSemSet(UT_Semaphore* sem, u32 count)
 {
     *sem = count;
 }
-static inline void UT_OSSemClose(UT_Semaphore *sem)
+static inline void UT_OSSemClose(UT_Semaphore* sem)
 {
 
 }
@@ -169,25 +132,25 @@ static inline void ut_sleep()
 #endif
 
 
-typedef void (*ut_isr_cbfun)(void *ut_bus, u32 status);
+typedef void (*ut_isr_cbfun)(void* ut_bus, u32 status);
 struct uart_platform_data_t {
     u8 tx_pin;                                          ///< 作为发送引脚的引脚号，可从参考gpio.h枚举中选，当引脚为空时，则填 -1
     u8 rx_pin;                                          ///< 作为接收引脚的引脚号，可从参考gpio.h枚举中选，当引脚为空时，则填 -1
-    void *rx_cbuf;                                      ///< 如果使用中断DMA接收，则写入循环buf的首地址，ut中断使能；如果不使用，则写入NULL，无中断
+    void* rx_cbuf;                                      ///< 如果使用中断DMA接收，则写入循环buf的首地址，ut中断使能；如果不使用，则写入NULL，无中断
     u32 rx_cbuf_size;                                   ///< 循环buf的大小,必须为2的多少几次幂，如果不用循环buf，该值无效，可写NULL
     u32 frame_length;                                   ///< 产生RT中断的字节数，如无中断，该值无效
     u32 rx_timeout;                                     ///< 产生OT中断的时间值，单位ms，如无中断，该值无效
     ut_isr_cbfun isr_cbfun; 			                ///< ut中断的回调函数句柄，不用回调函数则写入NULL，如无中断，句柄无效
-    void *argv;                                         ///< ut中断的回调函数的一个扩展形参，可供用户设定，如无回调函数，此参数无效
-    u32 is_9bit: 1;                                     ///< ut九位模式使能位，0：关闭；1：使能
-    u32 baud: 24;                                       ///< ut的波特率
+    void* argv;                                         ///< ut中断的回调函数的一个扩展形参，可供用户设定，如无回调函数，此参数无效
+    u32 is_9bit : 1;                                     ///< ut九位模式使能位，0：关闭；1：使能
+    u32 baud : 24;                                       ///< ut的波特率
 };
 
 /**
  * @brief 循环buf结构体类型定义
  */
 typedef struct {
-    u8 *buffer;                                         ///<循环buf的首地址
+    u8* buffer;                                         ///<循环buf的首地址
     u32 buf_size;                                       ///<循环buf的大小
     u32 buf_in;                                         ///<循环buf的写偏移量
     u32 buf_out;                                        ///<循环buf的读偏移量
@@ -204,11 +167,11 @@ enum {
  */
 typedef struct {
     ut_isr_cbfun isr_cbfun;                             ///< ut中断的回调函数句柄，不用回调函数则写入NULL，如无中断，句柄无效
-    void *argv;                                         ///< ut中断的回调函数的一个扩展形参,在此返回
+    void* argv;                                         ///< ut中断的回调函数的一个扩展形参,在此返回
     void (*putbyte)(char a);                            ///< ut发送一个byte
-    u8(*getbyte)(u8 *buf, u32 timeout);                 ///< ut接收一个byte，buf：字节存放地址；timeout：超时时间，单位ms；返回0：失败；返回1：成功
-    u32(*read)(u8 *inbuf, u32 len, u32 timeout);        ///< ut接收一个字符串，inbuf：字符串存放首地址；len：预接收长度；timeout：超时时间，单位ms；返回实际接收的长度
-    void (*write)(const u8 *outbuf, u32 len);           ///< ut发送一个字符串，outbuf：字符串首地址；len：发送的字符串长度；
+    u8(*getbyte)(u8* buf, u32 timeout);                 ///< ut接收一个byte，buf：字节存放地址；timeout：超时时间，单位ms；返回0：失败；返回1：成功
+    u32(*read)(u8* inbuf, u32 len, u32 timeout);        ///< ut接收一个字符串，inbuf：字符串存放首地址；len：预接收长度；timeout：超时时间，单位ms；返回实际接收的长度
+    void (*write)(const u8* outbuf, u32 len);           ///< ut发送一个字符串，outbuf：字符串首地址；len：发送的字符串长度；
     void (*set_baud)(u32 baud);                         ///< ut设置波特率，baud：波特率值
     u32 frame_length;
     u32 rx_timeout;
@@ -218,8 +181,8 @@ typedef struct {
 } uart_bus_t;
 
 
-const uart_bus_t *uart_dev_open(const struct uart_platform_data_t *arg);
-u32 uart_dev_close(uart_bus_t *ut);
+const uart_bus_t* uart_dev_open(const struct uart_platform_data_t* arg);
+u32 uart_dev_close(uart_bus_t* ut);
 #pragma endregion
 ////////////////////////////////////////////////////////////////////////////////
 #endif
