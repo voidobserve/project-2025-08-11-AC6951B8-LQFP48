@@ -23,11 +23,13 @@
 #include "dev_manager.h"
 #include "user_api/app_status_api.h"
 #include "adkey.h"
+
+#include "../../../../apps/user_app/sequencer/sequencer.h"
 #if TCFG_APP_SLEEP_EN
 
 extern void app_status_handler(enum APP_STATUS status);
 
-extern SEQUENCER sequencers;
+// extern SEQUENCER sequencers;
 
 extern void adkey_master_on_off(void);
 // extern void adkey_16way_on_off(int keyevent);
@@ -45,9 +47,12 @@ static int sleep_key_event_opr(struct sys_event* event)
     // //使用處理事件/消息的思想，不是鍵值
     int key_event = event->u.key.event;
     int key_value = event->u.key.value;
-    log_i("key_event:%d \n", key_event);
+    // log_i("key_event:%d \n", key_event);
+
+    printf("%s\n", __func__);
 
     if (key_event == KEW_PROW_IO && sequencers.timeing_flag == 1)
+    // if (key_event == KEW_PROW_IO && sequencers.timeing_flag == 0)
     {
         // sequencers.timeing_flag = 0;
         adkey_master_on_off();
@@ -73,6 +78,7 @@ static int sleep_key_event_opr(struct sys_event* event)
     // extern u8 loc_screen_f;
     //单击ad按键  开机状态且计时完成
     if (sequencers.on_ff == DEVICE_ON && sequencers.timeing_flag == 1)
+    // if (sequencers.on_ff == DEVICE_ON && sequencers.timeing_flag == 0)
     // if (sequencers.timeing_flag) // 如果没有在开关机的延时中
     {
         // if (loc_screen_f == 0)
@@ -84,6 +90,7 @@ static int sleep_key_event_opr(struct sys_event* event)
 
     //长按ad按键 开机状态且计时完成
     if (sequencers.on_ff == DEVICE_ON && sequencers.timeing_flag == 1)
+    // if (sequencers.on_ff == DEVICE_ON && sequencers.timeing_flag == 0)
     {
         // if (loc_screen_f)
         {
@@ -102,6 +109,7 @@ static int sleep_key_event_opr(struct sys_event* event)
 
     //单击红外按键
     if (sequencers.timeing_flag == 1)
+    // if (sequencers.timeing_flag == 0)
     {
         // printf("%s\n", __func__);
         irkey_16way_click(key_event);
@@ -210,7 +218,7 @@ void app_sleep_task()
         //while循环一次会阻塞在这里等待msg
         printf("sleep");
 
-        gpio_direction_output(pwoer_light, 1); //电源指示灯
+        // gpio_direction_output(pwoer_light, 1); //电源指示灯
         // check_relay_start();
         app_task_get_msg(msg, ARRAY_SIZE(msg), 1);
         // printf("msg[0] = %d",msg[0]);

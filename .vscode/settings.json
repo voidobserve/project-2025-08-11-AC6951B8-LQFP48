@@ -12,6 +12,15 @@
         "lcd1621.h": "c",
         "sequencer.h": "c",
         "ac_detection.h": "c",
-        "sys_time.h": "c"
+        "sys_time.h": "c",
+        "sequencer_device_on_off.h": "c",
+        "includes.h": "c",
+        "flash_handle.h": "c",
+        "key_event_deal.h": "c",
+        "chgbox_ctrl.h": "c",
+        "timer.h": "c",
+        "os_api.h": "c",
+        "typedef.h": "c",
+        "os_cpu.h": "c"
     }
 }

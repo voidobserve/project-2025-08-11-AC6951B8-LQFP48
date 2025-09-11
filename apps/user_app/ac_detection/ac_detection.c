@@ -163,6 +163,15 @@ void ac_voltage_update(void)
     ac_voltage_buff_add_new_val(ac_voltage);
     ac_voltage = ac_voltage_buff_get_filter_val();
 
+    // 测试时发现，测得的电压会比实际的电压大，所以减去一些，使显示的电压更准确
+    for (u8 i = 0; i < AC_VOLTAGE_DIFF_VALUE; i++)
+    {
+        if (ac_voltage > 0)
+        {
+            ac_voltage--;
+        }
+    }
+
     // 如果交流电电压小于90V，直接显示0V
     if (ac_voltage < 90)
     {

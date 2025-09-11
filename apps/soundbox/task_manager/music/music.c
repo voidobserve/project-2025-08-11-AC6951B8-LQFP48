@@ -560,7 +560,8 @@ void music_player_err_deal(int err)
 
 #include "adkey.h"
 #include "lcd1621.h"
-extern SEQUENCER sequencers;
+#include "../../../../apps/user_app/sequencer/sequencer.h"
+// extern SEQUENCER sequencers;
 
 extern void adkey_master_on_off(void);
 extern void adkey_16way_on_off(int keyevent);
@@ -588,7 +589,7 @@ static int music_key_event_opr(struct sys_event *event)
     msg[1] = event->u.key.value;//
     static int msg_demo = 0;
 
-    log_i("music task msg = %d\n", msg[0]);
+    // log_i("music task msg = %d\n", msg[0]);
 
 
 // ---------------------  耀祥时序器 -----------------------------
@@ -597,9 +598,10 @@ static int music_key_event_opr(struct sys_event *event)
 
     // extern u8 loc_screen_f;
   
-    // printf("%s\n", __func__);
+    printf("%s\n", __func__);
 
     if(key_event == KEW_PROW_IO  && sequencers.timeing_flag == 1)
+    // if(key_event == KEW_PROW_IO  && sequencers.timeing_flag == 0)
     { 
         // sequencers.timeing_flag = 0;
         adkey_master_on_off();
@@ -607,6 +609,7 @@ static int music_key_event_opr(struct sys_event *event)
     }
     //单击ad按键  开机状态且计时完成
     if(sequencers.on_ff == DEVICE_ON && sequencers.timeing_flag == 1) // 如果没有在开关机的延时中
+    // if(sequencers.on_ff == DEVICE_ON && sequencers.timeing_flag == 0) // 如果没有在开关机的延时中
     {
         // if(loc_screen_f == 0)  
         {
@@ -616,6 +619,7 @@ static int music_key_event_opr(struct sys_event *event)
     }
     //长按ad按键 开机状态且计时完成
     if(sequencers.on_ff == DEVICE_ON && sequencers.timeing_flag == 1)
+    // if(sequencers.on_ff == DEVICE_ON && sequencers.timeing_flag == 0)
     {
         // if(loc_screen_f)
         {
@@ -633,8 +637,9 @@ static int music_key_event_opr(struct sys_event *event)
     }
     //单击红外按键
     if( sequencers.timeing_flag == 1)
+    // if( sequencers.timeing_flag == 0)
     {
-        printf("%s\n", __func__);
+        // printf("%s\n", __func__);
         irkey_16way_click_music(key_event);
     }
 

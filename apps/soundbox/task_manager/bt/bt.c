@@ -890,7 +890,8 @@ int bt_background_event_handler(struct sys_event* event)
 
 #include "adkey.h"
 #include "lcd1621.h"
-extern SEQUENCER sequencers;
+#include "../../../../apps/user_app/sequencer/sequencer.h"
+// extern SEQUENCER sequencers;
 extern u8 lcd_now_state;
 extern void adkey_master_on_off(void);
 extern void adkey_16way_on_off(int keyevent);
@@ -915,7 +916,8 @@ int bt_key_event_handler(struct sys_event* event)
     int key_event = event->u.key.event;
     int key_value = event->u.key.value;
 
-    log_debug("bt key_event:%d %d %d %d\n", key_event, key->value, key->event, key->init);
+    // log_debug("bt key_event:%d %d %d %d\n", key_event, key->value, key->event, key->init);
+    printf("%s\n", __func__);
 
     if (bt_key_event_filter_after(key_event) == true) {
         return true;
@@ -932,6 +934,7 @@ int bt_key_event_handler(struct sys_event* event)
         // printf("key value: %lu\n", key_value);
 
     if (key_event == KEW_PROW_IO && sequencers.timeing_flag == 1)
+    // if (key_event == KEW_PROW_IO && sequencers.timeing_flag == 0)
     {
         // sequencers.timeing_flag = 0;
         adkey_master_on_off();
@@ -940,6 +943,7 @@ int bt_key_event_handler(struct sys_event* event)
 
     // 单击ad按键  开机状态且计时完成
     if(sequencers.on_ff == DEVICE_ON && sequencers.timeing_flag == 1)
+    // if(sequencers.on_ff == DEVICE_ON && sequencers.timeing_flag == 0)
     // if (sequencers.timeing_flag) // 如果没有在开关机的延时中
     {
         // if(loc_screen_f == 0)
@@ -950,6 +954,7 @@ int bt_key_event_handler(struct sys_event* event)
     }
     // 长按ad按键 开机状态且计时完成
     if (sequencers.on_ff == DEVICE_ON && sequencers.timeing_flag == 1)
+    // if (sequencers.on_ff == DEVICE_ON && sequencers.timeing_flag == 0)
     {
         // if(loc_screen_f)
         {
@@ -968,6 +973,7 @@ int bt_key_event_handler(struct sys_event* event)
 
     // 单击红外按键
     if (sequencers.timeing_flag == 1) // 如果没有在开关机的延时中
+    // if (sequencers.timeing_flag == 0) // 如果没有在开关机的延时中
     {
         // printf("%s\n", __func__);
         irkey_16way_click(key_event);

@@ -12,7 +12,11 @@
 #include "../../apps/soundbox/include/key_event_deal.h" // 按键消息类型定义
 #include "../../user_app/lcd/lcd1621.h"
 #include "../../user_app/sequencer/sequencer.h" // 时序器变量类型和变量定义
+#include "../../user_app/sequencer/sequencer_device_on_off.h" // 时序器设备开关控制
+#include "../../user_app/flash_handle/flash_handle.h" // flash读写接口
+
 #include "../../user_app/ac_detection/ac_detection.h" // 交流电电压检测
+
 
 
 extern void setup_arch();
@@ -138,23 +142,37 @@ void mp3key_light_gpio_init(void)
 
 #if 1 // 刚上电，如果要马上开机，使用这段：
 volatile u16 lcd_first_pwr_on_timer_id = 0;
-volatile u8 lcd_first_pwr_on_time_cnt = 0;
+// volatile u8 lcd_first_pwr_on_time_cnt = 0;
 void lcd_first_pwr_on_isr(void)
 {
-    lcd_first_pwr_on_time_cnt++;
-    if (lcd_first_pwr_on_time_cnt >= 2)
-    {
-        lcd_first_pwr_on_time_cnt = 0;
-        sys_hi_timer_del(lcd_first_pwr_on_timer_id);
-        lcd_open_frame();
+    // lcd_first_pwr_on_time_cnt++;
+    // if (lcd_first_pwr_on_time_cnt >= 2) // 等一段时间后，再点亮屏幕
+    // {
+    //     lcd_first_pwr_on_time_cnt = 0;
+    sys_hi_timer_del(lcd_first_pwr_on_timer_id);
+    lcd_open_frame();
 
-        if (sequencers.on_ff == DEVICE_ON)
-        {
-            // 如果断电之前是开机的状态
-            // find_max_time(DEVICE_ON);
-            // open_timer_test();//开始时序
-        }
+    printf("sequencers.on_ff = %u\n", (u16)sequencers.on_ff);
+    if (sequencers.on_ff == DEVICE_ON)
+    {
+        // 如果断电之前是开机的状态
+        // find_max_time(DEVICE_ON);
+        // open_timer_test();//开始时序
+
+        // sequence_update_max_power_time_before_first_power_on();
+
+        
+        printf("===================\n");
+        printf("first power on\n");
+        printf("device on\n");
+        sequencer_first_power_on();
     }
+    else
+    {
+        // 如果断电之前是关机状态
+        // 只点亮屏幕，不打开任何继电器
+    }
+    // }
 }
 
 
@@ -163,7 +181,8 @@ void lcd_handle_when_first_power_on()
 {
     if (lcd_first_pwr_on_timer_id == 0)                  // 防止重复注册
     {
-        lcd_first_pwr_on_timer_id = sys_hi_timer_add(NULL, lcd_first_pwr_on_isr, 500); // 注册定时器  500ms
+        // lcd_first_pwr_on_timer_id = sys_hi_timer_add(NULL, lcd_first_pwr_on_isr, 500); // 注册定时器 
+        lcd_first_pwr_on_timer_id = sys_hi_timer_add(NULL, lcd_first_pwr_on_isr, 200); // 注册定时器 
     }
 }
 #endif // 刚上电，如果要马上开机
@@ -201,11 +220,11 @@ static void app_init()
     User_rtc_load_save(1); // 初始化系统时间 
     read_sys_current_time();
 
-    extern void set_open_machine_flag(void);
+    // extern void set_open_machine_flag(void);
     read_flash_sequencers_status_init(); // 读取flash信息，初始化相应变量
     extern void lcd1621_init(void);
     lcd1621_init();
-    set_open_machine_flag();   // 上电初始化
+    // set_open_machine_flag();   // 上电初始化
 
     extern void  lcdseg_handle(void);
     extern void  printf_current_time(void);
@@ -216,6 +235,10 @@ static void app_init()
     sys_hi_timer_add(NULL, ac_voltage_update, 500); // 计算、更新交流电电压值
 
     lcd_handle_when_first_power_on();
+
+    task_create(user_msg_handle_task, NULL, "msg_task");
+    // os_task_create();
+
     /*
         上电之后，只点亮LCD屏幕和主开关对应的灯
         但是刚上电就点亮LCD会导致lcd所有内容都显示出来

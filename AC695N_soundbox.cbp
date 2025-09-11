@@ -1726,6 +1726,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="apps/user_app/lcd/lcd_user_driver.h" />
+		<Unit filename="apps/user_app/sequencer/sequencer.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="apps/user_app/sequencer/sequencer.h" />
 		<Unit filename="cpu/br23/adc_api.c">
 			<Option compilerVar="CC" />
 		</Unit>

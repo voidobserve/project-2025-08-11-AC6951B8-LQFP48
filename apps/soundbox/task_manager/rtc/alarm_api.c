@@ -6,6 +6,8 @@
 #include "tone_player.h"
 #include "app_task.h"
 
+#include "../../../../apps/user_app/sequencer/sequencer.h"
+
 #if TCFG_APP_RTC_EN
 #ifdef  RTC_ALM_EN
 /* #define ALARM_DEBUG_EN */
@@ -933,7 +935,7 @@ struct sys_time sys_current_time = {2023,11,25,12,12,12};
 
 struct sys_time sys_setting_time = {2023,11,25,12,12,12};
 
-extern SEQUENCER  sequencers;
+// extern SEQUENCER  sequencers;
 
 u8 temp_year[4] = {0};
 u8 temp_month[2] = {0};

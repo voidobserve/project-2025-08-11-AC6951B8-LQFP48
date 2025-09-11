@@ -1,6 +1,7 @@
 #include "system/includes.h"
 #include "app_config.h"
 
+#include "../../apps/user_app/sequencer/sequencer_device_on_off.h"
 
 /*任务列表, 注意:stack_size设置为32*n*/
 const struct task_info task_info_table[] = {
@@ -86,6 +87,8 @@ const struct task_info task_info_table[] = {
 #if (TUYA_DEMO_EN)
     {"user_deal",           7,     512,   512   },//定义线程 tuya任务调度
 #endif
+
+    {"msg_task",     3,     512,   128   }, // 用户消息处理线程
     {0, 0},
 };
 
