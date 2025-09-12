@@ -50,7 +50,7 @@ u16 get_max_adc_val_in_samples(void)
     return max_adc_val;
 }
 
- 
+
 
 void ac_voltage_buff_init(u16 ac_voltage)
 {
@@ -149,9 +149,12 @@ void ac_voltage_update(void)
     u32 ac_voltage = 0;
     u16 adc_filter_val = 0;
     static u8 flag_is_first_update = 1;
+    static u16 last_display_voltage = 0;     // 上次显示的电压值
+    u16 current_voltage = 0;                 // 当前计算出的电压值
+    u16 voltage_diff = 0;                    // 电压差值
 
     adc_filter_val = get_max_adc_val_in_samples();
-    ac_voltage =  ((double)adc_filter_val / 1024 * 3 + 0.11) / 0.013;
+    ac_voltage = ((double)adc_filter_val * 3 + 0.37 * 1024) / 0.013 / 1024;
 
     if (flag_is_first_update)
     {
@@ -161,33 +164,59 @@ void ac_voltage_update(void)
     }
 
     ac_voltage_buff_add_new_val(ac_voltage);
-    ac_voltage = ac_voltage_buff_get_filter_val();
+    current_voltage = ac_voltage_buff_get_filter_val();
 
-    // 测试时发现，测得的电压会比实际的电压大，所以减去一些，使显示的电压更准确
+    // 校准电压值，使显示的电压更准确
+    // 使用循环递减代替直接减法，避免负数问题
     for (u8 i = 0; i < AC_VOLTAGE_DIFF_VALUE; i++)
     {
-        if (ac_voltage > 0)
+        if (current_voltage > 0)
         {
-            ac_voltage--;
+            current_voltage--;
         }
     }
 
     // 如果交流电电压小于90V，直接显示0V
-    if (ac_voltage < 90)
+    if (current_voltage < 90)
     {
-        ac_voltage = 0;
+        current_voltage = 0;
     }
 
-    // 将采集好的电压值放到LCD显示对应的数组中
-    extern void get_voltage_array(unsigned long p_v);
-    get_voltage_array(ac_voltage);
+    // 计算与上次显示值的差值
+    if (current_voltage > last_display_voltage)
+    {
+        voltage_diff = current_voltage - last_display_voltage;
+    }
+    else
+    {
+        voltage_diff = last_display_voltage - current_voltage;
+    }
+
+    // 仅在以下情况更新显示:
+    // 1. 首次更新
+    // 2. 电压变化超过阈值(例如5V)
+    // 3. 电压从有到无或从无到有
+#define DISPLAY_UPDATE_THRESHOLD 2
+    if (flag_is_first_update || /* 第一次上电 */ 
+        voltage_diff >= DISPLAY_UPDATE_THRESHOLD || /* 当前采集到的电压与之前显示的电压相差过大 */
+        (last_display_voltage > 0 && current_voltage == 0) || /* 电压从有到无 */
+        (last_display_voltage == 0 && current_voltage > 0)) /* 电压从无到有 */
+    {
+        if (flag_is_first_update)
+        {
+            flag_is_first_update = 0;
+        }
+        last_display_voltage = current_voltage;
+
+        // 将采集好的电压值放到LCD显示对应的数组中
+        extern void get_voltage_array(unsigned long p_v);
+        get_voltage_array(current_voltage);
+    }
 
 #if 0
     // 测试用,让LCD屏显示采集脚检测到的电压，单位：0.1V
     adc_filter_val = adc_filter_val * 3000 / 10 / 1024;
     get_voltage_array(adc_filter_val);
-#endif
-
     /*
         交流电电压，检测脚检测到的最大电压
         220, 2.75
@@ -202,6 +231,5 @@ void ac_voltage_update(void)
         根据这些坐标点绘制图像，得出对应的方程
         y = 0.013𝑥 − 0.11
     */
-
-
+#endif
 }

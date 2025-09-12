@@ -1710,6 +1710,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="apps/user_app/ac_detection/ac_detection.h" />
+		<Unit filename="apps/user_app/flash_handle/flash_handle.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="apps/user_app/flash_handle/flash_handle.h" />
 		<Unit filename="apps/user_app/hlw8032/HLW8032.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -1730,6 +1734,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="apps/user_app/sequencer/sequencer.h" />
+		<Unit filename="apps/user_app/sequencer/sequencer_device_on_off.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="apps/user_app/sequencer/sequencer_device_on_off.h" />
 		<Unit filename="cpu/br23/adc_api.c">
 			<Option compilerVar="CC" />
 		</Unit>

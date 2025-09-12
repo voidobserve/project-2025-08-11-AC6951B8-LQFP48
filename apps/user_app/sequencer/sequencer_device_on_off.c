@@ -155,9 +155,9 @@ void sequencer_power_on_task(void* p)
         // 每次进入，找到要开机的继电器，判断它的开机延时时间
         for (u8 i = 0; i < sequencers.relay_number; i++)
         {
-            // if (sequencers.realy[i].cur_status_on_off == DEVICE_OFF &&
-                // sequencers.realy[i].last_status_on_off == DEVICE_ON)
-            if (sequencers.realy[i].cur_status_on_off == DEVICE_OFF)
+            if (sequencers.realy[i].cur_status_on_off == DEVICE_OFF &&
+                sequencers.realy[i].last_status_on_off == DEVICE_ON)
+            // if (sequencers.realy[i].cur_status_on_off == DEVICE_OFF)
             {
                 /*
                     如果当前继电器是关着的，并且上次是开着的，则说明是要准备开机的继电器
@@ -224,9 +224,9 @@ void sequencer_power_on_task(void* p)
             // 寻找下一个要开机的继电器 
             for (u8 i = cur_relay_index; i < sequencers.relay_number; i++)
             {
-                // if (sequencers.realy[i].cur_status_on_off == DEVICE_OFF &&
-                //     sequencers.realy[i].last_status_on_off == DEVICE_ON)
-                if (sequencers.realy[i].cur_status_on_off == DEVICE_OFF)
+                if (sequencers.realy[i].cur_status_on_off == DEVICE_OFF &&
+                    sequencers.realy[i].last_status_on_off == DEVICE_ON)
+                // if (sequencers.realy[i].cur_status_on_off == DEVICE_OFF)
                 {
                     /*
                         如果当前继电器是关着的，并且上次是开着的，则说明是要准备开机的继电器
@@ -400,7 +400,7 @@ void sequencer_power_off_task(void)
             temp_on_off[cur_relay_index] = sequencers.realy[cur_relay_index].clod_on_off; // 继电器关机时对应的状态
             relay_off_on(relay_table[cur_relay_index], cur_relay_index); // 继电器对应的图标、按键灯的开关 
             sequencers.realy[cur_relay_index].cur_status_on_off = DEVICE_OFF;
-            sequencers.realy[cur_relay_index].last_status_on_off = DEVICE_OFF;
+            // sequencers.realy[cur_relay_index].last_status_on_off = DEVICE_OFF;
             flag_is_in_counting = 0;
 
             // 寻找下一个要关机的继电器 
@@ -496,7 +496,7 @@ void sequencer_power_on(void)
     for (u8 i = 0; i < sequencers.relay_number; i++)
     {
         sequencers.realy[i].cur_status_on_off = DEVICE_OFF;
-        sequencers.realy[i].last_status_on_off = DEVICE_OFF;
+        // sequencers.realy[i].last_status_on_off = DEVICE_OFF;
     }
 
     sequencer_update_max_power_on_time(); // 更新时序器总的开机时间（所有继电器的开机延时时间累加） 

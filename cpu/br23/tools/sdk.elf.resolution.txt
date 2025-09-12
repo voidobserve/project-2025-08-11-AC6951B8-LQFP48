@@ -5309,7 +5309,6 @@ obj/Release/cpu/br23/uart_test.o
 -r=obj/Release/cpu/br23/uart_test.o,clean_num,l
 -r=obj/Release/cpu/br23/uart_test.o,make_alphabet,l
 -r=obj/Release/cpu/br23/uart_test.o,make_num,l
--r=obj/Release/cpu/br23/uart_test.o,all_shutdowm,pl
 -r=obj/Release/cpu/br23/uart_test.o,split_open_minute_second,pl
 -r=obj/Release/cpu/br23/uart_test.o,split_close_minute_second,pl
 -r=obj/Release/cpu/br23/uart_test.o,sum_open_minute_second,pl
@@ -5320,6 +5319,7 @@ obj/Release/cpu/br23/uart_test.o
 -r=obj/Release/cpu/br23/uart_test.o,write_relays_countdown_close_time,pl
 -r=obj/Release/cpu/br23/uart_test.o,adkey_16way_long,pl
 -r=obj/Release/cpu/br23/uart_test.o,need_handle_relays,pl
+-r=obj/Release/cpu/br23/uart_test.o,all_shutdowm,pl
 -r=obj/Release/cpu/br23/uart_test.o,master_led_flashing,pl
 -r=obj/Release/cpu/br23/uart_test.o,irkey_16way_click,pl
 -r=obj/Release/cpu/br23/uart_test.o,irket_on_off,pl
