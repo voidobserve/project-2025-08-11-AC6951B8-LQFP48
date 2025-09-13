@@ -144,6 +144,12 @@ void ac_detection_update(void)
 
 
 // 更新交流电电压，更新到lcd显示对应的数组中
+/**
+ * @brief 
+ *  
+ * 程序里是每次取出数组内的一个峰值，再根据对应关系进行计算
+ * 
+ */
 void ac_voltage_update(void)
 {
     u32 ac_voltage = 0;
@@ -181,6 +187,17 @@ void ac_voltage_update(void)
     {
         current_voltage = 0;
     }
+    else if (current_voltage <= 120)
+    {
+        // 小于等于120V，不小于90V，需要减8V作为补偿
+        current_voltage -= 8;
+    }
+    else if (current_voltage > 200)
+    {
+        // 超过200V，但不包括200V，需要加8V作为补偿
+        current_voltage += 8;
+    }
+    
 
     // 计算与上次显示值的差值
     if (current_voltage > last_display_voltage)
