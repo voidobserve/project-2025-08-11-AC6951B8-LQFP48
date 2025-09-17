@@ -157,7 +157,7 @@ void sequencer_power_on_task(void* p)
         {
             if (sequencers.realy[i].cur_status_on_off == DEVICE_OFF &&
                 sequencers.realy[i].last_status_on_off == DEVICE_ON)
-            // if (sequencers.realy[i].cur_status_on_off == DEVICE_OFF)
+                // if (sequencers.realy[i].cur_status_on_off == DEVICE_OFF)
             {
                 /*
                     如果当前继电器是关着的，并且上次是开着的，则说明是要准备开机的继电器
@@ -226,7 +226,7 @@ void sequencer_power_on_task(void* p)
             {
                 if (sequencers.realy[i].cur_status_on_off == DEVICE_OFF &&
                     sequencers.realy[i].last_status_on_off == DEVICE_ON)
-                // if (sequencers.realy[i].cur_status_on_off == DEVICE_OFF)
+                    // if (sequencers.realy[i].cur_status_on_off == DEVICE_OFF)
                 {
                     /*
                         如果当前继电器是关着的，并且上次是开着的，则说明是要准备开机的继电器
@@ -477,6 +477,14 @@ void sequencer_update_max_power_off_time(void)
 
 void sequencer_first_power_on(void)
 {
+    if (sequencers.timeing_flag == 0)
+    {
+        // 如果正在开/关机的延时，直接返回
+        return;
+    }
+
+    sequencers.timeing_flag = 0; // 表示正在开/关机的延时
+
     // 开机，所有继电器默认都是关闭的，清空对应的状态：（否则会影响开机的相关判断）
     for (u8 i = 0; i < sequencers.relay_number; i++)
     {
@@ -492,6 +500,14 @@ void sequencer_first_power_on(void)
 
 void sequencer_power_on(void)
 {
+    if (sequencers.timeing_flag == 0)
+    {
+        // 如果正在开/关机的延时，直接返回
+        return;
+    }
+
+    sequencers.timeing_flag = 0; // 表示正在开/关机的延时
+
     // 开机，所有继电器默认都是关闭的，清空对应的状态：（否则会影响开机的相关判断）
     for (u8 i = 0; i < sequencers.relay_number; i++)
     {
@@ -503,11 +519,19 @@ void sequencer_power_on(void)
 
     // 开机任务：
     sequencer_power_on_timer_isr_id = sys_hi_timer_add(NULL, sequencer_power_on_task, 1000); // 参数3，时间，单位：ms
-    led_power_flash_timer_isr_id = sys_hi_timer_add(NULL, led_power_flash_task, 500); 
+    led_power_flash_timer_isr_id = sys_hi_timer_add(NULL, led_power_flash_task, 500);
 }
 
 void sequencer_power_off(void)
 {
+    if (sequencers.timeing_flag == 0)
+    {
+        // 如果正在开/关机的延时，直接返回
+        return;
+    }
+
+    sequencers.timeing_flag = 0; // 表示正在开/关机的延时
+
     sequencer_update_max_power_off_time(); // 获取时序器最大的关机时间
 
     // 关机任务：

@@ -3944,6 +3944,8 @@ void irkey_16way_click(int keyevent)
         if (sequencers.on_ff == DEVICE_OFF)    // ---------------------- 开机
             // if (0 == flag_is_lcd_screen_on)
         {
+            // 这里如果快速短按按键，会重复进入，目前在sequencer_power_on()内部判断是否处于延时，防止重复触发
+
             printf("ir key_master_on_off open\n");
 #if 0
             //开机，点亮三个mp3按键的灯 
@@ -3976,6 +3978,7 @@ void irkey_16way_click(int keyevent)
         else if (sequencers.on_ff == DEVICE_ON)   // -------------------------- 关机
             // else if (flag_is_lcd_screen_on)
         {
+            // 这里如果快速短按按键，会重复进入，目前在sequencer_power_off()内部判断是否处于延时，防止重复触发
             printf("ir key_master_on_off off\n");
 #if 0
             read_flash_sequencers_status_init();  //读取关机时序信息
