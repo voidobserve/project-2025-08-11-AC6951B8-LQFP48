@@ -86,6 +86,8 @@ static void vbat_value_push(u16 vbat_value)
         pos = 0;
     }
 }
+
+// adc采集+均值滤波，采集次数由 vbat_value_array_size 决定
 static u16 vbat_value_avg(void)
 {
     u32 i, sum = 0;

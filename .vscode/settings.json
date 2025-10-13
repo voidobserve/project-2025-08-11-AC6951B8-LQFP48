@@ -21,6 +21,7 @@
         "timer.h": "c",
         "os_api.h": "c",
         "typedef.h": "c",
-        "os_cpu.h": "c"
+        "os_cpu.h": "c",
+        "board_ac695x_demo_cfg.h": "c"
     }
 }
