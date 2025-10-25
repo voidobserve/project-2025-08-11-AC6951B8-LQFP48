@@ -240,7 +240,7 @@ const u16 spdif_key_io_table[KEY_IO_NUM_MAX][KEY_EVENT_MAX] = {
 const u16 idle_key_io_table[KEY_IO_NUM_MAX][KEY_EVENT_MAX] = {
     //单击             //长按          //hold         //抬起            //双击                //三击
     [0] = {
-        KEW_PROW_IO,			    KEY_POWER_ON,			KEY_POWER_ON_HOLD,	KEY_NULL,	KEY_NULL,			KEY_NULL
+        KEW_PROW_IO,			    KEY_PROW_IO_LONG,			KEY_PROW_IO_HOLD,	KEY_PROW_IO_LOOSE,	KEY_NULL,			KEY_NULL
     },
     [1] = {
         KEW_PROW_IO,				KEY_NULL,				KEY_NULL,			KEY_NULL,	KEY_NULL,           KEY_NULL

@@ -76,7 +76,7 @@ static u32 adc_get_next_ch(u32 cur_ch)
     return 0;
 }
 #define vbat_value_array_size   16
-static u16 vbat_value_array[vbat_value_array_size];
+static volatile u16 vbat_value_array[vbat_value_array_size];
 static void vbat_value_push(u16 vbat_value)
 {
     static u32 pos = 0;

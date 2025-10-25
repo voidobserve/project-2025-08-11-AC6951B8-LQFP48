@@ -1835,13 +1835,15 @@ u8 show_e_f = 0; // 显示e还是显示f
  *
  * @param keyevent    AD按键消息
  */
-void adkey_16way_on_off(int keyevent)
+void ad_key_event_handle(int keyevent)
 {
     switch (keyevent)
     {
         // USER_TO_DO 后续需要添加独立的开机和关机延时， 加上 232 的反馈信息
         //继电器                  //控灯                       向上位机反馈
     case KEY0_AD_CLICK: // 第一路对应的继电器按键
+        // fall through
+    case KEY0_AD_LONG:
         // if (lcd_now_state == show_power) 
     {
         adkey_control(sw1_led, 0); // 继电器、继电器对应的按键灯和对应的LCD图标，状态取反
@@ -1852,6 +1854,8 @@ void adkey_16way_on_off(int keyevent)
     }
     break;
     case KEY1_AD_CLICK:
+        // fall through
+    case KEY1_AD_LONG:
     {
         adkey_control(sw2_led, 1); fd_relay_state();
         sequencers.realy[1].cur_status_on_off = temp_on_off[1];
@@ -1860,6 +1864,8 @@ void adkey_16way_on_off(int keyevent)
     }
     break;
     case KEY2_AD_CLICK:
+        // fall through
+    case KEY2_AD_LONG:
     {
         adkey_control(sw3_led, 2); fd_relay_state();
         sequencers.realy[2].cur_status_on_off = temp_on_off[2];
@@ -1868,6 +1874,8 @@ void adkey_16way_on_off(int keyevent)
     }
     break;
     case KEY3_AD_CLICK:
+        // fall through
+    case KEY3_AD_LONG:
     {
         adkey_control(sw4_led, 3); fd_relay_state();
         sequencers.realy[3].cur_status_on_off = temp_on_off[3];
@@ -1876,6 +1884,8 @@ void adkey_16way_on_off(int keyevent)
     }
     break;
     case KEY4_AD_CLICK:
+        // fall through
+    case KEY4_AD_LONG:
     {
         adkey_control(sw5_led, 4); fd_relay_state();
         sequencers.realy[4].cur_status_on_off = temp_on_off[4];
@@ -1884,6 +1894,8 @@ void adkey_16way_on_off(int keyevent)
     }
     break;
     case KEY5_AD_CLICK:
+        // fall through
+    case KEY5_AD_LONG:
     {
         adkey_control(sw6_led, 5); fd_relay_state();
         sequencers.realy[5].cur_status_on_off = temp_on_off[5];
@@ -1892,6 +1904,8 @@ void adkey_16way_on_off(int keyevent)
     }
     break;
     case KEY6_AD_CLICK:
+        // fall through
+    case KEY6_AD_LONG:
     {
         adkey_control(sw7_led, 6); fd_relay_state();
         sequencers.realy[6].cur_status_on_off = temp_on_off[6];
@@ -1900,6 +1914,8 @@ void adkey_16way_on_off(int keyevent)
     }
     break;
     case KEY7_AD_CLICK:
+        // fall through
+    case KEY7_AD_LONG:
     {
         adkey_control(sw8_led, 7); fd_relay_state();
         sequencers.realy[7].cur_status_on_off = temp_on_off[7];
@@ -3932,15 +3948,17 @@ void master_led_flashing(void)
 
 
 // -------------------------------- 红外遥控  ---------------------------
-//bt模式
-void irkey_16way_click(int keyevent)
+
+void ir_key_event_handle(int keyevent)
 {
     // printf("%s\n", __func__);
 
     // u8 next_data[7];
     switch (keyevent)
     {
-    case KEY1_IR_CLICK:  //开机
+        // 开机
+    case KEY1_IR_CLICK: 
+    {
         if (sequencers.on_ff == DEVICE_OFF)    // ---------------------- 开机
             // if (0 == flag_is_lcd_screen_on)
         {
@@ -4004,9 +4022,8 @@ void irkey_16way_click(int keyevent)
             sequencer_power_off();
             return;
         }
-
-
-        break;
+    }
+    break;
 
     case KEY2_IR_CLICK:  //关机
         break;
@@ -4029,6 +4046,7 @@ void irkey_16way_click(int keyevent)
         //     break;
 
     case KEY13_IR_CLICK:   //继电器1  USER_TO_DO 后续需要添加独立的开机和关机延时
+    {
         if (sequencers.on_ff == DEVICE_ON)
         {
             adkey_control(sw1_led, 0);   fd_relay_state();
@@ -4038,9 +4056,10 @@ void irkey_16way_click(int keyevent)
             sequencers.realy[0].last_status_on_off = temp_on_off[0];
             os_taskq_post("msg_task", 1, MSG_SEQUENCER_SAVE_INFO); // 将保存数据的消息，发送给对应的线程
         }
-
-        break;
+    }
+    break;
     case KEY14_IR_CLICK: // USER_TO_DO 后续需要添加独立的开机和关机延时
+    {
         if (sequencers.on_ff == DEVICE_ON)
         {
             adkey_control(sw2_led, 1);   fd_relay_state();
@@ -4049,10 +4068,10 @@ void irkey_16way_click(int keyevent)
             sequencers.realy[1].last_status_on_off = temp_on_off[1];
             os_taskq_post("msg_task", 1, MSG_SEQUENCER_SAVE_INFO); // 将保存数据的消息，发送给对应的线程
         }
-
-        break;
-
+    }
+    break; 
     case KEY15_IR_CLICK: // USER_TO_DO 后续需要添加独立的开机和关机延时
+    {
         if (sequencers.on_ff == DEVICE_ON)
         {
             adkey_control(sw3_led, 2);   fd_relay_state();
@@ -4061,8 +4080,10 @@ void irkey_16way_click(int keyevent)
             sequencers.realy[2].last_status_on_off = temp_on_off[2];
             os_taskq_post("msg_task", 1, MSG_SEQUENCER_SAVE_INFO); // 将保存数据的消息，发送给对应的线程
         }
-        break;
+    }
+    break;
     case KEY16_IR_CLICK: // USER_TO_DO 后续需要添加独立的开机和关机延时
+    {
         if (sequencers.on_ff == DEVICE_ON)
         {
             adkey_control(sw4_led, 3);   fd_relay_state();
@@ -4070,8 +4091,10 @@ void irkey_16way_click(int keyevent)
             sequencers.realy[3].last_status_on_off = temp_on_off[3];
             os_taskq_post("msg_task", 1, MSG_SEQUENCER_SAVE_INFO); // 将保存数据的消息，发送给对应的线程
         }
-        break;
+    }
+    break;
     case KEY17_IR_CLICK: // USER_TO_DO 后续需要添加独立的开机和关机延时
+    {
         if (sequencers.on_ff == DEVICE_ON)
         {
             adkey_control(sw5_led, 4);   fd_relay_state();
@@ -4079,8 +4102,10 @@ void irkey_16way_click(int keyevent)
             sequencers.realy[4].last_status_on_off = temp_on_off[4];
             os_taskq_post("msg_task", 1, MSG_SEQUENCER_SAVE_INFO); // 将保存数据的消息，发送给对应的线程
         }
-        break;
+    }
+    break;
     case KEY18_IR_CLICK: // USER_TO_DO 后续需要添加独立的开机和关机延时
+    {
         if (sequencers.on_ff == DEVICE_ON)
         {
             adkey_control(sw6_led, 5);   fd_relay_state();
@@ -4088,8 +4113,10 @@ void irkey_16way_click(int keyevent)
             sequencers.realy[5].last_status_on_off = temp_on_off[5];
             os_taskq_post("msg_task", 1, MSG_SEQUENCER_SAVE_INFO); // 将保存数据的消息，发送给对应的线程
         }
-        break;
+    }
+    break;
     case KEY19_IR_CLICK: // USER_TO_DO 后续需要添加独立的开机和关机延时
+    {
         if (sequencers.on_ff == DEVICE_ON)
         {
             adkey_control(sw7_led, 6);   fd_relay_state();
@@ -4097,8 +4124,10 @@ void irkey_16way_click(int keyevent)
             sequencers.realy[6].last_status_on_off = temp_on_off[6];
             os_taskq_post("msg_task", 1, MSG_SEQUENCER_SAVE_INFO); // 将保存数据的消息，发送给对应的线程
         }
-        break;
+    }
+    break;
     case KEY20_IR_CLICK: // USER_TO_DO 后续需要添加独立的开机和关机延时
+    {
         if (sequencers.on_ff == DEVICE_ON)
         {
             adkey_control(sw8_led, 7);   fd_relay_state();
@@ -4106,8 +4135,9 @@ void irkey_16way_click(int keyevent)
             sequencers.realy[7].last_status_on_off = temp_on_off[7];
             os_taskq_post("msg_task", 1, MSG_SEQUENCER_SAVE_INFO); // 将保存数据的消息，发送给对应的线程
         }
-        break;
-    }// switch (keyevent)
+    }
+    break;
+    } // switch (keyevent)
 
 
 

@@ -151,6 +151,8 @@ void lcd1621_reset(void)
 	lcd1621_write_cmd(SYS_EN);
 	lcd1621_write_cmd(RC_256K);         //选取片内RC晶振
 	lcd1621_write_cmd(BIAS_1_3);       //1/3偏压,4个COM端
+	// lcd1621_write_cmd(0x21);       // 1/3偏压,2个COM端（屏幕会有一半的图标没点亮）
+	// lcd1621_write_cmd(BIAS_1_2);       //1/2偏压,4个COM端 (会在侧面看到其他没有点亮的图标)
 	lcd1621_write_cmd(IRQ_DIS);        //时基电路失效（看门狗失效）
 	lcd1621_write_cmd(LCD_ON_1621);           //点着显示屏
 }
@@ -558,7 +560,7 @@ extern u8 chose_relays_num;
 unsigned char voltage_array[3] = { 0 }; // 存放要显示的电压
 unsigned char  power_array[4] = { 0 }; // 存放要显示的功率
 
-extern SEQUENCER  sequencers;
+// extern SEQUENCER  sequencers;
 u16 update_cnt = 0;
 
 extern struct sys_time sys_current_time;

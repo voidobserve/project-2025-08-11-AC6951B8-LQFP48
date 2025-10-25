@@ -3017,8 +3017,8 @@ obj/Release/apps/soundbox/task_manager/bt/bt.o
 -r=obj/Release/apps/soundbox/task_manager/bt/bt.o,bt_key_event_filter_before,l
 -r=obj/Release/apps/soundbox/task_manager/bt/bt.o,bt_key_event_filter_after,l
 -r=obj/Release/apps/soundbox/task_manager/bt/bt.o,adkey_master_on_off,l
--r=obj/Release/apps/soundbox/task_manager/bt/bt.o,adkey_16way_on_off,l
--r=obj/Release/apps/soundbox/task_manager/bt/bt.o,irkey_16way_click,l
+-r=obj/Release/apps/soundbox/task_manager/bt/bt.o,ad_key_event_handle,l
+-r=obj/Release/apps/soundbox/task_manager/bt/bt.o,ir_key_event_handle,l
 -r=obj/Release/apps/soundbox/task_manager/bt/bt.o,fd_relay_state,l
 -r=obj/Release/apps/soundbox/task_manager/bt/bt.o,bt_key_music_pp,l
 -r=obj/Release/apps/soundbox/task_manager/bt/bt.o,bt_key_music_prev,l
@@ -3498,7 +3498,7 @@ obj/Release/apps/soundbox/task_manager/music/music.o
 -r=obj/Release/apps/soundbox/task_manager/music/music.o,app_get_curr_task,l
 -r=obj/Release/apps/soundbox/task_manager/music/music.o,log_print,l
 -r=obj/Release/apps/soundbox/task_manager/music/music.o,adkey_master_on_off,l
--r=obj/Release/apps/soundbox/task_manager/music/music.o,adkey_16way_on_off,l
+-r=obj/Release/apps/soundbox/task_manager/music/music.o,ad_key_event_handle,l
 -r=obj/Release/apps/soundbox/task_manager/music/music.o,irkey_16way_click_music,l
 -r=obj/Release/apps/soundbox/task_manager/music/music.o,fd_relay_state,l
 -r=obj/Release/apps/soundbox/task_manager/music/music.o,dev_manager_find_active,l
@@ -3706,9 +3706,8 @@ obj/Release/apps/soundbox/task_manager/sleep/sleep.o
 -r=obj/Release/apps/soundbox/task_manager/sleep/sleep.o,sys_key_event_enable,l
 -r=obj/Release/apps/soundbox/task_manager/sleep/sleep.o,clock_idle,l
 -r=obj/Release/apps/soundbox/task_manager/sleep/sleep.o,adkey_master_on_off,l
--r=obj/Release/apps/soundbox/task_manager/sleep/sleep.o,fd_relay_state,l
--r=obj/Release/apps/soundbox/task_manager/sleep/sleep.o,adkey_16way_on_off,l
--r=obj/Release/apps/soundbox/task_manager/sleep/sleep.o,irkey_16way_click,l
+-r=obj/Release/apps/soundbox/task_manager/sleep/sleep.o,ad_key_event_handle,l
+-r=obj/Release/apps/soundbox/task_manager/sleep/sleep.o,ir_key_event_handle,l
 -r=obj/Release/apps/soundbox/task_manager/sleep/sleep.o,puts,l
 -r=obj/Release/apps/soundbox/task_manager/sleep/sleep.o,sequencers,l
 obj/Release/apps/soundbox/task_manager/spdif/hdmi_cec_drv.o
@@ -5303,7 +5302,7 @@ obj/Release/cpu/br23/uart_test.o
 -r=obj/Release/cpu/br23/uart_test.o,adkey_master_on_off,pl
 -r=obj/Release/cpu/br23/uart_test.o,sequencer_power_on,l
 -r=obj/Release/cpu/br23/uart_test.o,sequencer_power_off,l
--r=obj/Release/cpu/br23/uart_test.o,adkey_16way_on_off,pl
+-r=obj/Release/cpu/br23/uart_test.o,ad_key_event_handle,pl
 -r=obj/Release/cpu/br23/uart_test.o,os_taskq_post,l
 -r=obj/Release/cpu/br23/uart_test.o,clean_num,l
 -r=obj/Release/cpu/br23/uart_test.o,make_alphabet,l
@@ -5320,7 +5319,7 @@ obj/Release/cpu/br23/uart_test.o
 -r=obj/Release/cpu/br23/uart_test.o,need_handle_relays,pl
 -r=obj/Release/cpu/br23/uart_test.o,all_shutdowm,pl
 -r=obj/Release/cpu/br23/uart_test.o,master_led_flashing,pl
--r=obj/Release/cpu/br23/uart_test.o,irkey_16way_click,pl
+-r=obj/Release/cpu/br23/uart_test.o,ir_key_event_handle,pl
 -r=obj/Release/cpu/br23/uart_test.o,irket_on_off,pl
 -r=obj/Release/cpu/br23/uart_test.o,lcd_open_frame,l
 -r=obj/Release/cpu/br23/uart_test.o,irkey_16way_click_music,pl

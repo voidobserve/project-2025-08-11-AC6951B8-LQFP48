@@ -32,7 +32,6 @@ extern void app_status_handler(enum APP_STATUS status);
 // extern SEQUENCER sequencers;
 
 extern void adkey_master_on_off(void);
-// extern void adkey_16way_on_off(int keyevent);
 //*----------------------------------------------------------------------------*/
 /**@brief    sleep 按键消息入口
   @param    无
@@ -43,16 +42,34 @@ extern void adkey_master_on_off(void);
 static int sleep_key_event_opr(struct sys_event* event)
 {
     int ret = false;
-    int err = 0;
+    // int err = 0;
     // //使用處理事件/消息的思想，不是鍵值
     int key_event = event->u.key.event;
     int key_value = event->u.key.value;
+    u8 key_event_type = event->u.key.type; // 存放按键类型
+
     // log_i("key_event:%d \n", key_event);
 
     printf("%s\n", __func__);
 
-    if (key_event == KEW_PROW_IO && sequencers.timeing_flag == 1)
-    // if (key_event == KEW_PROW_IO && sequencers.timeing_flag == 0)
+    // if (KEW_PROW_IO == key_event)
+    // {
+    //     printf("io key click\n");
+    // }
+    // else if (KEY_PROW_IO_LONG == key_event)
+    // {
+    //     printf("io key long\n");
+    // }
+    // else if (KEY_PROW_IO_HOLD == key_event)
+    // {
+    //     printf("io key hold\n");
+    // }
+
+
+    if (key_event_type == KEY_DRIVER_TYPE_IO && // 是io按键事件
+        ((key_event == KEW_PROW_IO && sequencers.timeing_flag == 1) || // 总开关短按，并且此时没有在开关机的计时
+            (key_event == KEY_PROW_IO_LONG && sequencers.timeing_flag == 1))) // 总开关触发LONG事件，并且此时没有在开关机的计时
+        // if (key_event == KEW_PROW_IO && sequencers.timeing_flag == 0)
     {
         // sequencers.timeing_flag = 0;
         adkey_master_on_off();
@@ -60,60 +77,60 @@ static int sleep_key_event_opr(struct sys_event* event)
         // app_task_switch_to(APP_BT_TASK);
     }
 
-    //单击红外按键 仅开机
-    // if (key_event == KEY1_IR_CLICK && sequencers.timeing_flag == 1)
+    // if (key_event == APP_CMD)  //上位机读取当前状态
     // {
-    //     // sequencers.timeing_flag = 0;
-    //     printf("%s\n", __func__);
-    //     irkey_16way_click(KEY1_IR_CLICK);
-    //     // app_task_switch_to(APP_BT_TASK);
+    //     fd_relay_state();
+    // }
+
+    // if (key_event_type == KEY_DRIVER_TYPE_AD)
+    // {
+    //     printf("key event ad occur\n");
+
+    //     if (key_event == KEY0_AD_CLICK)
+    //     {
+    //         printf("ad 0 click\n");
+    //     }
+    //     else if (key_event == KEY0_AD_LONG)
+    //     {
+    //         printf("ad 0 long\n");
+    //     }
+
     // }
 
 
-    if (key_event == APP_CMD)  //上位机读取当前状态
-    {
-        fd_relay_state();
-    }
 
-    // extern u8 loc_screen_f;
-    //单击ad按键  开机状态且计时完成
-    if (sequencers.on_ff == DEVICE_ON && sequencers.timeing_flag == 1)
-    // if (sequencers.on_ff == DEVICE_ON && sequencers.timeing_flag == 0)
-    // if (sequencers.timeing_flag) // 如果没有在开关机的延时中
+    // 如果是ad按键事件
+    if (key_event_type == KEY_DRIVER_TYPE_AD)
     {
-        // if (loc_screen_f == 0)
-        {
-            adkey_16way_on_off(key_event);
-
+        if (sequencers.on_ff == DEVICE_ON && sequencers.timeing_flag == 1)
+        { // 单击ad按键  开机状态且计时完成
+            {
+                extern void ad_key_event_handle(int keyevent);
+                ad_key_event_handle(key_event);
+            }
         }
     }
 
-    //长按ad按键 开机状态且计时完成
-    if (sequencers.on_ff == DEVICE_ON && sequencers.timeing_flag == 1)
-    // if (sequencers.on_ff == DEVICE_ON && sequencers.timeing_flag == 0)
-    {
-        // if (loc_screen_f)
-        {
-            // if (key_event == KEY9_AD_LONG)
-            // {
-            //     // loc_screen_f = 0;
-            //     dis_lock_screen();
-            // }
-        }
-        // else
-        // {
-        //     adkey_16way_long(key_event);
-        // }
 
-    }
+
+    // //长按ad按键 开机状态且计时完成
+    // if (sequencers.on_ff == DEVICE_ON && sequencers.timeing_flag == 1)
+    //     // if (sequencers.on_ff == DEVICE_ON && sequencers.timeing_flag == 0)
+    // {
+
+    // }
 
     //单击红外按键
-    if (sequencers.timeing_flag == 1)
-    // if (sequencers.timeing_flag == 0)
-    {
-        // printf("%s\n", __func__);
-        irkey_16way_click(key_event);
+    if (key_event_type == KEY_DRIVER_TYPE_IR)
+    { 
+        if (sequencers.timeing_flag == 1)
+        {
+            extern void ir_key_event_handle(int keyevent);
+            ir_key_event_handle(key_event);
+        }
     }
+
+
 
     return ret;
 }

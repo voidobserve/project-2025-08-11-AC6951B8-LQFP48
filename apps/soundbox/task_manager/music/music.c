@@ -564,7 +564,7 @@ void music_player_err_deal(int err)
 // extern SEQUENCER sequencers;
 
 extern void adkey_master_on_off(void);
-extern void adkey_16way_on_off(int keyevent);
+extern void ad_key_event_handle(int keyevent);
 
 extern u8 lcd_now_state;
 
@@ -613,7 +613,7 @@ static int music_key_event_opr(struct sys_event *event)
     {
         // if(loc_screen_f == 0)  
         {
-            adkey_16way_on_off(key_event);
+            ad_key_event_handle(key_event);
 
         }
     }

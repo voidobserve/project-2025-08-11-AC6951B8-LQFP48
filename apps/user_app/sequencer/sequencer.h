@@ -61,7 +61,7 @@ extern volatile SEQUENCER  sequencers;
 
 
 extern void relay_off_on(u32 relay_led, u8 relay_number);
-void user_msg_handle_task(void *p);
+void user_msg_handle_task(void* p);
 
 
 #endif

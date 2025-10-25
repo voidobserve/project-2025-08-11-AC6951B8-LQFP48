@@ -33,12 +33,15 @@ static IR_KEY ir_key;
 
 
 //按键驱动扫描参数列表
+#define IR_KEY_SCAN_TIMES 2 // 按键扫描频率, 单位: ms
+#define IR_KEY_SCAN_LONG_TIMES (u32)1500 // ir 按键长按判定时间
+#define IR_KEY_SCAN_HOLD_TIMES (u32)150 // ir 按键HOLD判定时间
 struct key_driver_para irkey_scan_para = {
-    .scan_time 	  	  = 2,				//按键扫描频率, 单位: ms
+    .scan_time 	  	  = IR_KEY_SCAN_TIMES,				//按键扫描频率, 单位: ms
     .last_key 		  = NO_KEY,  		//上一次get_value按键值, 初始化为NO_KEY;
     .filter_time  	  = 1,				//按键消抖延时;
-    .long_time 		  = 75,  			//按键判定长按数量
-    .hold_time 		  = (75 + 15),  	//按键判定HOLD数量
+    .long_time 		  = IR_KEY_SCAN_LONG_TIMES / IR_KEY_SCAN_TIMES,  			//按键判定长按数量
+    .hold_time 		  = (IR_KEY_SCAN_LONG_TIMES + IR_KEY_SCAN_HOLD_TIMES) / IR_KEY_SCAN_TIMES,  	//按键判定HOLD数量
     .click_delay_time = 0, //20,				//按键被抬起后等待连击延时数量
     .key_type		  = KEY_DRIVER_TYPE_IR,
     .get_value 		  = ir_get_key_value,

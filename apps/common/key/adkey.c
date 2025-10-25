@@ -13,13 +13,16 @@ static const struct adkey_platform_data *__this2 = NULL;
 u8 ad_get_key_value(void);
 u8 ad_get_key2_value(void);
 //按键驱动扫描参数列表
+#define AD_KEY_SCAN_TIMES 10 // 按键扫描频率, 单位: ms
+#define AD_KEY_SCAN_LONG_TIMES (u32)1500 // ad 按键长按判定时间
+#define AD_KEY_SCAN_HOLD_TIMES (u32)150 // ad 按键HOLD判定时间
 struct key_driver_para adkey_scan_para = {
-    .scan_time 	  	  = 10,				//按键扫描频率, 单位: ms
+    .scan_time 	  	  = AD_KEY_SCAN_TIMES,				//按键扫描频率, 单位: ms
     .last_key 		  = NO_KEY,  		//上一次get_value按键值, 初始化为NO_KEY;
     .filter_time  	  = 2,				//按键消抖延时;
-    .long_time 		  = 75,  			//按键判定长按数量
-    .hold_time 		  = (75 + 15),  	//按键判定HOLD数量
-    .click_delay_time = 20,				//按键被抬起后等待连击延时数量
+    .long_time 		  = AD_KEY_SCAN_LONG_TIMES / AD_KEY_SCAN_TIMES,  			//按键判定长按数量
+    .hold_time 		  = (AD_KEY_SCAN_LONG_TIMES + AD_KEY_SCAN_HOLD_TIMES)  / AD_KEY_SCAN_TIMES,  	//按键判定HOLD数量
+    .click_delay_time = 0,				//按键被抬起后等待连击延时数量
     .key_type		  = KEY_DRIVER_TYPE_AD,   //按键类型  AD按键，IO按键，2.4G按键等
     .get_value 		  = ad_get_key_value,
 };

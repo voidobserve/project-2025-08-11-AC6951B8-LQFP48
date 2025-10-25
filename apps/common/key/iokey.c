@@ -8,32 +8,36 @@
 // #if TCFG_IOKEY_ENABLE
 #if 1
 
-static const struct iokey_platform_data *__this = NULL;
+static const struct iokey_platform_data* __this = NULL;
 
 u8 io_get_key_value(void);
 
 #if MOUSE_KEY_SCAN_MODE
 struct key_driver_para iokey_scan_para = {
-    .scan_time 	  	  = 5,				//按键扫描频率, 单位: ms
-    .last_key 		  = NO_KEY,  		//上一次get_value按键值, 初始化为NO_KEY;
-    .filter_time  	  = 2,				//按键消抖延时;
-    .long_time 		  = 5,  			//按键判定长按数量
-    .hold_time 		  = (5 + 0),   	//按键判定HOLD数量
+    .scan_time = 5,				//按键扫描频率, 单位: ms
+    .last_key = NO_KEY,  		//上一次get_value按键值, 初始化为NO_KEY;
+    .filter_time = 2,				//按键消抖延时;
+    .long_time = 5,  			//按键判定长按数量
+    .hold_time = (5 + 0),   	//按键判定HOLD数量
     .click_delay_time = 20,				//按键被抬起后等待连击延时数量
-    .key_type		  = KEY_DRIVER_TYPE_IO,
-    .get_value 		  = io_get_key_value,
+    .key_type = KEY_DRIVER_TYPE_IO,
+    .get_value = io_get_key_value,
 };
 #else
 //按键驱动扫描参数列表
+#define IO_KEY_SCAN_TIMES 10 // io 按键扫描时间间隔，单位：ms
+#define IO_KEY_SCAN_LONG_TIMES (u16)1500 // 按键扫描中，触发长按的时间，单位：ms
+#define IO_KEY_SCAN_HOLD_TIMES (u16)150 // 按键扫描中，触发按住不放（按键持续）的时间，单位：ms
+
 struct key_driver_para iokey_scan_para = {
-    .scan_time 	  	  = 10,				//按键扫描频率, 单位: ms
-    .last_key 		  = NO_KEY,  		//上一次get_value按键值, 初始化为NO_KEY;
-    .filter_time  	  = 4,				//按键消抖延时;
-    .long_time 		  = 75,  			//按键判定长按数量
-    .hold_time 		  = (75 + 15),  	//按键判定HOLD数量
-    .click_delay_time = 20,				//按键被抬起后等待连击延时数量
-    .key_type		  = KEY_DRIVER_TYPE_IO,
-    .get_value 		  = io_get_key_value,
+    .scan_time = IO_KEY_SCAN_TIMES,				//按键扫描频率, 单位: ms
+    .last_key = NO_KEY,  		//上一次get_value按键值, 初始化为NO_KEY;
+    .filter_time = 4,				//按键消抖延时;
+    .long_time = IO_KEY_SCAN_LONG_TIMES / IO_KEY_SCAN_TIMES,  			//按键判定长按数量
+    .hold_time = (IO_KEY_SCAN_LONG_TIMES + IO_KEY_SCAN_HOLD_TIMES) / IO_KEY_SCAN_TIMES,  	//按键判定HOLD数量
+    .click_delay_time = 0,				//按键被抬起后等待连击延时数量
+    .key_type = KEY_DRIVER_TYPE_IO,
+    .get_value = io_get_key_value,
 };
 #endif
 
@@ -130,14 +134,14 @@ static void udelay(u32 usec)
 {
     JL_TIMER0->CON = BIT(14);
     JL_TIMER0->CNT = 0;
-    JL_TIMER0->PRD = clk_get("lsb") / 1000000L  * usec;
+    JL_TIMER0->PRD = clk_get("lsb") / 1000000L * usec;
     JL_TIMER0->CON = BIT(0); //lsb clk
     while ((JL_TIMER0->CON & BIT(15)) == 0);
     JL_TIMER0->CON = BIT(14);
 }
 extern u8 sd_io_suspend(u8 sdx, u8 sd_io);
 extern u8 sd_io_resume(u8 sdx, u8 sd_io);
-void sd_mult_io_detect(void *arg)
+void sd_mult_io_detect(void* arg)
 {
     static u32 cnt = 0;
     if (sd_io_suspend(1, 1) == 0) {
@@ -182,9 +186,11 @@ u8 io_get_key_value(void)
 
         if (connect_way == ONE_PORT_TO_HIGH) {
             press_value = 1;
-        } else if (connect_way == ONE_PORT_TO_LOW) {
+        }
+        else if (connect_way == ONE_PORT_TO_LOW) {
             press_value = 0;
-        } else {
+        }
+        else {
             continue;
         }
 
@@ -193,7 +199,8 @@ u8 io_get_key_value(void)
 #if (TCFG_IO_MULTIPLEX_WITH_SD == ENABLE)
         if (read_io == TCFG_MULTIPLEX_PORT) {
             read_value = mult_key_value;
-        } else {
+        }
+        else {
             read_value = get_io_key_value(read_io);
         }
 #else
@@ -252,7 +259,7 @@ u8 io_get_key_value(void)
     ret_value = (bit_mark != NO_KEY) ? bit_mark : ret_value;
 #endif
 
-// printf("ret_value = %d", ret_value);
+    // printf("ret_value = %d", ret_value);
 
 
 _iokey_get_value_end:
@@ -261,7 +268,7 @@ _iokey_get_value_end:
 
 
 
-int iokey_init(const struct iokey_platform_data *iokey_data)
+int iokey_init(const struct iokey_platform_data* iokey_data)
 {
     int i;
 

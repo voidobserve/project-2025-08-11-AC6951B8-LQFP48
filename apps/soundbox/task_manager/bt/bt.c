@@ -893,8 +893,8 @@ int bt_background_event_handler(struct sys_event* event)
 #include "../../../../apps/user_app/sequencer/sequencer.h"
 // extern SEQUENCER sequencers;
 extern u8 lcd_now_state;
-extern void adkey_master_on_off(void);
-extern void adkey_16way_on_off(int keyevent);
+extern void adkey_master_on_off(void); 
+extern void ad_key_event_handle(int keyevent);
 extern void adkey_16way_long(int keyevent);
 
 /*----------------------------------------------------------------------------*/
@@ -948,7 +948,7 @@ int bt_key_event_handler(struct sys_event* event)
     {
         // if(loc_screen_f == 0)
         {
-            adkey_16way_on_off(key_event);
+            ad_key_event_handle(key_event);
 
         }
     }
@@ -976,7 +976,7 @@ int bt_key_event_handler(struct sys_event* event)
     // if (sequencers.timeing_flag == 0) // 如果没有在开关机的延时中
     {
         // printf("%s\n", __func__);
-        irkey_16way_click(key_event);
+        ir_key_event_handle(key_event);
     }
 
 

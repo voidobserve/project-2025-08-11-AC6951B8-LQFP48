@@ -196,7 +196,11 @@ enum {
     KEY16_AD_CLICK,
     APP_CMD,   
 
-    KEW_PROW_IO,
+    // 总开关的按键事件
+    KEW_PROW_IO,  // 总开关短按
+    KEY_PROW_IO_LONG, // 总开关长按
+    KEY_PROW_IO_HOLD, // 总开关按住不放
+    KEY_PROW_IO_LOOSE, // 总开关长按松开
 
 //耀祥时序器的长按
     KEY0_AD_LONG,      //
