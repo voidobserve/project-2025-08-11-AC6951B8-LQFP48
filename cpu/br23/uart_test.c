@@ -13,13 +13,15 @@
 //  选择1  串口中断回调函数推送事件，由事件响应函数接收串口数据
 //  选择2  由task接收串口数据
 
-#define UART_DEV_TEST_MULTI_BYTE        1       //uart_dev.c 读写多个字节api / 读写1个字节api 选择
+// #define UART_DEV_TEST_MULTI_BYTE        1       //uart_dev.c 读写多个字节api / 读写1个字节api 选择
 
 #define UART_RXBUF_SIZE             512
 #define UART_CBUF_SIZE              512
-#define UART_TIMEROUT               50
+#define UART_TIMEROUT               50 
 
 #define UART_EN_NUM                 2
+
+#define UART_BAUDRATE               115200
 
 //串口0
 #define UART0_TX_PORT               IO_PORTB_04
@@ -39,13 +41,13 @@ static volatile uint8_t uart0_rcv_flag = 1;
 //串口1
 #define UART1_TX_PORT               IO_PORTC_00
 #define UART1_RX_PORT               IO_PORTC_01
-#define UART_BAUDRATE               9600
+
 
 static u8 uart1_cbuf[512] __attribute__((aligned(4)));
 static u8 uart1_rxbuf[512] __attribute__((aligned(4)));
 const uart_bus_t* uart1_bus = NULL;
 static volatile uint32_t uart1_rcv_len = 0;
-static volatile uint8_t uart1_rcv_flag = 1;
+// static volatile uint8_t uart1_rcv_flag = 1;
 // end
 
 //串口2
@@ -92,7 +94,7 @@ const u8 relay_table[RELAYS_MAX] = {
 
 }; // 继电器对应的按键灯位置（索引）
 
-static void uart_event_handler(struct sys_event* e);
+// static void uart_event_handler(struct sys_event* e);
 
 ///Uart TX 写入
 // void Uart0_Send_Tx(u8* txBuf, u8 len)
@@ -111,7 +113,7 @@ void Uart1_Send_Tx(u8* txBuf, u8 len)
 {
     if (uart1_bus)
     {
-        uart1_rcv_flag = 0;
+        // uart1_rcv_flag = 0;
         uart1_bus->write(txBuf, len);
         // printf_buf(txBuf,len);
     }
@@ -211,7 +213,7 @@ void parse_uart2_data(u8* RxBuf, u32 Len);
  *
  * @param e
  */
-static void uart_event_handler(struct sys_event* e)
+void uart_event_handler(struct sys_event* e)
 {
     const uart_bus_t* uart1_bus;
     u32 uart_rxcnt = 0;
@@ -265,31 +267,37 @@ static void uart_event_handler(struct sys_event* e)
             uart1_bus = (const uart_bus_t*)e->u.dev.value;
             uart1_rcv_len = uart1_bus->read(uart1_rxbuf, sizeof(uart1_rxbuf), 0);   //接受到字符串实际长度
             printf_buf(uart1_rxbuf, uart1_rcv_len);
-            parse_uart1_data(uart1_rxbuf, uart1_rcv_len);
+            // parse_uart1_data(uart1_rxbuf, uart1_rcv_len);
 
-            //清空串口内容
             if (uart1_rcv_len) {
-                uart1_rcv_flag = 1;
-                // uart1_bus->write(uart1_rxbuf, uart1_rcv_len);
-                // Controller Msg
-                Uart1_Rx_Deal(uart1_rxbuf, uart1_rcv_len);
+                // 处理接收到的数据
+
+                // 往指令处理数组中存放数据
+                for (u32 i = 0; i < uart1_rcv_len; i++)
+                {
+                    uart1_rxbuffer_put(uart1_rxbuf[i]);
+                }
             }
 
         }
     }
+
     if ((u32)e->arg == DEVICE_EVENT_FROM_UART_RX_OUTTIME) {
         if (e->u.dev.event == DEVICE_EVENT_CHANGE) {
             printf("uart event:DEVICE_EVENT_FROM_UART_RX_OUTTIME\n");
             uart1_bus = (const uart_bus_t*)e->u.dev.value;
             uart1_rcv_len = uart1_bus->read(uart1_rxbuf, sizeof(uart1_rxbuf), 0);
             printf_buf(uart1_rxbuf, uart1_rcv_len);
-            parse_uart1_data(uart1_rxbuf, uart1_rcv_len);
+
+            // parse_uart1_data(uart1_rxbuf, uart1_rcv_len);
             //接受完数据就清
             if (uart1_rcv_len) {
-                uart1_rcv_flag = 1;
-                // uart1_bus->write(uart1_rxbuf, uart1_rcv_len);
-                // Controller Msg
-                Uart1_Rx_Deal(uart1_rxbuf, uart1_rcv_len);
+
+                // 往指令处理数组中存放数据
+                for (u32 i = 0; i < uart1_rcv_len; i++)
+                {
+                    uart1_rxbuffer_put(uart1_rxbuf[i]);
+                }
             }
 
         }
@@ -334,7 +342,9 @@ static void uart_event_handler(struct sys_event* e)
 
         }
     }
+
     // app_task_put_usr_msg(APP_MSG_SYS_EVENT,0);
+
 #endif
 
 //串口2 end
@@ -383,7 +393,7 @@ static void Uart0_isr_hook(void* arg, u32 status)
 
 
 /**
- * @brief 耀祥时序器串口1中断函数
+ * @brief 串口1回调函数 （相当于发送和接收中断）
  *
  * @param arg
  * @param status
@@ -392,10 +402,10 @@ static void Uart1_isr_hook(void* arg, u32 status)
 {
     const uart_bus_t* ubus = arg;
     struct sys_event e;
-    printf("Uart1_isr_hook\n");
+    // printf("Uart1_isr_hook\n");
     //当CONFIG_UARTx_ENABLE_TX_DMA（x = 0, 1）为1时，不要在中断里面调用ubus->write()，因为中断不能pend信号量
     if (status == UT_RX) {
-        printf("uart1_rx_isr\n");
+        printf("uart1_rx_over_flow_isr\n"); // 接收缓冲区满
 #if (UART_DEV_USAGE_TEST_SEL == 1)
         e.type = SYS_DEVICE_EVENT;
         e.arg = (void*)DEVICE_EVENT_FROM_UART_RX_OVERFLOW;
@@ -404,8 +414,9 @@ static void Uart1_isr_hook(void* arg, u32 status)
         sys_event_notify(&e);
 #endif
     }
+
     if (status == UT_RX_OT) {
-        printf("uart1_rx_ot_isr  1\n");
+        printf("uart1_rx_outtime_isr  1\n"); // 接收超时
 #if (UART_DEV_USAGE_TEST_SEL == 1)
         e.type = SYS_DEVICE_EVENT;
         e.arg = (void*)DEVICE_EVENT_FROM_UART_RX_OUTTIME;
@@ -503,17 +514,20 @@ u8 Uart1_Init(void)
     u_arg.frame_length = UART_RXBUF_SIZE;
     u_arg.rx_timeout = UART_TIMEROUT;
     u_arg.isr_cbfun = Uart1_isr_hook;
-    u_arg.baud = UART_BAUDRATE;
     u_arg.is_9bit = 0;
+    u_arg.baud = UART_BAUDRATE;
 
-    uart1_bus = uart_dev_open(&u_arg);
+    uart1_bus = uart_dev_open(&u_arg); // 初始化 uart 模块
     if (uart1_bus != NULL)
     {
         gpio_set_pull_up(u_arg.rx_pin, 1);
         return 1;
     }
+
     return 0;
 }
+
+
 /**
  * @brief 耀祥时序器串口2初始化
  * 与PC通信使用的串口2
@@ -3957,7 +3971,7 @@ void ir_key_event_handle(int keyevent)
     switch (keyevent)
     {
         // 开机
-    case KEY1_IR_CLICK: 
+    case KEY1_IR_CLICK:
     {
         if (sequencers.on_ff == DEVICE_OFF)    // ---------------------- 开机
             // if (0 == flag_is_lcd_screen_on)
@@ -4069,7 +4083,7 @@ void ir_key_event_handle(int keyevent)
             os_taskq_post("msg_task", 1, MSG_SEQUENCER_SAVE_INFO); // 将保存数据的消息，发送给对应的线程
         }
     }
-    break; 
+    break;
     case KEY15_IR_CLICK: // USER_TO_DO 后续需要添加独立的开机和关机延时
     {
         if (sequencers.on_ff == DEVICE_ON)

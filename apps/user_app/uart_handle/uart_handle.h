@@ -3,9 +3,9 @@
 
 #include "includes.h"
 
-// #define UART_HEADER_1_INDEX
-// #define UART_HEADER_2_INDEX
-
+#include "../../../apps/user_app/user_config.h"
+ 
+#if 0
 /*
     定义数组的下标索引，用于查表
 
@@ -39,6 +39,13 @@ enum
     UART_CMD_PARAM_VIEW_ALL_RELAYS_STATUS = 0x08, /* 查看指定设备的所有继电器的开关状态 */
     UART_CMD_PARAM_SET_ALL_RELAYS = 0x09, /* 设置指定设备的所有继电器的开关状态 */
 };
+#endif
 
+u8 uart1_rxbuffer_get_count(void);
+u8 uart1_rxbuffer_get(void);
+void uart1_rxbuffer_put(u8 byte);
+
+
+ 
 
 #endif

@@ -228,8 +228,8 @@
 //*********************************************************************************//
 //                                 adkey 配置                                      //
 //*********************************************************************************//
-#define TCFG_ADKEY_ENABLE                   ENABLE_THIS_MOUDLE//是否使能AD按键
-#define TCFG_ADKEY_LED_IO_REUSE				DISABLE_THIS_MOUDLE	//ADKEY 和 LED IO复用，led只能设置蓝灯显示
+#define TCFG_ADKEY_ENABLE                   ENABLE_THIS_MOUDLE// 是否使能AD按键
+#define TCFG_ADKEY_LED_IO_REUSE				DISABLE_THIS_MOUDLE	// ADKEY 和 LED IO复用，led只能设置蓝灯显示
 
 //耀祥時序器
 //8个继电器+3个mp3  

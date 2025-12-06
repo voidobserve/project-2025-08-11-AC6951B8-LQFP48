@@ -17,6 +17,8 @@
 
 #include "../../user_app/ac_detection/ac_detection.h" // 交流电电压检测
 
+#include "../../user_app/user_config.h" // 用户配置头文件
+#include "../../user_app/user_main_task.h" // 用户主任务
 
 
 extern void setup_arch();
@@ -209,7 +211,7 @@ static void app_init()
     // ---------- 耀祥时序器  ---------
 
 
-        // Uart0_Init(); //耀祥串口0  功率计
+    // Uart0_Init(); //耀祥串口0  功率计
     Uart1_Init(); //耀祥串口1  向下一级
     Uart2_Init(); //耀祥串口2  连接PC
 
@@ -237,6 +239,10 @@ static void app_init()
     lcd_handle_when_first_power_on();
 
     task_create(user_msg_handle_task, NULL, "msg_task");
+
+    // 创建用户的主任务线程
+    task_create(user_main_task, NULL , "user_task");
+
     // os_task_create();
 
     /*

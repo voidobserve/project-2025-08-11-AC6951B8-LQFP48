@@ -1113,22 +1113,27 @@ void  lcdseg_handle(void)
 
 #endif
 
+#if 0
 	// lcd_open_frame(); // 测试用 -- 打开背光，显示边框
 	// check_lcd_display(); // 测试用 
+	// lcd1621_write_data(dis_data, 16);
 	// printf("test \n");
+#endif
 
+#if 1
 	// 上电期间，一直显示LCD，显示交流电电压：
 	clean_num(1);clean_num(2);clean_num(3);   //清
 	clean_num(4);clean_num(5);clean_num(6); clean_num(7);  // 清屏
 	clean_dis(clrbit(SEG_S3));clean_dis(clrbit(SEG_S4)); // 不显示： ' " 
 	clean_dis(clrbit(SEG_S6)); // 关闭"W"
-	//电压
+	// 交流电电压：
 	make_num(1, voltage_array[0]);
 	make_num(2, voltage_array[1]);
 	make_num(3, voltage_array[2]);
 
 	lcd1621_write_data(dis_data, 16);
 
+#endif
 }
 
 

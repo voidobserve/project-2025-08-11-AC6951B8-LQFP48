@@ -86,7 +86,7 @@
                 "C:/JL/pi32/pi32v2-include",
                 // "${workspaceFolder}/apps/user_apps/",
                 // "${workspaceFolder}/apps/user_apps/hardware/",
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**" // 搜索路径下的所有文件
             ],
             "intelliSenseMode": "clang-x86",
             "name": "AC695N_soundbox"

@@ -1999,6 +1999,7 @@ obj/Release/apps/soundbox/common/init.o
 -r=obj/Release/apps/soundbox/common/init.o,ac_detection_update,l
 -r=obj/Release/apps/soundbox/common/init.o,ac_voltage_update,l
 -r=obj/Release/apps/soundbox/common/init.o,user_msg_handle_task,l
+-r=obj/Release/apps/soundbox/common/init.o,user_main_task,l
 -r=obj/Release/apps/soundbox/common/init.o,update_result_deal,l
 -r=obj/Release/apps/soundbox/common/init.o,get_charge_online_flag,l
 -r=obj/Release/apps/soundbox/common/init.o,check_power_on_voltage,l
@@ -3960,6 +3961,13 @@ obj/Release/apps/user_app/sequencer/sequencer_device_on_off.o
 -r=obj/Release/apps/user_app/sequencer/sequencer_device_on_off.o,sequencers,l
 -r=obj/Release/apps/user_app/sequencer/sequencer_device_on_off.o,temp_on_off,l
 -r=obj/Release/apps/user_app/sequencer/sequencer_device_on_off.o,relay_table,l
+obj/Release/apps/user_app/uart_handle/uart_handle.o
+-r=obj/Release/apps/user_app/uart_handle/uart_handle.o,uart1_rxbuffer_get_count,pl
+-r=obj/Release/apps/user_app/uart_handle/uart_handle.o,uart1_rxbuffer_get,pl
+-r=obj/Release/apps/user_app/uart_handle/uart_handle.o,uart1_rxbuffer_put,pl
+obj/Release/apps/user_app/user_main_task.o
+-r=obj/Release/apps/user_app/user_main_task.o,user_main_task,pl
+-r=obj/Release/apps/user_app/user_main_task.o,os_time_dly,l
 obj/Release/cpu/br23/adc_api.o
 -r=obj/Release/cpu/br23/adc_api.o,adc_add_sample_ch,pl
 -r=obj/Release/cpu/br23/adc_api.o,printf,l
@@ -5275,7 +5283,7 @@ obj/Release/cpu/br23/uart_test.o
 -r=obj/Release/cpu/br23/uart_test.o,printf,l
 -r=obj/Release/cpu/br23/uart_test.o,printf_buf,l
 -r=obj/Release/cpu/br23/uart_test.o,parse_uart0_data,pl
--r=obj/Release/cpu/br23/uart_test.o,parse_uart1_data,pl
+-r=obj/Release/cpu/br23/uart_test.o,uart1_rxbuffer_put,l
 -r=obj/Release/cpu/br23/uart_test.o,parse_uart2_data,pl
 -r=obj/Release/cpu/br23/uart_test.o,Uart0_Init,pl
 -r=obj/Release/cpu/br23/uart_test.o,uart_dev_open,l
@@ -5286,6 +5294,7 @@ obj/Release/cpu/br23/uart_test.o
 -r=obj/Release/cpu/br23/uart_test.o,uart_dev_close,l
 -r=obj/Release/cpu/br23/uart_test.o,find_max_time,pl
 -r=obj/Release/cpu/br23/uart_test.o,DealUartInf,l
+-r=obj/Release/cpu/br23/uart_test.o,parse_uart1_data,pl
 -r=obj/Release/cpu/br23/uart_test.o,set_open_machine_flag,pl
 -r=obj/Release/cpu/br23/uart_test.o,save_sequencers_data_area3,l
 -r=obj/Release/cpu/br23/uart_test.o,read_flash_sequencers_status_init,l

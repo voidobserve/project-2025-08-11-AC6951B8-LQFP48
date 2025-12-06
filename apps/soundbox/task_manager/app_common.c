@@ -48,15 +48,15 @@
 #include "debug.h"
 
 #include "asm/uart_dev.h"
-int JL_rcsp_event_handler(struct rcsp_event *rcsp);
-int bt_background_event_handler(struct sys_event *event);
+int JL_rcsp_event_handler(struct rcsp_event* rcsp);
+int bt_background_event_handler(struct sys_event* event);
 extern u32 timer_get_ms(void);
-extern int alarm_sys_event_handler(struct sys_event *event);
+extern int alarm_sys_event_handler(struct sys_event* event);
 extern void bt_tws_sync_volume();
 
 static u32 input_number = 0;
 static u16 input_number_timer = 0;
-static void input_number_timeout(void *p)
+static void input_number_timeout(void* p)
 {
     input_number_timer = 0;
     printf("input_number = %d\n", input_number);
@@ -74,7 +74,8 @@ static void input_number_deal(u32 num)
     printf("num = %d, input_number = %d, input_number_timer = %d\n", num, input_number, input_number_timer);
     if (input_number_timer == 0) {
         input_number_timer = sys_timeout_add(NULL, input_number_timeout, 1000);
-    } else {
+    }
+    else {
         sys_timer_modify(input_number_timer, 1000);
     }
     UI_SHOW_MENU(MENU_FILENUM, 4 * 1000, input_number, NULL);
@@ -83,23 +84,23 @@ static void input_number_deal(u32 num)
 
 
 /**
- * @brief 
- * 
- * @param event 
- * @return int 
+ * @brief
+ *
+ * @param event
+ * @return int
  */
-int app_common_key_msg_deal(struct sys_event *event)
+int app_common_key_msg_deal(struct sys_event* event)
 {
     printf("app_common_key_msg_deal");
     int ret = false;
-    struct key_event *key = &event->u.key;
+    struct key_event* key = &event->u.key;
     int key_event = event->u.key.event;
     int key_value = event->u.key.value;
 
 
 
     if (key_event == KEY_NULL) {   //单击按键
-       
+
         return false;
     }
 
@@ -258,7 +259,8 @@ int app_common_key_msg_deal(struct sys_event *event)
 
             if (bt_emitter_stu_sw()) {
                 printf("bt emitter start \n");
-            } else {
+            }
+            else {
                 printf("bt emitter stop \n");
             }
         }
@@ -287,7 +289,8 @@ int app_common_key_msg_deal(struct sys_event *event)
 #endif
         if (mic_effect_get_status()) {
             mic_effect_stop();
-        } else {
+        }
+        else {
             mic_effect_start();
         }
         ret = true;
@@ -298,7 +301,8 @@ int app_common_key_msg_deal(struct sys_event *event)
         if (recorder_mix_get_status()) {
             printf("recorder_encode_stop\n");
             recorder_mix_stop();
-        } else {
+        }
+        else {
             if (dev_manager_get_phy_logo(dev_manager_find_active(0))) {
                 printf("recorder_encode_start\n");
                 recorder_mix_start();
@@ -324,12 +328,12 @@ int app_common_key_msg_deal(struct sys_event *event)
 
 
 /**
- * @brief 
- * 
- * @param dev 
- * @return int 
+ * @brief
+ *
+ * @param dev
+ * @return int
  */
-int app_power_user_event_handler(struct device_event *dev)
+int app_power_user_event_handler(struct device_event* dev)
 {
 #if(TCFG_SYS_LVD_EN == 1)
     switch (dev->event) {
@@ -347,16 +351,16 @@ int app_power_user_event_handler(struct device_event *dev)
 
 
 /**
- * @brief 
- * 
- * @param event 
+ * @brief
+ *
+ * @param event
  */
-static void app_common_device_event_handler(struct sys_event *event)
+static void app_common_device_event_handler(struct sys_event* event)
 {
     int ret = 0;
-    const char *logo = NULL;
-    const char *usb_msg = NULL;
-    u8 app  = 0xff ;
+    const char* logo = NULL;
+    const char* usb_msg = NULL;
+    u8 app = 0xff;
     u8 alarm_flag = 0;
 
     switch ((u32)event->arg) {
@@ -398,7 +402,7 @@ static void app_common_device_event_handler(struct sys_event *event)
 
     case DEVICE_EVENT_FROM_OTG:
         ///先分析OTG设备类型
-        usb_msg = (const char *)event->u.dev.value;
+        usb_msg = (const char*)event->u.dev.value;
         if (usb_msg[0] == 's') {
             ///是从机
 #if TCFG_PC_ENABLE
@@ -408,9 +412,11 @@ static void app_common_device_event_handler(struct sys_event *event)
             }
 #endif
             break;
-        } else if (usb_msg[0] == 'h') {
+        }
+        else if (usb_msg[0] == 'h') {
             ///是主机, 统一于SD卡等响应主机处理，这里不break
-        } else {
+        }
+        else {
             log_e("unknow otg devcie !!!\n");
             break;
         }
@@ -471,7 +477,8 @@ static void app_common_device_event_handler(struct sys_event *event)
                 extern u8 get_charge_online_flag(void);
                 if (get_charge_online_flag()) {
 
-                } else
+                }
+                else
 #endif
                 {
 
@@ -485,32 +492,29 @@ static void app_common_device_event_handler(struct sys_event *event)
 
 
 ///公共事件处理， 各自模式没有处理的事件， 会统一在这里处理
-void app_default_event_deal(struct sys_event *event)
+void app_default_event_deal(struct sys_event* event)
 {
     int ret;
     SYS_EVENT_HANDLER_SPECIFIC(event);
-    printf("event->type = %d",event->type);
+    printf("event->type = %d", event->type);
     switch (event->type) {
     case SYS_DEVICE_EVENT: // event->type == 4
-        /*默认公共设备事件处理*/
+    { /*默认公共设备事件处理*/
         printf(">>>>>>>>>>>>>%s %d \n", __FUNCTION__, __LINE__);
         app_common_device_event_handler(event);
-
-
-      
-
-
-
-        break;
+    }
+    break;
 #if TCFG_APP_BT_EN
     case SYS_BT_EVENT:
+    {
         if (true != app_check_curr_task(APP_BT_TASK)) {
             /*默认公共BT事件处理*/
             bt_background_event_handler(event);
         }
-        break;
+    }
+    break;
 #endif
-    case SYS_KEY_EVENT:    
+    case SYS_KEY_EVENT:
         app_common_key_msg_deal(event);
         break;
     default:
@@ -521,13 +525,13 @@ void app_default_event_deal(struct sys_event *event)
 
 
 #if 0
-extern int key_event_remap(struct sys_event *e);
+extern int key_event_remap(struct sys_event* e);
 extern const u16 bt_key_ad_table[KEY_AD_NUM_MAX][KEY_EVENT_MAX];
 u8 app_common_key_var_2_event(u32 key_var)
 {
     u8 key_event = 0;
     u8 key_value = 0;
-    struct sys_event e = {0};
+    struct sys_event e = { 0 };
 #if TCFG_ADKEY_ENABLE
     for (; key_value < KEY_AD_NUM_MAX; key_value++) {
         for (key_event = 0; key_event < KEY_EVENT_MAX; key_event++) {
@@ -537,7 +541,7 @@ u8 app_common_key_var_2_event(u32 key_var)
                 e.u.key.event = key_event;
                 e.u.key.value = key_value;
                 /* e.u.key.tmr = timer_get_ms(); */
-                e.arg  = (void *)DEVICE_EVENT_FROM_KEY;
+                e.arg = (void*)DEVICE_EVENT_FROM_KEY;
                 /* printf("key2event:%d %d %d\n", key_var, key_value, key_event); */
                 if (key_event_remap(&e)) {
                     sys_event_notify(&e);
@@ -554,11 +558,11 @@ u8 app_common_key_var_2_event(u32 key_var)
 
 u8 app_common_key_var_2_event(u32 key_var)
 {
-    struct sys_event e = {0};
+    struct sys_event e = { 0 };
     e.type = SYS_KEY_EVENT;
     e.u.key.type = KEY_DRIVER_TYPE_SOFTKEY;
     e.u.key.event = key_var;
-    e.arg  = (void *)DEVICE_EVENT_FROM_KEY;
+    e.arg = (void*)DEVICE_EVENT_FROM_KEY;
     sys_event_notify(&e);
     return true;
 }
@@ -580,26 +584,26 @@ u8 app_common_key_var_2_event(u32 key_var)
 void read_flash_device_status_init(void)
 {
     printf("\n read_flash 1");
-    #if 1
+#if 1
     u8 res;
     save_flash_t save_flash3;
 
-    memset((u8*)&save_flash3,0,sizeof(save_flash_t));
+    memset((u8*)&save_flash3, 0, sizeof(save_flash_t));
     printf("\n read_flash 2");
 
-    res = syscfg_read(CFG_USER_LED_LEDGTH_DATA,(u8 *)(&save_flash3), sizeof(save_flash_t));
+    res = syscfg_read(CFG_USER_LED_LEDGTH_DATA, (u8*)(&save_flash3), sizeof(save_flash_t));
     printf("\n read_flash 3");
 
 
     printf("\n read_flash 4");
 
-    if(save_flash3.header != 0x55)  //第一次上电
+    if (save_flash3.header != 0x55)  //第一次上电
     {
         // fc_data_init();
     }
     else
     {
-        memcpy( (u8*)(&sequencers), (u8*)(&save_flash3.seq_save) , sizeof(save_flash_t));
+        memcpy((u8*)(&sequencers), (u8*)(&save_flash3.seq_save), sizeof(save_flash_t));
     }
     printf("\n read_flash 5");
 
@@ -615,9 +619,9 @@ void save_user_data_area3(void)
     // extern ON_OFF_FLAG get_on_off_state(void);
     // 不保存开关机状态，默认开机
 
-    memcpy((u8*)(&save_data.seq_save) , (u8*)(&sequencers), sizeof(save_flash_t));  //灯光效果
+    memcpy((u8*)(&save_data.seq_save), (u8*)(&sequencers), sizeof(save_flash_t));  //灯光效果
 
-    syscfg_write(CFG_USER_LED_LEDGTH_DATA, (u8 *)(&save_data), sizeof(save_flash_t));
+    syscfg_write(CFG_USER_LED_LEDGTH_DATA, (u8*)(&save_data), sizeof(save_flash_t));
     printf("save arae3 successed ");
 }
 #endif
@@ -633,7 +637,7 @@ void save_user_data_area3(void)
 //     save_flash_t save_flash3;
 
 //     memset((u8*)&save_flash3,0,sizeof(save_flash_t));
- 
+
 //     res = syscfg_read(CFG_USER_CLOSE_SEQUENCER_DATA,(u8 *)(&save_flash3), sizeof(save_flash_t));
 //     if(save_flash3.header != 0x55)  //第一次上电
 //     {

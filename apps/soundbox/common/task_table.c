@@ -4,6 +4,7 @@
 #include "../../apps/user_app/sequencer/sequencer_device_on_off.h"
 
 /*任务列表, 注意:stack_size设置为32*n*/
+/* 名称  优先级  堆栈大小  队列大小 */
 const struct task_info task_info_table[] = {
     {"app_core",            1,     896,  768  },
     {"sys_event",           6,     256,   0    },
@@ -88,7 +89,9 @@ const struct task_info task_info_table[] = {
     {"user_deal",           7,     512,   512   },//定义线程 tuya任务调度
 #endif
 
-    {"msg_task",     3,     512,   128   }, // 用户消息处理线程
+    {"user_task",    3 ,    512 ,  128 }, // 用户主任务线程
+
+    {"msg_task",     3,     256,   256   }, // 用户消息处理线程
     {0, 0},
 };
 
