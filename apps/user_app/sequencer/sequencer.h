@@ -49,8 +49,10 @@ typedef struct
 enum
 {
     MSG_SEQUENCER_NONE = 0x00,
-    MSG_SEQUENCER_SAVE_INFO,
+    // MSG_SEQUENCER_SAVE_INFO,
     // MSG_SEQUENCER_READ_INFO,
+
+    MSG_USER_SAVE_INFO,
 };
 
 extern volatile u8 flag_is_lcd_screen_on; // 标志位，lcd屏幕状态，0--未点亮，1--点亮

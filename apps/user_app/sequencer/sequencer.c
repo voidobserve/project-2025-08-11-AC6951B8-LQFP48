@@ -18,14 +18,14 @@ void user_msg_handle_task(void* p)
     {
         // os_sem_pend(msg, 0); // 一直阻塞等待信号量
         int ret = os_taskq_pend("msg_task", msg, 1);
-        printf("recv msg\n");
-        printf("ret %d\n", ret);
-        if (OS_TASKQ != ret)
+        // printf("recv msg\n");
+        // printf("ret %d\n", ret);
+        if (OS_TASKQ != ret) 
         {
             continue;
         }
 
-        if (msg[0] != Q_USER)
+        if (msg[0] != Q_USER) // 如果不是用户消息
         {
             continue;
         }
@@ -38,9 +38,9 @@ void user_msg_handle_task(void* p)
 
         switch (msg[1])
         {
-        case MSG_SEQUENCER_SAVE_INFO: // 如果要保存信息
-            printf("recv msg MSG_SEQUENCER_SAVE_INFO \n");
-            save_sequencers_data_area3(); // 保存数据到flash中
+        case MSG_USER_SAVE_INFO: // 如果要保存信息
+            // printf("recv msg MSG_USER_SAVE_INFO \n");
+            save_user_data_enable(); // 使能保存数据的倒计时，使能保存数据的操作
             break;
 
             // case MSG_SEQUENCER_POWER_ON:

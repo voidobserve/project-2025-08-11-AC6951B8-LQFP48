@@ -4,67 +4,13 @@
 #include "app_task.h"
 #include "key_event_deal.h"
 
-#include "../../apps/user_app/lcd/lcd1621.h"
+#include "../../apps/user_app/user_config.h"
+
+// #include "../../apps/user_app/lcd/lcd1621.h"
 #include "../../apps/user_app/sequencer/sequencer.h" // 时序器相关变量类型和变量定义
 #include "../../apps/user_app/sequencer/sequencer_device_on_off.h" // 时序器设备开关控制
 #include "../../apps/user_app/flash_handle/flash_handle.h" // flash读写接口
 
-#define UART_DEV_USAGE_TEST_SEL         1       //uart_dev.c api接口使用方法选择
-//  选择1  串口中断回调函数推送事件，由事件响应函数接收串口数据
-//  选择2  由task接收串口数据
-
-// #define UART_DEV_TEST_MULTI_BYTE        1       //uart_dev.c 读写多个字节api / 读写1个字节api 选择
-
-#define UART_RXBUF_SIZE             512
-#define UART_CBUF_SIZE              512
-#define UART_TIMEROUT               50 
-
-#define UART_EN_NUM                 2
-
-#define UART_BAUDRATE               115200
-
-//串口0
-#define UART0_TX_PORT               IO_PORTB_04
-#define UART0_RX_PORT               IO_PORTB_06
-
-#define DEVICE_EVENT_FROM_UART0_RX_OVERFLOW		(('U' << 24) | ('R' << 16) | ('4' << 8) | '\0')
-#define DEVICE_EVENT_FROM_UART0_RX_OUTTIME		(('U' << 24) | ('R' << 16) | ('5' << 8) | '\0')
-
-static u8 uart0_cbuf[512] __attribute__((aligned(4)));
-static u8 uart0_rxbuf[512] __attribute__((aligned(4)));
-const uart_bus_t* uart0_bus = NULL;
-static volatile uint32_t uart0_rcv_len = 0;
-static volatile uint8_t uart0_rcv_flag = 1;
-
-//end
-
-//串口1
-#define UART1_TX_PORT               IO_PORTC_00
-#define UART1_RX_PORT               IO_PORTC_01
-
-
-static u8 uart1_cbuf[512] __attribute__((aligned(4)));
-static u8 uart1_rxbuf[512] __attribute__((aligned(4)));
-const uart_bus_t* uart1_bus = NULL;
-static volatile uint32_t uart1_rcv_len = 0;
-// static volatile uint8_t uart1_rcv_flag = 1;
-// end
-
-//串口2
-#if UART_EN_NUM == 2
-#define UART2_TX_PORT               IO_PORTA_09
-#define UART2_RX_PORT               IO_PORTA_10
-
-#define DEVICE_EVENT_FROM_UART2_RX_OVERFLOW		(('U' << 24) | ('R' << 16) | ('2' << 8) | '\0')
-#define DEVICE_EVENT_FROM_UART2_RX_OUTTIME		(('U' << 24) | ('R' << 16) | ('3' << 8) | '\0')
-
-static u8 uart2_cbuf[512] __attribute__((aligned(4)));
-static u8 uart2_rxbuf[512] __attribute__((aligned(4)));
-const uart_bus_t* uart2_bus = NULL;
-static volatile uint32_t uart2_rcv_len = 0;
-static volatile uint8_t uart2_rcv_flag = 1;
-#endif
-//end
 
 
 
@@ -72,7 +18,7 @@ static volatile uint8_t uart2_rcv_flag = 1;
 
 
 #include "adkey.h"
-#include "lcd1621.h"
+// #include "lcd1621.h"
 
 
 
@@ -94,44 +40,6 @@ const u8 relay_table[RELAYS_MAX] = {
 
 }; // 继电器对应的按键灯位置（索引）
 
-// static void uart_event_handler(struct sys_event* e);
-
-///Uart TX 写入
-// void Uart0_Send_Tx(u8* txBuf, u8 len)
-// {
-//     if (uart0_bus)
-//     {
-//         uart0_rcv_flag = 0;
-//         uart0_bus->write(txBuf, len);
-//         // printf_buf(txBuf,len);
-//     }
-// }
-
-
-///Uart TX 写入
-void Uart1_Send_Tx(u8* txBuf, u8 len)
-{
-    if (uart1_bus)
-    {
-        // uart1_rcv_flag = 0;
-        uart1_bus->write(txBuf, len);
-        // printf_buf(txBuf,len);
-    }
-}
-
-
-void Uart2_Send_Tx(u8* txBuf, u8 len)
-{
-#if UART_EN_NUM == 2
-    if (uart2_bus)
-    {
-        uart2_rcv_flag = 0;
-        uart2_bus->write(txBuf, len);
-        // printf("uart2 write");
-        // printf_buf(txBuf,len);
-    }
-#endif
-}
 
 
 
@@ -148,17 +56,17 @@ void Controller_MsgDeal(u8* RxBuf, u8 Len)
     memset(RxBuf, 0, Len);
 
 }
-/**
- * @brief 级联设备串口信息清零
- *
- * @param RxBuf
- * @param Len
- */
-void NextMCU_MsgDeal(u8* RxBuf, u8 Len)
-{
-    memset(RxBuf, 0, Len);
+// /**
+//  * @brief 级联设备串口信息清零
+//  *
+//  * @param RxBuf
+//  * @param Len
+//  */
+// void NextMCU_MsgDeal(u8* RxBuf, u8 Len)
+// {
+//     memset(RxBuf, 0, Len);
 
-}
+// }
 
 /**
  * @brief 串口0接受数据清零
@@ -172,411 +80,52 @@ void Uart0_Rx_Deal(u8* RxBuf, u8 Len)
     Controller_MsgDeal(RxBuf, Len);
 }
 
-/**
- * @brief 串口1接受数据清零
- *
- * @param RxBuf
- * @param Len
- */
-void Uart1_Rx_Deal(u8* RxBuf, u8 Len)
-{
-    extern void Controller_MsgDeal(u8 * RxBuf, u8 Len);
-    Controller_MsgDeal(RxBuf, Len);
-}
+// /**
+//  * @brief 串口1接受数据清零
+//  *
+//  * @param RxBuf
+//  * @param Len
+//  */
+// void Uart1_Rx_Deal(u8* RxBuf, u8 Len)
+// {
+//     extern void Controller_MsgDeal(u8 * RxBuf, u8 Len);
+//     Controller_MsgDeal(RxBuf, Len);
+// }
 
-#if UART_EN_NUM == 2
-/**
- * @brief 串口2接受数据清零
- *
- * @param RxBuf
- * @param Len
- */
-void Uart2_Rx_Deal(u8* RxBuf, u8 Len)
-{
-    extern void NextMCU_MsgDeal(u8 * RxBuf, u8 Len);
-    NextMCU_MsgDeal(RxBuf, Len);
-}
-#endif
-
-
+// #if UART_EN_NUM == 2
+// /**
+//  * @brief 串口2接受数据清零
+//  *
+//  * @param RxBuf
+//  * @param Len
+//  */
+// void Uart2_Rx_Deal(u8* RxBuf, u8 Len)
+// {
+//     extern void NextMCU_MsgDeal(u8 * RxBuf, u8 Len);
+//     NextMCU_MsgDeal(RxBuf, Len);
+// }
+// #endif
 
 
 
-void parse_uart0_data(u8* RxBuf, u32 Len);
+
+
+// void parse_uart0_data(u8* RxBuf, u32 Len);
 void parse_uart1_data(u8* RxBuf, u32 Len);
 void parse_uart2_data(u8* RxBuf, u32 Len);
 
 
 
-/**
- * @brief  串口消息处理 放在系统线程
- *
- * @param e
- */
-void uart_event_handler(struct sys_event* e)
-{
-    const uart_bus_t* uart1_bus;
-    u32 uart_rxcnt = 0;
-
-    //串口0 耀祥时序器的功率计
-    if ((u32)e->arg == DEVICE_EVENT_FROM_UART0_RX_OVERFLOW) {
-        if (e->u.dev.event == DEVICE_EVENT_CHANGE) {
-            printf("uart event: DEVICE_EVENT_FROM_UART0_RX_OVERFLOW\n");
-            uart0_bus = (const uart_bus_t*)e->u.dev.value;
-            uart0_rcv_len = uart0_bus->read(uart0_rxbuf, sizeof(uart0_rxbuf), 0);
-
-            printf_buf(uart0_rxbuf, uart0_rcv_len);
-
-            parse_uart0_data(uart0_rxbuf, uart0_rcv_len);  // 解析数据 
-            //    Uart1_Send_Tx(uart0_rxbuf,uart0_rcv_len);
-
-            if (uart0_rcv_len) {
-                uart0_rcv_flag = 1;
-
-                Uart0_Rx_Deal(uart0_rxbuf, uart0_rcv_len); // 清空缓冲区中的数据
-            }
-
-        }
-    }
-    if ((u32)e->arg == DEVICE_EVENT_FROM_UART0_RX_OUTTIME) {
-        if (e->u.dev.event == DEVICE_EVENT_CHANGE) {
-            printf("uart event:DEVICE_EVENT_FROM_UART0_RX_OUTTIME\n");
-            uart2_bus = (const uart_bus_t*)e->u.dev.value;
-            uart0_rcv_len = uart2_bus->read(uart0_rxbuf, sizeof(uart0_rxbuf), 0);
-
-            printf_buf(uart0_rxbuf, uart0_rcv_len);
-
-            //  Uart1_Send_Tx(uart0_rxbuf,uart0_rcv_len);
-
-            parse_uart0_data(uart0_rxbuf, uart0_rcv_len);
-
-            if (uart0_rcv_len) {
-                uart0_rcv_flag = 1;
-
-                Uart0_Rx_Deal(uart0_rxbuf, uart0_rcv_len);
-            }
-
-        }
-    }
-    //串口0 end
-
-    //串口1  发向耀祥时序器的级联设备
-    if ((u32)e->arg == DEVICE_EVENT_FROM_UART_RX_OVERFLOW) {
-        if (e->u.dev.event == DEVICE_EVENT_CHANGE) {
-            printf("uart event: DEVICE_EVENT_FROM_UART_RX_OVERFLOW\n");
-            uart1_bus = (const uart_bus_t*)e->u.dev.value;
-            uart1_rcv_len = uart1_bus->read(uart1_rxbuf, sizeof(uart1_rxbuf), 0);   //接受到字符串实际长度
-            printf_buf(uart1_rxbuf, uart1_rcv_len);
-            // parse_uart1_data(uart1_rxbuf, uart1_rcv_len);
-
-            if (uart1_rcv_len) {
-                // 处理接收到的数据
-
-                // 往指令处理数组中存放数据
-                for (u32 i = 0; i < uart1_rcv_len; i++)
-                {
-                    uart1_rxbuffer_put(uart1_rxbuf[i]);
-                }
-            }
-
-        }
-    }
-
-    if ((u32)e->arg == DEVICE_EVENT_FROM_UART_RX_OUTTIME) {
-        if (e->u.dev.event == DEVICE_EVENT_CHANGE) {
-            printf("uart event:DEVICE_EVENT_FROM_UART_RX_OUTTIME\n");
-            uart1_bus = (const uart_bus_t*)e->u.dev.value;
-            uart1_rcv_len = uart1_bus->read(uart1_rxbuf, sizeof(uart1_rxbuf), 0);
-            printf_buf(uart1_rxbuf, uart1_rcv_len);
-
-            // parse_uart1_data(uart1_rxbuf, uart1_rcv_len);
-            //接受完数据就清
-            if (uart1_rcv_len) {
-
-                // 往指令处理数组中存放数据
-                for (u32 i = 0; i < uart1_rcv_len; i++)
-                {
-                    uart1_rxbuffer_put(uart1_rxbuf[i]);
-                }
-            }
-
-        }
-    }
-    //串口1 end
-
-    //串口2  耀祥时序器设备与PC端通信
-#if UART_EN_NUM == 2
-
-    // 串口2接收缓冲区溢出
-    if ((u32)e->arg == DEVICE_EVENT_FROM_UART2_RX_OVERFLOW) {
-        if (e->u.dev.event == DEVICE_EVENT_CHANGE) {
-            printf("uart event: DEVICE_EVENT_FROM_UART_RX_OVERFLOW\n");
-            uart2_bus = (const uart_bus_t*)e->u.dev.value;
-            uart2_rcv_len = uart2_bus->read(uart2_rxbuf, sizeof(uart2_rxbuf), 0);
-            printf_buf(uart2_rxbuf, uart2_rcv_len);
-            if (uart2_rcv_len) {
-                uart2_rcv_flag = 1;
-                // uart2_bus->write(uart2_rxbuf, uart2_rcv_len);
-                // NextMCU Msg
-                Uart2_Rx_Deal(uart2_rxbuf, uart2_rcv_len);
-            }
-
-        }
-    }
-
-    // 串口2接收超时
-    if ((u32)e->arg == DEVICE_EVENT_FROM_UART2_RX_OUTTIME) {
-        if (e->u.dev.event == DEVICE_EVENT_CHANGE) {
-            printf("uart event:DEVICE_EVENT_FROM_UART_RX_OUTTIME\n");
-            uart2_bus = (const uart_bus_t*)e->u.dev.value;
-            uart2_rcv_len = uart2_bus->read(uart2_rxbuf, sizeof(uart2_rxbuf), 0);
-            printf_buf(uart2_rxbuf, uart2_rcv_len);
-            parse_uart2_data(uart2_rxbuf, uart2_rcv_len);
-
-            if (uart2_rcv_len) {
-                uart2_rcv_flag = 1;
-                // uart2_bus->write(uart2_rxbuf, uart2_rcv_len);
-                // NextMCU Msg
-                Uart2_Rx_Deal(uart2_rxbuf, uart2_rcv_len);
-            }
-
-        }
-    }
-
-    // app_task_put_usr_msg(APP_MSG_SYS_EVENT,0);
-
-#endif
-
-//串口2 end
-}
-
-SYS_EVENT_HANDLER(SYS_DEVICE_EVENT, uart_event_handler, 0);   //线程
 
 
 
 
 
-/**
- * @brief 耀祥时序器串口0中断函数
- *
- * @param arg
- * @param status
- */
-static void Uart0_isr_hook(void* arg, u32 status)
-{
-    const uart_bus_t* ubus = arg;
-    struct sys_event e;
-
-    //当CONFIG_UARTx_ENABLE_TX_DMA（x = 0, 1）为1时，不要在中断里面调用ubus->write()，因为中断不能pend信号量
-    if (status == UT_RX) {
-        printf("Uart0_isr_hook\n");
-#if (UART_DEV_USAGE_TEST_SEL == 1)
-        e.type = SYS_DEVICE_EVENT;
-        e.arg = (void*)DEVICE_EVENT_FROM_UART0_RX_OVERFLOW;
-        e.u.dev.event = DEVICE_EVENT_CHANGE;
-        e.u.dev.value = (int)ubus;
-        sys_event_notify(&e);
-#endif
-    }
-    if (status == UT_RX_OT) {
-        printf("uart0_rx_ot_isr   2\n");
-#if (UART_DEV_USAGE_TEST_SEL == 1)
-        e.type = SYS_DEVICE_EVENT;
-        e.arg = (void*)DEVICE_EVENT_FROM_UART0_RX_OUTTIME;
-        e.u.dev.event = DEVICE_EVENT_CHANGE;
-        e.u.dev.value = (int)ubus;
-        sys_event_notify(&e);
-#endif
-    }
-
-}
-
-
-/**
- * @brief 串口1回调函数 （相当于发送和接收中断）
- *
- * @param arg
- * @param status
- */
-static void Uart1_isr_hook(void* arg, u32 status)
-{
-    const uart_bus_t* ubus = arg;
-    struct sys_event e;
-    // printf("Uart1_isr_hook\n");
-    //当CONFIG_UARTx_ENABLE_TX_DMA（x = 0, 1）为1时，不要在中断里面调用ubus->write()，因为中断不能pend信号量
-    if (status == UT_RX) {
-        printf("uart1_rx_over_flow_isr\n"); // 接收缓冲区满
-#if (UART_DEV_USAGE_TEST_SEL == 1)
-        e.type = SYS_DEVICE_EVENT;
-        e.arg = (void*)DEVICE_EVENT_FROM_UART_RX_OVERFLOW;
-        e.u.dev.event = DEVICE_EVENT_CHANGE;
-        e.u.dev.value = (int)ubus;
-        sys_event_notify(&e);
-#endif
-    }
-
-    if (status == UT_RX_OT) {
-        printf("uart1_rx_outtime_isr  1\n"); // 接收超时
-#if (UART_DEV_USAGE_TEST_SEL == 1)
-        e.type = SYS_DEVICE_EVENT;
-        e.arg = (void*)DEVICE_EVENT_FROM_UART_RX_OUTTIME;
-        e.u.dev.event = DEVICE_EVENT_CHANGE;
-        e.u.dev.value = (int)ubus;
-        sys_event_notify(&e);
-#endif
-    }
-}
-
-
-
-
-#if UART_EN_NUM == 2
-/**
- * @brief 耀祥时序器串口2中断函数
- *
- * @param arg
- * @param status
- */
-static void Uart2_isr_hook(void* arg, u32 status)
-{
-    const uart_bus_t* ubus = arg;
-    struct sys_event e;
-
-    //当CONFIG_UARTx_ENABLE_TX_DMA（x = 0, 1）为1时，不要在中断里面调用ubus->write()，因为中断不能pend信号量
-    if (status == UT_RX) {
-        printf("Uart2_isr_hook\n");
-#if (UART_DEV_USAGE_TEST_SEL == 1)
-        e.type = SYS_DEVICE_EVENT;
-        e.arg = (void*)DEVICE_EVENT_FROM_UART2_RX_OVERFLOW;
-        e.u.dev.event = DEVICE_EVENT_CHANGE;
-        e.u.dev.value = (int)ubus;
-        sys_event_notify(&e);
-#endif
-    }
-    if (status == UT_RX_OT) {
-        printf("uart2_rx_ot_isr   2\n");
-#if (UART_DEV_USAGE_TEST_SEL == 1)
-        e.type = SYS_DEVICE_EVENT;
-        e.arg = (void*)DEVICE_EVENT_FROM_UART2_RX_OUTTIME;
-        e.u.dev.event = DEVICE_EVENT_CHANGE;
-        e.u.dev.value = (int)ubus;
-        sys_event_notify(&e);
-#endif
-    }
-}
-#endif
 
 
 
 
 
-/**
- * @brief 耀祥时序器串口0初始化    接功率计
- *
- * @return u8
- */
-u8 Uart0_Init(void)
-{
-    struct uart_platform_data_t u_arg = { 0 };
-    u_arg.tx_pin = UART0_TX_PORT;
-    u_arg.rx_pin = UART0_RX_PORT;
-    u_arg.rx_cbuf = uart0_cbuf;
-    u_arg.rx_cbuf_size = UART_CBUF_SIZE;
-    u_arg.frame_length = UART_RXBUF_SIZE;
-    u_arg.rx_timeout = UART_TIMEROUT;
-    u_arg.isr_cbfun = Uart0_isr_hook;
-    // u_arg.baud = UART_BUADRATE;
-    u_arg.baud = 4800;
-    u_arg.is_9bit = 0;
-
-    uart0_bus = uart_dev_open(&u_arg);
-    if (uart0_bus != NULL)
-    {
-        gpio_set_pull_up(u_arg.rx_pin, 1);
-        return 1;
-    }
-    return 0;
-}
-
-
-/**
- * @brief 耀祥时序器串口1初始化
- *
- * @return u8
- */
-u8 Uart1_Init(void)
-{
-    struct uart_platform_data_t u_arg = { 0 };
-    u_arg.tx_pin = UART1_TX_PORT;
-    u_arg.rx_pin = UART1_RX_PORT;
-    u_arg.rx_cbuf = uart1_cbuf;
-    u_arg.rx_cbuf_size = UART_CBUF_SIZE;
-    u_arg.frame_length = UART_RXBUF_SIZE;
-    u_arg.rx_timeout = UART_TIMEROUT;
-    u_arg.isr_cbfun = Uart1_isr_hook;
-    u_arg.is_9bit = 0;
-    u_arg.baud = UART_BAUDRATE;
-
-    uart1_bus = uart_dev_open(&u_arg); // 初始化 uart 模块
-    if (uart1_bus != NULL)
-    {
-        gpio_set_pull_up(u_arg.rx_pin, 1);
-        return 1;
-    }
-
-    return 0;
-}
-
-
-/**
- * @brief 耀祥时序器串口2初始化
- * 与PC通信使用的串口2
- * @return u8
- */
-u8 Uart2_Init(void)
-{
-#if UART_EN_NUM == 2
-    struct uart_platform_data_t u_arg = { 0 };
-    u_arg.tx_pin = UART2_TX_PORT;
-    u_arg.rx_pin = UART2_RX_PORT;
-    u_arg.rx_cbuf = uart2_cbuf;
-    u_arg.rx_cbuf_size = UART_CBUF_SIZE;
-    u_arg.frame_length = UART_RXBUF_SIZE;
-    u_arg.rx_timeout = UART_TIMEROUT;
-    u_arg.isr_cbfun = Uart2_isr_hook;
-    u_arg.baud = UART_BAUDRATE;
-    u_arg.is_9bit = 0;
-
-    // printf("Uart2_Init");
-
-    uart2_bus = uart_dev_open(&u_arg);
-    if (uart2_bus != NULL)
-    {
-        gpio_set_pull_up(u_arg.rx_pin, 1);
-        return 1;
-    }
-    return 0;
-#endif
-}
-/**
- * @brief 博朗时序器关闭串口
- *
- */
-void Uart_Off(void)
-{
-    if (uart0_bus != NULL) {
-        uart_dev_close(uart0_bus);
-    }
-
-    if (uart1_bus != NULL) {
-        uart_dev_close(uart1_bus);
-    }
-#if UART_EN_NUM == 2
-    if (uart2_bus != NULL) {
-        uart_dev_close(uart2_bus);
-    }
-#endif
-}
 
 
 u8 uart2_data[512];
@@ -650,23 +199,19 @@ extern unsigned char voltage_array[3];
 // extern unsigned char  power_array[4];
 
 //功率计
-void parse_uart0_data(u8* RxBuf, u32 Len) // 分析串口 数据
-{
+// void parse_uart0_data(u8* RxBuf, u32 Len) // 分析串口 数据
+// {
 
 
-    if (RxBuf[0] == 0x55 && RxBuf[1] == 0x5A && Len == 24) //&& sequencers.on_ff == DEVICE_ON)
-    {
+//     if (RxBuf[0] == 0x55 && RxBuf[1] == 0x5A && Len == 24) //&& sequencers.on_ff == DEVICE_ON)
+//     {
 
 
 
-        DealUartInf(RxBuf, Len);
+//         DealUartInf(RxBuf, Len);
 
-        //    clean_num(1);clean_num(2);clean_num(3);   //清
-        // 	clean_num(4);clean_num(5);clean_num(6); clean_num(7);  // 清屏
-
-
-    }
-}
+//     }
+// }
 
 
 
@@ -689,8 +234,6 @@ void parse_uart1_data(u8* RxBuf, u32 Len)
 //上电初始化
 void set_open_machine_flag(void)
 {
-    //     // sequencers.timeing_flag = 1;
-    //     // sequencers.on_ff = DEVICE_OFF;//上电默认关机
 }
 
 
@@ -707,8 +250,6 @@ void set_open_machine_flag(void)
  */
 void parse_uart2_data(u8* RxBuf, u32 Len)
 {
-    // u8 // 标志位，是否要处理接收到的数据
-    // u8 // 标志位，是否要转发接收到的数据
 
 
     u8 data_len = Len;
@@ -720,457 +261,9 @@ void parse_uart2_data(u8* RxBuf, u32 Len)
     printf("sequencers.timeing_flag  = %d", sequencers.timeing_flag); // 打印当前设备的计时状态，是否在计时（处于开关机中）
     printf("sequencers.addr = %d", sequencers.addr); // 打印当前设备的地址
 
-#if 0
-    if (uart2_data[0] != 0xFE)
-    {
-        // 格式头不正确，直接返回
-        return;
-    }
-
-    if (uart2_data[1] == 0x03)
-    {
-        // 如果是PC或上一级设备发给 当前设备的指令
-
-    }
-    else if (uart2_data[1] == 0x04)
-    {
-        // 如果是下一次设备 发给 当前设备的指令
-
-
-    }
-
-    if (data_len == 6)
-    {
-        if (uart2_data[5] != 0xFF)
-        {
-            // 最后一个字节不是0xFF
-            return;
-        }
-    }
-
-    if (uart2_data[2] == 0x01) /* 开机 / 关机 */
-    {
-        if (uart2_data[3] == sequencers.addr ||  /* 设备地址一致（设备ID一致） */
-            uart2_data[3] == 0x00) /* 0x00 表示广播，控制所有设备 */
-        {
-            if (uart2_data[4] == 0x01 &&
-                sequencers.timeing_flag == 1 &&
-                sequencers.on_ff == DEVICE_OFF)
-            {
-                // 开机
-                // printf("open\n");
-                sequencers.timeing_flag = 0;
-                read_flash_sequencers_status_init();
-
-                // for (int i = 0; i < 16; i++)
-                //     printf("sequencers.realy[%d].open_on_off = %d", i, sequencers.realy[i].open_on_off);
-
-                //开机，点亮三个mp3按键的灯
-                gpio_direction_output(IO_PORTA_11, 1);
-                gpio_direction_output(IO_PORTC_03, 1);
-                gpio_direction_output(IO_PORTC_02, 1);
-
-                //开机点亮LCD屏的背光灯
-                gpio_direction_output(lcd_light, 1); //背光灯默认关
-
-                //lcd屏幕显示轮廓
-                lcd_open_frame();
-
-
-                find_max_time(DEVICE_ON);
-                open_timer_test();          //开始时序
-
-                //实现开启设备，软件界面变化  
-                fb_information[0] = 0xFE;
-                fb_information[1] = 0X04;
-                fb_information[2] = 0x01;
-                fb_information[3] = sequencers.addr;
-                fb_information[4] = DEVICE_ON; // 表示设备开机
-                fb_information[5] = 0xFF;
-                Uart2_Send_Tx(fb_information, 6);  //应答返回
-
-
-                // Uart1_Send_Tx(uart2_data, data_len); //通过串口1发送给级联设备
-            }
-            else if (uart2_data[4] == 0x00 &&
-                sequencers.timeing_flag == 1 &&
-                sequencers.on_ff == DEVICE_ON)
-            {
-                /* 关机 */
-                // printf("close\n");
-                sequencers.timeing_flag = 0;
-                read_flash_sequencers_status_init();
-                find_max_time(DEVICE_OFF);
-                close_timer_test(); //关机时序 
-
-                //实现开启设备，软件界面变化
-                fb_information[0] = 0xFE;
-                fb_information[1] = 0X04;
-                fb_information[2] = 0x01;
-                fb_information[3] = sequencers.addr;
-                fb_information[4] = DEVICE_OFF; // 表示设备关机
-                fb_information[5] = 0xFF;
-                Uart2_Send_Tx(fb_information, 6);  //应答返回
-
-                // Uart1_Send_Tx(uart2_data, data_len); //通过串口1发送给级联设备
-            }
-
-        } /* 设备地址一致，或者是收到广播 */
-        else if (uart2_data[3] == 0x00 || uart2_data[3] != sequencers.addr)
-        {
-            // 如果收到广播，或者设备地址不一致，通过串口1发送给级联设备
-            Uart1_Send_Tx(uart2_data, data_len);
-        }
-    } // if (uart2_data[2] == 0x01) /* 开机 / 关机 */
-    else if (sequencers.timeing_flag == 1) /* 如果正在计时，可能在执行开机/关机动画 */
-    {
-        if (uart2_data[2] == 0x02 &&  /* 命令 -- 设置地址 */
-            uart2_data[3] == 0x00 /* 广播地址 */
-            )
-        {
-            printf("set device addr\n");
-
-            u8 next_device_addr = 0;
-            sequencers.addr = uart2_data[4]; // 设置设备地址
-            if (sequencers.addr < 0xFF)
-            {
-                next_device_addr = sequencers.addr + 1;
-            }
-            else
-            {
-                next_device_addr = 0xFF;
-            }
-
-            // 需要将期间地址写回flash
-            save_sequencers_data_area3();
-
-            fb_information[0] = 0xFE;
-            fb_information[1] = 0X04;
-            fb_information[2] = 0x02;
-            fb_information[3] = sequencers.addr; // 设置之后的设备地址
-            fb_information[4] = 0x00;
-            fb_information[5] = 0xFF;
-            Uart2_Send_Tx(fb_information, 6);
-
-            fb_uart1[0] = 0xFE;
-            fb_uart1[1] = 0x03;
-            fb_uart1[2] = 0x02; /* 命令 */
-            fb_uart1[3] = 0x00; /* 广播地址 */
-            fb_uart1[5] = next_device_addr;
-            fb_uart1[6] = 0xFF;
-            Uart1_Send_Tx(fb_uart1, 7);  //发送给级联设备
-        } /* 设置地址 */
-        else if (uart2_data[2] == 0x03 && /* 命令 -- 查看当前设备的地址 */
-            uart2_data[3] == 0x00 /* 广播地址 */
-            )
-        {
-            fb_information[0] = 0xFE;
-            fb_information[1] = 0X04;
-            fb_information[2] = 0x03; /* 命令 */
-            fb_information[3] = sequencers.addr; // 设备地址
-            fb_information[4] = 0x00;
-            fb_information[5] = 0xFF;
-            Uart2_Send_Tx(fb_information, 6);
-        }/* 查看当前设备的地址 */
-        else if (uart2_data[2] == 0x04 && /* 命令 -- 设置指定设备的所有继电器的开机时序 */
-            (uart2_data[3] == sequencers.addr || uart2_data[3] == 0x00)  /* 设备地址一致，或是广播地址 */
-            )
-        {
-            if (data_len != 13)
-            {
-                // 指令长度不一致，直接退出
-                return;
-            }
-
-            // if (sequencers.on_ff != DEVICE_ON)
-            // {
-            //     return;
-            // }
-
-            printf("recv cmd set relays open time\n");
-
-            for (u8 i = 0; i < 8; i++)
-            {
-                sequencers.realy[i].open_time = uart2_data[4 + i]; // 继电器开机延时时间
-                if (uart2_data[4 + i] != 0)
-                {
-                    sequencers.realy[i].open_on_off = DEVICE_ON; // 继电器开启时的开关状态
-                }
-
-                if (sequencers.realy[i].open_time > sequencers.open_timeing)
-                    sequencers.open_timeing = sequencers.realy[i].open_time;
-            }
-
-
-        }
-
-        else if (uart2_data[2] == 0x08 &&  /* 命令 -- 查看 指定设备的继电器的状态 */
-            (uart2_data[3] == sequencers.addr || uart2_data[3] == 0x00) /* 设备地址一致，或是广播地址 */
-            )
-        {
-            if (sequencers.on_ff == DEVICE_OFF)
-            {
-                return;
-            }
-
-            fb_information[0] = 0xFE;
-            fb_information[1] = 0X04;
-            fb_information[2] = 0x08; /* 命令 */
-            fb_information[3] = sequencers.addr; // 设备地址
-            // fb_information[4] = sequencers.realy[0].open_on_off;
-            // fb_information[5] = sequencers.realy[1].open_on_off;
-            // fb_information[6] = sequencers.realy[2].open_on_off;
-            // fb_information[7] = sequencers.realy[3].open_on_off;
-            // fb_information[8] = sequencers.realy[4].open_on_off;
-            // fb_information[9] = sequencers.realy[5].open_on_off;
-            // fb_information[10] = sequencers.realy[6].open_on_off;
-            // fb_information[11] = sequencers.realy[7].open_on_off;
-            // fb_information[12] = sequencers.realy[8].open_on_off;
-
-            // fb_information[4] = (sequencers.realy[0].open_on_off == DEVICE_ON) ? sequencers.realy[0].open_on_off : sequencers.realy[0].clod_on_off;
-            fb_information[4] = temp_on_off[0];
-            fb_information[5] = temp_on_off[1];
-            fb_information[6] = temp_on_off[2];
-            fb_information[7] = temp_on_off[3];
-            fb_information[8] = temp_on_off[4];
-            fb_information[9] = temp_on_off[5];
-            fb_information[10] = temp_on_off[6];
-            fb_information[11] = temp_on_off[7];
-            fb_information[12] = temp_on_off[8];
-            fb_information[13] = 0xFF;
-            Uart2_Send_Tx(fb_information, 14);
-        }
-
-        else if (uart2_data[2] == 0x09) /* 命令 -- 开/关 设备对应的继电器 */
-        {
-            if (uart2_data[3] == sequencers.addr ||
-                uart2_data[3] == 0x00 /* 广播地址 */)
-            {
-                // 地址一致
-
-                if (data_len != 7)
-                {
-                    // 指令长度不一致，直接退出
-                    return;
-                }
-
-                if (uart2_data[4] > 8)
-                {
-                    // 继电器编号错误，超过了8个继电器，直接退出
-                    return;
-                }
-
-                if (uart2_data[5] > 0x01)
-                {
-                    // 继电器状态错误，只能是0或1，直接退出
-                    return;
-                }
-
-                if (sequencers.on_ff == DEVICE_OFF)
-                {
-                    // 如果设备没有开机，直接退出
-                    return;
-                }
-
-                u8 relay_index = uart2_data[4] - 1;// 继电器索引，范围：0~7（继电器索引，LCD对应的继电器图标索引，都使用这个，范围：0~7）
-                u8 sw_led_index = sw1_led; // 继电器对应的按键灯的索引
-                u8 relay_ctl = uart2_data[5]; // 继电器控制命令，开启/关闭对应的继电器
-                printf("relay_inded %u\n", (u16)relay_index);
-                temp_on_off[relay_index] = relay_ctl; // 根据传入的指令，开启/关闭对应的继电器
-
-                switch (relay_index + 1) // 计算继电器对应的按键灯的索引
-                {
-                case 1: sw_led_index = sw1_led; break;
-                case 2: sw_led_index = sw2_led; break;
-                case 3: sw_led_index = sw3_led; break;
-                case 4: sw_led_index = sw4_led; break;
-                case 5: sw_led_index = sw5_led; break;
-                case 6: sw_led_index = sw6_led; break;
-                case 7: sw_led_index = sw8_led; break;
-                case 8: sw_led_index = sw8_led; break;
-                }
-                relay_off_on((u32)sw_led_index, relay_index); // 开启/关闭 继电器对应的按键灯 和 LCD对应的继电器图标
-
-                fb_information[0] = 0xFE; // 帧头
-                fb_information[1] = 0x04;
-                fb_information[2] = 0x09; /* 命令 */
-                fb_information[3] = sequencers.addr; /* 设备地址 */
-                fb_information[4] = relay_index + 1; // 继电器编号（不是索引，编号从1开始，这里要加一）
-                fb_information[5] = relay_ctl; // 继电器状态
-                fb_information[6] = 0xFF; // 帧尾
-                Uart2_Send_Tx(fb_information, 7);
-            } // if (uart2_data[3] == sequencers.addr)
-
-            if (uart2_data[3] != sequencers.addr ||
-                uart2_data[3] == 0x00 /* 广播地址 */)
-            {
-                // 地址不一致，或者是广播地址，转发给下一级设备
-
-                fb_uart1[0] = 0xFE; // 帧头
-                fb_uart1[1] = 0x04;
-                fb_uart1[2] = 0x09; /* 命令 */
-                fb_uart1[3] = uart2_data[3]; // 设备地址
-                fb_uart1[4] = uart2_data[4]; // 设备对应的继电器编号（范围：1~8）
-                fb_uart1[5] = uart2_data[5]; // 继电器控制命令，开启/关闭对应的继电器
-                fb_uart1[6] = 0xFF; // 帧尾
-                Uart1_Send_Tx(fb_uart1, 7); // 发送给级联设备
-            }
-        }
-
-    }
-
-#endif
-
-
-#if 0 // 开关设备  无条件转发给级联设备
-    // 开关设备  无条件转发给级联设备
-    if (uart2_data[0] == 0xFE &&
-        uart2_data[1] == 0x03 &&
-        uart2_data[2] == 0x00 &&
-        uart2_data[3] == 0x02 &&
-        data_len == 6)
-    {
-        if (uart2_data[4] == 0x01 &&
-            sequencers.timeing_flag == 1 &&
-            sequencers.on_ff == DEVICE_OFF)   /* 开机 */
-        {
-            printf("open");
-            sequencers.timeing_flag = 0;
-            read_flash_sequencers_status_init();
-
-            for (int i = 0; i < 16; i++)
-                printf("sequencers.realy[%d].open_on_off = %d", i, sequencers.realy[i].open_on_off);
-
-
-            //开机，点亮三个mp3按键的灯
-            gpio_direction_output(IO_PORTA_11, 1);
-            gpio_direction_output(IO_PORTC_03, 1);
-            gpio_direction_output(IO_PORTC_02, 1);
-
-            //开机点亮LCD屏的背光灯
-            gpio_direction_output(lcd_light, 1); //背光灯默认关
-
-            //lcd屏幕显示轮廓
-            lcd_open_frame();
-
-
-            find_max_time(DEVICE_ON);
-            open_timer_test();          //开始时序
-
-            //实现开启设备，软件界面变化 
-            fb_information[0] = 0xFE;
-            fb_information[1] = 0X04;
-            fb_information[2] = 0x01;
-            fb_information[3] = 0x00;
-            fb_information[4] = sequencers.addr;
-            fb_information[5] = sequencers.relay_number;
-            fb_information[6] = 0xFF;
-            Uart2_Send_Tx(fb_information, 7);  //应答返回
-
-
-            Uart1_Send_Tx(uart2_data, data_len); //通过串口1发送给级联设备
-
-
-
-            // 关闭了音乐播放功能，不切换到蓝牙
-            // app_task_switch_to(APP_BT_TASK); // 
-        }
-        else if (uart2_data[4] == 0x00 &&
-            sequencers.timeing_flag == 1 &&
-            sequencers.on_ff == DEVICE_ON)
-        {
-            /* 关机 */
-
-            printf("close");
-            sequencers.timeing_flag = 0;
-            read_flash_sequencers_status_init();
-            find_max_time(DEVICE_OFF);
-            close_timer_test(); //关机时序
-
-            // make_dis(SEG_T);   // 音符
-
-            //实现开启设备，软件界面变化
-            fb_information[0] = 0xFE;
-            fb_information[1] = 0X04;
-            fb_information[2] = 0x01;
-            fb_information[3] = 0x00;
-            fb_information[4] = sequencers.addr;
-            fb_information[5] = sequencers.relay_number;
-            fb_information[6] = 0xFF;
-            Uart2_Send_Tx(fb_information, 7);  //应答返回
-
-
-            Uart1_Send_Tx(uart2_data, data_len); //通过串口1发送给级联设备
-
-        }
-    }// 开关设备  无条件转发给级联设备
-#endif
-    // 按下板子上面对应的按钮也是按照这个设置的时间来，是吗？
-
     // 所有指令在AD计时时，不执行下面的代码块
     if (sequencers.timeing_flag == 1)
     {
-#if 0  //设置地址
-        //设置地址  不需要转发
-        if (uart2_data[0] == 0xFE &&
-            uart2_data[1] == 0x04 &&
-            uart2_data[2] == 0x00 &&
-            uart2_data[3] == 0x01)
-        {
-            printf("set address");
-            u8 next_address = 0;
-            u8 fb_uart1[7];
-            sequencers.addr = uart2_data[4];
-            sequencers.relay_number = uart2_data[5];
-            next_address = uart2_data[4] + 1;
-            if (sequencers.addr == 255)
-                next_address = 255;
-            fb_information[0] = 0xFE;
-            fb_information[1] = 0X04;  //指令长度
-            fb_information[2] = 0x01;
-            fb_information[3] = 0x01;
-            fb_information[4] = sequencers.addr;
-            fb_information[5] = sequencers.relay_number;
-            fb_information[6] = 0xFF;
-            Uart2_Send_Tx(fb_information, 7);  //发给串口2  返回PC段 固定7个字节  应答返回
-
-            //级联
-            fb_uart1[0] = 0xFE;
-            fb_uart1[1] = 0x04;
-            fb_uart1[2] = 0x00;
-            fb_uart1[3] = 0x01;
-            fb_uart1[4] = next_address;
-            fb_uart1[5] = sequencers.relay_number;
-            fb_uart1[6] = 0xFF;
-            Uart1_Send_Tx(fb_uart1, 7);  //发送级联设备地址
-            for (int i = 0; i < 16; i++)
-                printf("sequencers.realy[%d].open_on_off = %d", i, sequencers.realy[i].open_on_off);
-            printf("sequencers.addr = %d next_address = %d ", sequencers.addr, next_address);
-            save_sequencers_data_area3();
-
-        }
-#endif
-
-#if 0 //查看本地地址 
-        //查看本地地址   //不需要转发
-        if (uart2_data[0] == 0xFE &&
-            uart2_data[1] == 0x03 &&
-            uart2_data[2] == 0x00 &&
-            uart2_data[3] == 0x00 &&
-            uart2_data[4] == 0x00 &&
-            uart2_data[5] == 0xFF)
-        {
-            printf("check address");
-            fb_information[0] = 0xFE;
-            fb_information[1] = 0X04;
-            fb_information[2] = 0x01;
-            fb_information[3] = 0x00;
-            fb_information[4] = sequencers.addr;
-            fb_information[5] = sequencers.relay_number;
-            fb_information[6] = 0xFF;
-            Uart2_Send_Tx(fb_information, 7);  //应答返回
-        }
-#endif
 
         // 设置开机时序
         if (uart2_data[0] == 0xFE && /* 帧头 */
@@ -1214,7 +307,9 @@ void parse_uart2_data(u8* RxBuf, u32 Len)
             fb_information[fb_info_len++] = sequencers.realy[7].open_time;
             fb_information[fb_info_len++] = 0xFF;
             Uart2_Send_Tx(fb_information, fb_info_len);  //返回
-            save_sequencers_data_area3();
+            // save_sequencers_data_area3();
+            // save_user_data_area3();
+            os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO);
         }
 
         // 2设置关机时序
@@ -1257,7 +352,9 @@ void parse_uart2_data(u8* RxBuf, u32 Len)
             fb_information[fb_info_len++] = sequencers.realy[7].close_time;
             fb_information[fb_info_len++] = 0xFF;
             Uart2_Send_Tx(fb_information, fb_info_len);  //返回
-            save_sequencers_data_area3();
+            // save_sequencers_data_area3();
+            // save_user_data_area3();
+            os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO);
         }
 
         // 3查看开机时序
@@ -1267,7 +364,7 @@ void parse_uart2_data(u8* RxBuf, u32 Len)
             (sequencers.addr == uart2_data[3] || 0x00 == uart2_data[3])) /* 设备地址 */
         {
             printf("【recv cmd】get open time \n");
-            read_flash_sequencers_status_init();
+            save_user_data_init();
             u8 fb_info_len = 0;
             fb_information[fb_info_len++] = 0xFE; /* 帧头 */
             fb_information[fb_info_len++] = 0X04; /* 传输方向 */
@@ -1293,7 +390,7 @@ void parse_uart2_data(u8* RxBuf, u32 Len)
             (sequencers.addr == uart2_data[3] || 0x00 == uart2_data[3])) /* 设备地址 */
         {
             printf("【recv cmd】get close time \n");
-            read_flash_sequencers_status_init();
+            save_user_data_init();
             u8 fb_info_len = 0;
             fb_information[fb_info_len++] = 0xFE; /* 帧头 */
             fb_information[fb_info_len++] = 0X04; /* 传输方向 */
@@ -1374,12 +471,6 @@ void sequencers_data_init()
         // sequencers.realy[open_set_cnt].open_time = 0; // 测试，如果开机延时时间为0
         sequencers.realy[open_set_cnt].open_on_off = DEVICE_ON; // 继电器开机时对应的状态
 
-        // sequencers.realy[open_set_cnt].countdown_open_time.year = 2023;
-        // sequencers.realy[open_set_cnt].countdown_open_time.month = 12;
-        // sequencers.realy[open_set_cnt].countdown_open_time.day = 12;
-        // sequencers.realy[open_set_cnt].countdown_open_time.hour = 12;
-        // sequencers.realy[open_set_cnt].countdown_open_time.min = 12;
-        // sequencers.realy[open_set_cnt].countdown_open_time.sec = 12;
     }
 
     //默认关机时逐个灭
@@ -1389,19 +480,7 @@ void sequencers_data_init()
         sequencers.realy[close_set_cnt].close_time = 1;
 
         // sequencers.realy[close_set_cnt].close_time = 0; // 测试，如果关机延时时间为0
-        sequencers.realy[close_set_cnt].clod_on_off = DEVICE_OFF; // 继电器关机时对应的状态
-        // i--;
-
-
-        // sequencers.realy[close_set_cnt].countdown_close_time.year = 2023;
-        // sequencers.realy[close_set_cnt].countdown_close_time.month = 12;
-        // sequencers.realy[close_set_cnt].countdown_close_time.day = 12;
-        // sequencers.realy[close_set_cnt].countdown_close_time.hour = 12;
-        // sequencers.realy[close_set_cnt].countdown_close_time.min = 12;
-        // sequencers.realy[close_set_cnt].countdown_close_time.sec = 12;
-
-
-
+        sequencers.realy[close_set_cnt].clod_on_off = DEVICE_OFF; // 继电器关机时对应的状态 
     }
 
     for (u8 i = 0; i < RELAYS_MAX; i++)
@@ -1439,23 +518,6 @@ void relay_off_on(u32 relay_led, u8 relay_number)
 
 void fd_relay_state(void)
 {
-    // u8 fb_temp[50];
-    // fb_temp[0] = 0xFE;
-    // fb_temp[1] = sequencers.relay_number + 7;
-    // fb_temp[2] = sequencers.addr;
-    // fb_temp[3] = 0x08;
-    // fb_temp[4] = 0x5A;  //z
-    // fb_temp[5] = 0x44;  //d
-    // fb_temp[6] = 0x00;  //正式版本号
-    // fb_temp[7] = 0x01;   //送测版本号
-    // fb_temp[8] = sequencers.on_ff;
-    // for (int i = 9, j = 0; i <= (8 + sequencers.relay_number); i++, j++)
-    // {
-    //     fb_temp[i] = temp_on_off[j];
-    // }
-
-    // fb_temp[(9 + sequencers.relay_number)] = 0xFF;
-    // Uart2_Send_Tx(fb_temp, (10 + sequencers.relay_number));
 }
 
 
@@ -1469,13 +531,13 @@ void adkey_control(u32 relay_led, u8 relay_number)
     temp_on_off[relay_number] = !temp_on_off[relay_number];
     if (temp_on_off[relay_number] == DEVICE_ON)
     {
-        gpio_direction_output(relay_led, 1); //开灯
-        lcd_show_relay_icon(relay_number); // lcd点亮对应的通道
+        gpio_direction_output(relay_led, 1); // 点亮对应按键的灯 同时也会打开对应的继电器
+        lcd_show_relay_icon(relay_number); // lcd 对应的通道
     }
     else
     {
-        gpio_direction_output(relay_led, 0); //关灯
-        lcd_clear_relay_icon(relay_number); // lcd点亮对应的通道
+        gpio_direction_output(relay_led, 0); // 关闭按键对应的灯，同时关闭对应的继电器
+        lcd_clear_relay_icon(relay_number); // lcd 对应的通道
     }
 
 }
@@ -1783,7 +845,7 @@ void adkey_master_on_off(void)
 
 // ---------------------------------------------  控制面板的功能逻辑  ----------------------------------------------------
 
-#include "lcd1621.h"
+// #include "lcd1621.h"
 extern u8 lcd_now_state;
 u8 time_unit = 0;
 u8 sys_time_unit = 0;
@@ -1861,10 +923,11 @@ void ad_key_event_handle(int keyevent)
         // if (lcd_now_state == show_power) 
     {
         adkey_control(sw1_led, 0); // 继电器、继电器对应的按键灯和对应的LCD图标，状态取反
-        fd_relay_state(); // 向上位机反馈
+
+        // 更新状态：
         sequencers.realy[0].cur_status_on_off = temp_on_off[0];
         sequencers.realy[0].last_status_on_off = temp_on_off[0];
-        os_taskq_post("msg_task", 1, MSG_SEQUENCER_SAVE_INFO);
+        os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO);
     }
     break;
     case KEY1_AD_CLICK:
@@ -1874,7 +937,7 @@ void ad_key_event_handle(int keyevent)
         adkey_control(sw2_led, 1); fd_relay_state();
         sequencers.realy[1].cur_status_on_off = temp_on_off[1];
         sequencers.realy[1].last_status_on_off = temp_on_off[1];
-        os_taskq_post("msg_task", 1, MSG_SEQUENCER_SAVE_INFO);
+        os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO);
     }
     break;
     case KEY2_AD_CLICK:
@@ -1884,7 +947,7 @@ void ad_key_event_handle(int keyevent)
         adkey_control(sw3_led, 2); fd_relay_state();
         sequencers.realy[2].cur_status_on_off = temp_on_off[2];
         sequencers.realy[2].last_status_on_off = temp_on_off[2];
-        os_taskq_post("msg_task", 1, MSG_SEQUENCER_SAVE_INFO);
+        os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO);
     }
     break;
     case KEY3_AD_CLICK:
@@ -1894,7 +957,7 @@ void ad_key_event_handle(int keyevent)
         adkey_control(sw4_led, 3); fd_relay_state();
         sequencers.realy[3].cur_status_on_off = temp_on_off[3];
         sequencers.realy[3].last_status_on_off = temp_on_off[3];
-        os_taskq_post("msg_task", 1, MSG_SEQUENCER_SAVE_INFO);
+        os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO);
     }
     break;
     case KEY4_AD_CLICK:
@@ -1904,7 +967,7 @@ void ad_key_event_handle(int keyevent)
         adkey_control(sw5_led, 4); fd_relay_state();
         sequencers.realy[4].cur_status_on_off = temp_on_off[4];
         sequencers.realy[4].last_status_on_off = temp_on_off[4];
-        os_taskq_post("msg_task", 1, MSG_SEQUENCER_SAVE_INFO);
+        os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO);
     }
     break;
     case KEY5_AD_CLICK:
@@ -1914,7 +977,7 @@ void ad_key_event_handle(int keyevent)
         adkey_control(sw6_led, 5); fd_relay_state();
         sequencers.realy[5].cur_status_on_off = temp_on_off[5];
         sequencers.realy[5].last_status_on_off = temp_on_off[5];
-        os_taskq_post("msg_task", 1, MSG_SEQUENCER_SAVE_INFO);
+        os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO);
     }
     break;
     case KEY6_AD_CLICK:
@@ -1924,7 +987,7 @@ void ad_key_event_handle(int keyevent)
         adkey_control(sw7_led, 6); fd_relay_state();
         sequencers.realy[6].cur_status_on_off = temp_on_off[6];
         sequencers.realy[6].last_status_on_off = temp_on_off[6];
-        os_taskq_post("msg_task", 1, MSG_SEQUENCER_SAVE_INFO);
+        os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO);
     }
     break;
     case KEY7_AD_CLICK:
@@ -1934,1033 +997,21 @@ void ad_key_event_handle(int keyevent)
         adkey_control(sw8_led, 7); fd_relay_state();
         sequencers.realy[7].cur_status_on_off = temp_on_off[7];
         sequencers.realy[7].last_status_on_off = temp_on_off[7];
-        os_taskq_post("msg_task", 1, MSG_SEQUENCER_SAVE_INFO);
+        os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO);
     }
     break;
 
-    //mp3的按键
-// --------------------------------------------------------------- 上调
-    case KEY8_AD_CLICK:
-        //调开机时序
-        if (lcd_now_state == open_dev_time)
-        {
-            blink_f = 0;//为了操作显示，感觉上流畅
-            blink_cnt = pre_tiem;
 
-            switch (time_unit)
-            {
-            case 0:
-                split_open_time[chose_relays_num][0] = 0;
-                break;
-            case 1:
-                if (split_open_time[chose_relays_num][1] < 4)
-                    split_open_time[chose_relays_num][1]++;
-                break;
-            case 2:
-                if (split_open_time[chose_relays_num][1] < 4)
-                {
-                    if (split_open_time[chose_relays_num][2] < 9)
-                        split_open_time[chose_relays_num][2]++;
-                }
-                else
-                {
-                    split_open_time[chose_relays_num][2] = 1;
-                }
-                break;
-            case 3:
-
-                if (split_open_time[chose_relays_num][1] < 4)
-                {
-                    if (split_open_time[chose_relays_num][3] < 9)
-                        split_open_time[chose_relays_num][3]++;
-                }
-                else
-                {
-                    split_open_time[chose_relays_num][3] = 5;
-                }
-
-                break;
-
-            }
-
-        }
-        //调关机时序
-        else if (lcd_now_state == close_dev_time)
-        {
-            blink_f = 0;//为了操作显示，感觉上流畅
-            blink_cnt = pre_tiem;
-
-            switch (time_unit)
-            {
-            case 0:
-                split_close_time[chose_relays_num][0] = 0;
-                break;
-            case 1:
-                if (split_close_time[chose_relays_num][1] < 4)
-                    split_close_time[chose_relays_num][1]++;
-                break;
-            case 2:
-                if (split_close_time[chose_relays_num][1] < 4)
-                {
-                    if (split_close_time[chose_relays_num][2] < 9)
-                        split_close_time[chose_relays_num][2]++;
-                }
-                else
-                {
-                    split_close_time[chose_relays_num][2] = 1;
-                }
-                break;
-            case 3:
-
-                if (split_close_time[chose_relays_num][1] < 4)
-                {
-                    if (split_close_time[chose_relays_num][3] < 9)
-                        split_close_time[chose_relays_num][3]++;
-                }
-                else
-                {
-                    split_close_time[chose_relays_num][3] = 5;
-                }
-
-                break;
-
-            }
-        }
-        //功率默模式
-        else if (lcd_now_state == show_power)
-        {
-            // bt_key_music_prev();  // 上一曲
-        }
-        /* 调系统时间 */
-        else if (lcd_now_state == set_sys_time)
-        {
-
-            blink_f = 0;//为了操作显示，感觉上流畅
-            blink_cnt = pre_tiem;
-            switch (sys_time_unit)
-            {
-                u8 ti = 0;
-                // 年份
-            case 0:
-                if (temp_year[0] < 9)
-                {
-                    temp_year[0]++;
-                }
-
-                break;
-            case 1:
-                if (temp_year[1] < 9)
-                {
-                    temp_year[1]++;
-                }
-                break;
-            case 2:
-                if (temp_year[2] < 9)
-                {
-                    temp_year[2]++;
-                }
-                break;
-            case 3:
-                if (temp_year[3] < 9)
-                {
-                    temp_year[3]++;
-                }
-                break;
-                // 月份
-            case 4:
-
-                if (temp_month[0] < 1)
-                {
-                    temp_month[0]++;
-                }
-                break;
-            case 5:
-                if (temp_month[0] == 1)
-                {
-                    if (temp_month[1] < 2)
-                    {
-                        temp_month[1]++;
-                    }
-                }
-                else
-                {
-                    if (temp_month[1] < 9)
-                    {
-                        temp_month[1]++;
-                    }
-                }
-
-                break;
-                // 日
-            case 6:
-                if (temp_day[0] < 3)
-                {
-                    temp_day[0]++;
-                }
-                break;
-            case 7:
-                if (temp_day[0] == 3)
-                {
-                    if (temp_day[1] < 1)
-                    {
-                        temp_day[1]++;
-                    }
-                }
-                else
-                {
-                    if (temp_day[1] < 9)
-                    {
-                        temp_day[1]++;
-                    }
-                }
-
-                break;
-                // 时
-            case 8:
-                if (temp_hour[0] < 2)
-                {
-                    temp_hour[0]++;
-                }
-                break;
-            case 9:
-
-                if (temp_hour[0] == 2)
-                {
-                    if (temp_hour[1] < 3)
-                    {
-                        temp_hour[1]++;
-                    }
-                }
-                else
-                {
-                    if (temp_hour[1] < 9)
-                    {
-                        temp_hour[1]++;
-                    }
-                }
-                break;
-                // 分
-            case 10:
-                if (temp_min[0] < 5)
-                {
-                    temp_min[0]++;
-                }
-                break;
-            case 11:
-                if (temp_min[1] < 9)
-                {
-                    temp_min[1]++;
-                }
-                break;
-                // 秒
-            case 12:
-                if (temp_sec[0] < 5)
-                {
-                    temp_sec[0]++;
-                }
-                break;
-            case 13:
-                if (temp_sec[1] < 9)
-                {
-                    temp_sec[1]++;
-                }
-                break;
-            }
-        }
-        /* 调定时开继电器  */
-        else if (lcd_now_state == timing_relay_open)
-        {
-            blink_f = 0;//为了操作显示，感觉上流畅
-            blink_cnt = pre_tiem;
-            switch (time_unit)
-            {
-                u8 ti = 0;
-                // 年份
-            case 0:
-                if (set_countdown_open_year[chose_relays_num][0] < 9)
-                {
-                    set_countdown_open_year[chose_relays_num][0]++;
-                }
-
-                break;
-            case 1:
-                if (set_countdown_open_year[chose_relays_num][1] < 9)
-                {
-                    set_countdown_open_year[chose_relays_num][1]++;
-                }
-                break;
-            case 2:
-                if (set_countdown_open_year[chose_relays_num][2] < 9)
-                {
-                    set_countdown_open_year[chose_relays_num][2]++;
-                }
-                break;
-            case 3:
-                if (set_countdown_open_year[chose_relays_num][3] < 9)
-                {
-                    set_countdown_open_year[chose_relays_num][3]++;
-                }
-                break;
-                // 月份
-            case 4:
-
-                if (set_countdown_open_month[chose_relays_num][0] < 1)
-                {
-                    set_countdown_open_month[chose_relays_num][0]++;
-                }
-                break;
-            case 5:
-                if (set_countdown_open_month[chose_relays_num][0] == 1)
-                {
-                    if (set_countdown_open_month[chose_relays_num][1] < 2)
-                    {
-                        set_countdown_open_month[chose_relays_num][1]++;
-                    }
-                }
-                else
-                {
-                    if (set_countdown_open_month[chose_relays_num][1] < 9)
-                    {
-                        set_countdown_open_month[chose_relays_num][1]++;
-                    }
-                }
-
-                break;
-                // 日
-            case 6:
-                if (set_countdown_open_day[chose_relays_num][0] < 3)
-                {
-                    set_countdown_open_day[chose_relays_num][0]++;
-                }
-                break;
-            case 7:
-                if (set_countdown_open_day[chose_relays_num][0] == 3)
-                {
-                    if (set_countdown_open_day[chose_relays_num][1] < 1)
-                    {
-                        set_countdown_open_day[chose_relays_num][1]++;
-                    }
-                }
-                else
-                {
-                    if (set_countdown_open_day[chose_relays_num][1] < 9)
-                    {
-                        set_countdown_open_day[chose_relays_num][1]++;
-                    }
-                }
-
-                break;
-                // 时
-            case 8:
-                if (set_countdown_open_hour[chose_relays_num][0] < 2)
-                {
-                    set_countdown_open_hour[chose_relays_num][0]++;
-                }
-                break;
-            case 9:
-
-                if (set_countdown_open_hour[chose_relays_num][0] == 2)
-                {
-                    if (set_countdown_open_hour[chose_relays_num][1] < 3)
-                    {
-                        set_countdown_open_hour[chose_relays_num][1]++;
-                    }
-                }
-                else
-                {
-                    if (set_countdown_open_hour[chose_relays_num][1] < 9)
-                    {
-                        set_countdown_open_hour[chose_relays_num][1]++;
-                    }
-                }
-                break;
-                // 分
-            case 10:
-                if (set_countdown_open_min[chose_relays_num][0] < 5)
-                {
-                    set_countdown_open_min[chose_relays_num][0]++;
-                }
-                break;
-            case 11:
-                if (set_countdown_open_min[chose_relays_num][1] < 9)
-                {
-                    set_countdown_open_min[chose_relays_num][1]++;
-                }
-                break;
-                // 秒
-            case 12:
-                if (set_countdown_open_sec[chose_relays_num][0] < 5)
-                {
-                    set_countdown_open_sec[chose_relays_num][0]++;
-                }
-                break;
-            case 13:
-                if (set_countdown_open_sec[chose_relays_num][1] < 9)
-                {
-                    set_countdown_open_sec[chose_relays_num][1]++;
-                }
-                break;
-            }
-        }
-        /* 调定时关继电器 */
-        else if (lcd_now_state == timing_relay_close)
-        {
-            blink_f = 0;//为了操作显示，感觉上流畅
-            blink_cnt = pre_tiem;
-            switch (time_unit)
-            {
-                u8 ti = 0;
-                // 年份
-            case 0:
-                if (set_countdown_close_year[chose_relays_num][0] < 9)
-                {
-                    set_countdown_close_year[chose_relays_num][0]++;
-                }
-
-                break;
-            case 1:
-                if (set_countdown_close_year[chose_relays_num][1] < 9)
-                {
-                    set_countdown_close_year[chose_relays_num][1]++;
-                }
-                break;
-            case 2:
-                if (set_countdown_close_year[chose_relays_num][2] < 9)
-                {
-                    set_countdown_close_year[chose_relays_num][2]++;
-                }
-                break;
-            case 3:
-                if (set_countdown_close_year[chose_relays_num][3] < 9)
-                {
-                    set_countdown_close_year[chose_relays_num][3]++;
-                }
-                break;
-                // 月份
-            case 4:
-
-                if (set_countdown_close_month[chose_relays_num][0] < 1)
-                {
-                    set_countdown_close_month[chose_relays_num][0]++;
-                }
-                break;
-            case 5:
-                if (set_countdown_close_month[chose_relays_num][0] == 1)
-                {
-                    if (set_countdown_close_month[chose_relays_num][1] < 2)
-                    {
-                        set_countdown_close_month[chose_relays_num][1]++;
-                    }
-                }
-                else
-                {
-                    if (set_countdown_close_month[chose_relays_num][1] < 9)
-                    {
-                        set_countdown_close_month[chose_relays_num][1]++;
-                    }
-                }
-
-                break;
-                // 日
-            case 6:
-                if (set_countdown_close_day[chose_relays_num][0] < 3)
-                {
-                    set_countdown_close_day[chose_relays_num][0]++;
-                }
-                break;
-            case 7:
-                if (set_countdown_close_day[chose_relays_num][0] == 3)
-                {
-                    if (set_countdown_close_day[chose_relays_num][1] < 1)
-                    {
-                        set_countdown_close_day[chose_relays_num][1]++;
-                    }
-                }
-                else
-                {
-                    if (set_countdown_close_day[chose_relays_num][1] < 9)
-                    {
-                        set_countdown_close_day[chose_relays_num][1]++;
-                    }
-                }
-
-                break;
-                // 时
-            case 8:
-                if (set_countdown_close_hour[chose_relays_num][0] < 2)
-                {
-                    set_countdown_close_hour[chose_relays_num][0]++;
-                }
-                break;
-            case 9:
-
-                if (set_countdown_close_hour[chose_relays_num][0] == 2)
-                {
-                    if (set_countdown_close_hour[chose_relays_num][1] < 3)
-                    {
-                        set_countdown_close_hour[chose_relays_num][1]++;
-                    }
-                }
-                else
-                {
-                    if (set_countdown_close_hour[chose_relays_num][1] < 9)
-                    {
-                        set_countdown_close_hour[chose_relays_num][1]++;
-                    }
-                }
-                break;
-                // 分
-            case 10:
-                if (set_countdown_close_min[chose_relays_num][0] < 5)
-                {
-                    set_countdown_close_min[chose_relays_num][0]++;
-                }
-                break;
-            case 11:
-                if (set_countdown_close_min[chose_relays_num][1] < 9)
-                {
-                    set_countdown_close_min[chose_relays_num][1]++;
-                }
-                break;
-                // 秒
-            case 12:
-                if (set_countdown_close_sec[chose_relays_num][0] < 5)
-                {
-                    set_countdown_close_sec[chose_relays_num][0]++;
-                }
-                break;
-            case 13:
-                if (set_countdown_close_sec[chose_relays_num][1] < 9)
-                {
-                    set_countdown_close_sec[chose_relays_num][1]++;
-                }
-                break;
-            }
-
-        }
-
-        break;
-
-        // -------------------------------------------------------------- 播放
-
-                //切换时间的位
-    case KEY9_AD_CLICK:
-        if (lcd_now_state == show_power)
-        {
-            // bt_key_music_pp();  // 播放/暂停
-        }
-        // 切换开关机延时的时间位
-        else if (lcd_now_state == open_dev_time || lcd_now_state == close_dev_time)
-        {
-            blink_f = 1; blink_cnt = pre_tiem; //为了操作显示，感觉上流畅
-            time_unit++; if (time_unit == 4) time_unit = 0;
-        }
-        // 切换定时开关继电器的时间位
-        else if (lcd_now_state == timing_relay_open || lcd_now_state == timing_relay_close)
-        {
-            blink_f = 1; blink_cnt = pre_tiem; //为了操作显示，感觉上流畅
-            time_unit++;
-            if (time_unit == 14) time_unit = 0;  //
-            if (time_unit < 8)
-            {
-                clean_num(1);clean_num(2);clean_num(3); // 清数据
-                if (show_e_f == 2)
-                {
-                    make_alphabet(2);  make_num(3, chose_relays_num + 1);  // 显示e  对应的第几个继电器
-
-                }
-                else if (show_e_f == 3)
-                {
-                    make_alphabet(3);  make_num(3, chose_relays_num + 1);  // 显示e  对应的第几个继电器
-
-                }
-            }
-            if (time_unit == 8)
-            {
-                clean_num(2);clean_num(3); // 清数据
-            }
-
-
-        }
-        // 切换系统假时钟的时间位
-        else if (lcd_now_state == set_sys_time)
-        {
-            blink_f = 1; blink_cnt = pre_tiem; //为了操作显示，感觉上流畅
-            sys_time_unit++;
-            if (sys_time_unit == 14) sys_time_unit = 0;  //
-            // 如果日期的十位是3，切换一位是马上显示0
-            if (sys_time_unit == 7)
-            {
-                if (temp_day[0] > 2)
-                {
-                    temp_day[1] = 0;
-                }
-            }
-        }
-
-        break;
-
-        // ------------------------------------------------------------------  下调
-    case KEY10_AD_CLICK:
-        //调开机时序
-        if (lcd_now_state == open_dev_time)
-        {
-            blink_f = 0;//为了操作显示，感觉上流畅
-            blink_cnt = 20;
-
-            switch (time_unit)
-            {
-            case 0:
-                split_open_time[chose_relays_num][0] = 0;
-                break;
-            case 1:
-                if (split_open_time[chose_relays_num][1] > 0)
-                    split_open_time[chose_relays_num][1]--;
-                break;
-            case 2:
-                if (split_open_time[chose_relays_num][2] > 0)
-                    split_open_time[chose_relays_num][2]--;
-
-                break;
-            case 3:
-
-                if (split_open_time[chose_relays_num][3] > 0)
-                    split_open_time[chose_relays_num][3]--;
-                break;
-
-            }
-
-        }
-        //调关机时序
-        else if (lcd_now_state == close_dev_time)
-        {
-
-            blink_f = 0;//为了操作显示，感觉上流畅
-            blink_cnt = 10;
-
-            switch (time_unit)
-            {
-            case 0:
-                split_close_time[chose_relays_num][0] = 0;
-                break;
-            case 1:
-                if (split_close_time[chose_relays_num][1] > 0)
-                    split_close_time[chose_relays_num][1]--;
-                break;
-            case 2:
-                if (split_close_time[chose_relays_num][2] > 0)
-                    split_close_time[chose_relays_num][2]--;
-
-                break;
-            case 3:
-
-                if (split_close_time[chose_relays_num][3] > 0)
-                    split_close_time[chose_relays_num][3]--;
-                break;
-
-            }
-
-
-        }
-        //功率模式
-        else if (lcd_now_state == show_power)
-        {
-            // bt_key_music_next();  // 下一曲
-        }
-        /* 调系统时间 */
-        else if (lcd_now_state == set_sys_time)
-        {
-            blink_f = 0;//为了操作显示，感觉上流畅
-            blink_cnt = pre_tiem;
-            switch (sys_time_unit)
-            {
-                u8 ti = 0;
-                // 年份
-            case 0:
-                if (temp_year[0] > 0)
-                {
-                    temp_year[0]--;
-                }
-
-                break;
-            case 1:
-                if (temp_year[1] > 0)
-                {
-                    temp_year[1]--;
-                }
-                break;
-            case 2:
-                if (temp_year[2] > 0)
-                {
-                    temp_year[2]--;
-                }
-                break;
-            case 3:
-                if (temp_year[3] > 0)
-                {
-                    temp_year[3]--;
-                }
-                break;
-                // 月份
-            case 4:
-                if (temp_month[0] > 0)
-                {
-                    temp_month[0]--;
-                }
-                break;
-            case 5:
-                if (temp_month[1] > 0)
-                {
-                    temp_month[1]--;
-                }
-                break;
-                // 日
-            case 6:
-                if (temp_day[0] > 0)
-                {
-                    temp_day[0]--;
-                }
-                break;
-            case 7:
-                if (temp_day[1] > 0)
-                {
-                    temp_day[1]--;
-                }
-                break;
-                // 时
-            case 8:
-                if (temp_hour[0] > 0)
-                {
-                    temp_hour[0]--;
-                }
-                break;
-            case 9:
-
-
-                if (temp_hour[1] > 0)
-                {
-                    temp_hour[1]--;
-                }
-
-
-
-                break;
-                // 分
-            case 10:
-                if (temp_min[0] > 0)
-                {
-                    temp_min[0]--;
-                }
-
-
-                break;
-            case 11:
-                if (temp_min[1] > 0)
-                {
-                    temp_min[1]--;
-                }
-                break;
-                // 秒
-            case 12:
-                if (temp_sec[0] > 0)
-                {
-                    temp_sec[0]--;
-                }
-                break;
-            case 13:
-                if (temp_sec[1] > 0)
-                {
-                    temp_sec[1]--;
-                }
-                break;
-
-            }
-
-        }
-        /* 调定时开继电器  */
-        else if (lcd_now_state == timing_relay_open)
-        {
-            blink_f = 0;//为了操作显示，感觉上流畅
-            blink_cnt = pre_tiem;
-            switch (time_unit)
-            {
-                u8 ti = 0;
-                // 年份
-            case 0:
-                if (set_countdown_open_year[chose_relays_num][0] > 0)
-                {
-                    set_countdown_open_year[chose_relays_num][0]--;
-                }
-
-                break;
-            case 1:
-                if (set_countdown_open_year[chose_relays_num][1] > 0)
-                {
-                    set_countdown_open_year[chose_relays_num][1]--;
-                }
-                break;
-            case 2:
-                if (set_countdown_open_year[chose_relays_num][2] > 0)
-                {
-                    set_countdown_open_year[chose_relays_num][2]--;
-                }
-                break;
-            case 3:
-                if (set_countdown_open_year[chose_relays_num][3] > 0)
-                {
-                    set_countdown_open_year[chose_relays_num][3]--;
-                }
-                break;
-                // 月份
-            case 4:
-                if (set_countdown_open_month[chose_relays_num][0] > 0)
-                {
-                    set_countdown_open_month[chose_relays_num][0]--;
-                }
-                break;
-            case 5:
-                if (set_countdown_open_month[chose_relays_num][1] > 0)
-                {
-                    set_countdown_open_month[chose_relays_num][1]--;
-                }
-                break;
-                // 日
-            case 6:
-                if (set_countdown_open_day[chose_relays_num][0] > 0)
-                {
-                    set_countdown_open_day[chose_relays_num][0]--;
-                }
-                break;
-            case 7:
-                if (set_countdown_open_day[chose_relays_num][1] > 0)
-                {
-                    set_countdown_open_day[chose_relays_num][1]--;
-                }
-                break;
-                // 时
-            case 8:
-                if (set_countdown_open_hour[chose_relays_num][0] > 0)
-                {
-                    set_countdown_open_hour[chose_relays_num][0]--;
-                }
-                break;
-            case 9:
-
-
-                if (set_countdown_open_hour[chose_relays_num][1] > 0)
-                {
-                    set_countdown_open_hour[chose_relays_num][1]--;
-                }
-
-
-
-                break;
-                // 分
-            case 10:
-                if (set_countdown_open_min[chose_relays_num][0] > 0)
-                {
-                    set_countdown_open_min[chose_relays_num][0]--;
-                }
-
-
-                break;
-            case 11:
-                if (set_countdown_open_min[chose_relays_num][1] > 0)
-                {
-                    set_countdown_open_min[chose_relays_num][1]--;
-                }
-                break;
-                // 秒
-            case 12:
-                if (set_countdown_open_sec[chose_relays_num][0] > 0)
-                {
-                    set_countdown_open_sec[chose_relays_num][0]--;
-                }
-                break;
-            case 13:
-                if (set_countdown_open_sec[chose_relays_num][1] > 0)
-                {
-                    set_countdown_open_sec[chose_relays_num][1]--;
-                }
-                break;
-
-            }
-        }
-        /* 调定时关继电器 */
-        else if (lcd_now_state == timing_relay_close)
-        {
-            blink_f = 0;//为了操作显示，感觉上流畅
-            blink_cnt = pre_tiem;
-            switch (time_unit)
-            {
-                u8 ti = 0;
-                // 年份
-            case 0:
-                if (set_countdown_close_year[chose_relays_num][0] > 0)
-                {
-                    set_countdown_close_year[chose_relays_num][0]--;
-                }
-
-                break;
-            case 1:
-                if (set_countdown_close_year[chose_relays_num][1] > 0)
-                {
-                    set_countdown_close_year[chose_relays_num][1]--;
-                }
-                break;
-            case 2:
-                if (set_countdown_close_year[chose_relays_num][2] > 0)
-                {
-                    set_countdown_close_year[chose_relays_num][2]--;
-                }
-                break;
-            case 3:
-                if (set_countdown_close_year[chose_relays_num][3] > 0)
-                {
-                    set_countdown_close_year[chose_relays_num][3]--;
-                }
-                break;
-                // 月份
-            case 4:
-                if (set_countdown_open_month[chose_relays_num][0] > 0)
-                {
-                    set_countdown_open_month[chose_relays_num][0]--;
-                }
-                break;
-            case 5:
-                if (set_countdown_close_month[chose_relays_num][1] > 0)
-                {
-                    set_countdown_close_month[chose_relays_num][1]--;
-                }
-                break;
-                // 日
-            case 6:
-                if (set_countdown_close_day[chose_relays_num][0] > 0)
-                {
-                    set_countdown_close_day[chose_relays_num][0]--;
-                }
-                break;
-            case 7:
-                if (set_countdown_close_day[chose_relays_num][1] > 0)
-                {
-                    set_countdown_close_day[chose_relays_num][1]--;
-                }
-                break;
-                // 时
-            case 8:
-                if (set_countdown_close_hour[chose_relays_num][0] > 0)
-                {
-                    set_countdown_close_hour[chose_relays_num][0]--;
-                }
-                break;
-            case 9:
-
-
-                if (set_countdown_close_hour[chose_relays_num][1] > 0)
-                {
-                    set_countdown_close_hour[chose_relays_num][1]--;
-                }
-
-
-
-                break;
-                // 分
-            case 10:
-                if (set_countdown_close_min[chose_relays_num][0] > 0)
-                {
-                    set_countdown_close_min[chose_relays_num][0]--;
-                }
-
-
-                break;
-            case 11:
-                if (set_countdown_close_min[chose_relays_num][1] > 0)
-                {
-                    set_countdown_close_min[chose_relays_num][1]--;
-                }
-                break;
-                // 秒
-            case 12:
-                if (set_countdown_close_sec[chose_relays_num][0] > 0)
-                {
-                    set_countdown_close_sec[chose_relays_num][0]--;
-                }
-                break;
-            case 13:
-                if (set_countdown_close_sec[chose_relays_num][1] > 0)
-                {
-                    set_countdown_close_sec[chose_relays_num][1]--;
-                }
-                break;
-
-            }
-        }
-
-
-
-        break;
-
-    default: break;
+    default:
+    {
+        return;
+    }
+    break;
 
     }// switch (keyevent)
 
 
-
-
-#if 0
-
-    // u8 flag_is_all_relays_colse = 1;
-    // u8 i = 0;
-    // for (i = 0; i < RELAYS_MAX; i++)
-    // {
-    //     if (temp_on_off[i] == DEVICE_ON)
-    //     {
-    //         flag_is_all_relays_colse = 0;
-    //         break;
-    //     }
-    // }
-
-
-    // if (flag_is_all_relays_colse && DEVICE_ON == sequencers.on_ff)
-    // {
-    //     // 所有继电器都关闭，但是设备还是开着的 
-
-    //     all_shutdowm();  //确保所有继电器的状态是关机状态
-    //     gpio_direction_output(sw0_led, 0); //关闭总开关的指示灯 
-    //     sequencers.on_ff = DEVICE_OFF;
-    //     os_taskq_post("msg_task", 1, MSG_SEQUENCER_SAVE_INFO);
-    // }
-
-    /*
-        检查继电器是否全部关闭 或是 有一个继电器开启
-    */
-    u8 flag_is_all_relays_colse = 1;
-    u8 i = 0;
-    for (i = 0; i < RELAYS_MAX; i++)
-    {
-        if (temp_on_off[i] == DEVICE_ON)
-        {
-            flag_is_all_relays_colse = 0;
-            break;
-        }
-    }
-
-
-    if (flag_is_all_relays_colse && DEVICE_ON == sequencers.on_ff)
-    {
-        // 所有继电器都关闭，但是设备还是开着的 
-
-        all_shutdowm();  //确保所有继电器的状态是关机状态
-        gpio_direction_output(sw0_led, 0); //关闭总开关的指示灯 
-        sequencers.on_ff = DEVICE_OFF;
-    }
-    else if (0 == flag_is_all_relays_colse && DEVICE_OFF == sequencers.on_ff)
-    {
-        // 至少有一个继电器开启，但是设备是关闭的
-        gpio_direction_output(sw0_led, 1); // 开灯（总开关对应的按键灯）
-        sequencers.on_ff = DEVICE_ON;
-    }
-#endif
+    os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO);
 }
 
 //将开机时拆分成分秒的格式
@@ -3160,726 +1211,7 @@ extern u16 update_cnt;
  */
 void adkey_16way_long(int keyevent)
 {
-#if 0
-    static u8 m = 0;
 
-
-    switch (keyevent)
-    {
-
-        //第一路
-    case KEY0_AD_LONG:
-        chose_relays_num = 0;
-        clean_num(1);clean_num(2);clean_num(3);   //清
-        clean_num(4);clean_num(5);clean_num(6); clean_num(7);  // 清屏
-
-        printf("m_arry[chose_relays_num] == %u\n", (u16)m_arry[chose_relays_num]);
-
-        //设置开机时间模式
-        if (m_arry[chose_relays_num] == 0)
-        {
-            time_unit = 0; //确保每次进入，都是从分开始
-            make_alphabet(0);  make_num(3, chose_relays_num + 1);  // 显示P  对应的第几个继电器
-            clean_dis(clrbit(SEG_S5)); clean_dis(clrbit(SEG_S6)); // 关闭“V”"W""
-            // make_dis(SEG_S3);make_dis(SEG_S4);  // 显示 “ " ”  “ ' ”
-            split_open_minute_second();
-
-            //读取当前的开机时序数据
-            // make_num(4, split_open_time[chose_relays_num][0]);
-            // make_num(5, split_open_time[chose_relays_num][1]);
-            // make_num(6, split_open_time[chose_relays_num][2]);
-            // make_num(7, split_open_time[chose_relays_num][3]);
-
-            lcd_now_state = open_dev_time;
-            m_arry[chose_relays_num] = 1;
-        }
-        // 设置关机时间模式
-        else if (m_arry[chose_relays_num] == 1)
-        {
-            time_unit = 0;
-            make_alphabet(1);  make_num(3, chose_relays_num + 1);
-            // make_dis(SEG_S3);make_dis(SEG_S4);  // 显 ’ ”
-            clean_dis(clrbit(SEG_S5)); clean_dis(clrbit(SEG_S6));  // 清 v w
-            split_close_minute_second();
-
-            //读取当前的关机时序
-            // make_num(4, split_close_time[chose_relays_num][0]);
-            // make_num(5, split_close_time[chose_relays_num][1]);
-            // make_num(6, split_close_time[chose_relays_num][2]);
-            // make_num(7, split_close_time[chose_relays_num][3]);
-
-            lcd_now_state = close_dev_time;
-            m_arry[chose_relays_num] = 2;
-
-        }
-        // 设置继电器定时开
-        else if (m_arry[chose_relays_num] == 2)
-        {
-
-            time_unit = 0; //确保每次进入，都是从分开始
-            make_alphabet(2);  make_num(3, chose_relays_num + 1);  // 显示e  对应的第几个继电器
-            read_relays_countdown_open_time();
-            lcd_now_state = timing_relay_open;
-            m_arry[chose_relays_num] = 3;
-            show_e_f = 2;
-        }
-        // 设置继电器定时关
-        else if (m_arry[chose_relays_num] == 3)
-        {
-
-            time_unit = 0; //确保每次进入，都是从分开始
-            make_alphabet(3);  make_num(3, chose_relays_num + 1);  // 显示f  对应的第几个继电器
-            read_relays_countdown_close_time();
-            lcd_now_state = timing_relay_close;
-            m_arry[chose_relays_num] = 4;
-            show_e_f = 3;
-        }
-        //退出设置模式
-        else if (m_arry[chose_relays_num] == 4)
-        {
-            time_unit = 0;
-            show_e_f = 0;
-            sum_open_minute_second();    // 记录8路的开机时间
-            sum_close_minute_second();  // 记录8路的关机时间
-
-            write_relays_countdown_open_time();     // 记录8路定时开的时间
-            write_relays_countdown_close_time();    // 记录8路定时关的时间
-
-            // clean_dis(clrbit(SEG_S3));clean_dis(clrbit(SEG_S4));  // 清 ” ‘
-            make_dis(SEG_S5); // "V"
-            make_dis(SEG_S6); // "W"
-            lcd_now_state = show_power;
-            m_arry[chose_relays_num] = 0;
-            save_sequencers_data_area3();
-        }
-
-        break;
-
-        //第二路
-    case KEY1_AD_LONG:
-        chose_relays_num = 1;
-        clean_num(1);clean_num(2);clean_num(3);   //清
-        clean_num(4);clean_num(5);clean_num(6); clean_num(7);  // 清屏
-
-        //设置开机时间模式
-        if (m_arry[chose_relays_num] == 0)
-        {
-            time_unit = 0; //确保每次进入，都是从分开始
-            make_alphabet(0);  make_num(3, chose_relays_num + 1);  // 显示P  对应的第几个继电器
-            clean_dis(clrbit(SEG_S5)); clean_dis(clrbit(SEG_S6)); // 关闭“V”"W""
-            // make_dis(SEG_S3);make_dis(SEG_S4);  // 显示 “ " ”  “ ' ”
-            split_open_minute_second();
-
-            //读取当前的开机时序数据
-            // make_num(4, split_open_time[chose_relays_num][0]);
-            // make_num(5, split_open_time[chose_relays_num][1]);
-            // make_num(6, split_open_time[chose_relays_num][2]);
-            // make_num(7, split_open_time[chose_relays_num][3]);
-
-            lcd_now_state = open_dev_time;
-            m_arry[chose_relays_num] = 1;
-        }
-        // 设置关机时间模式
-        else if (m_arry[chose_relays_num] == 1)
-        {
-            time_unit = 0;
-            make_alphabet(1);  make_num(3, chose_relays_num + 1);
-            // make_dis(SEG_S3);make_dis(SEG_S4); 
-            clean_dis(clrbit(SEG_S5)); clean_dis(clrbit(SEG_S6)); // 清 v w
-            split_close_minute_second();
-
-            //读取当前的关机时序
-            // make_num(4, split_close_time[chose_relays_num][0]);
-            // make_num(5, split_close_time[chose_relays_num][1]);
-            // make_num(6, split_close_time[chose_relays_num][2]);
-            // make_num(7, split_close_time[chose_relays_num][3]);
-
-            lcd_now_state = close_dev_time;
-            m_arry[chose_relays_num] = 2;
-
-        }
-        // 设置继电器定时开
-        else if (m_arry[chose_relays_num] == 2)
-        {
-
-            time_unit = 0; //确保每次进入，都是从分开始
-            make_alphabet(2);  make_num(3, chose_relays_num + 1);  // 显示e  对应的第几个继电器
-            read_relays_countdown_open_time();
-            lcd_now_state = timing_relay_open;
-            m_arry[chose_relays_num] = 3;
-            show_e_f = 2;
-        }
-        // 设置继电器定时关
-        else if (m_arry[chose_relays_num] == 3)
-        {
-
-            time_unit = 0; //确保每次进入，都是从分开始
-            make_alphabet(3);  make_num(3, chose_relays_num + 1);  // 显示f  对应的第几个继电器
-            read_relays_countdown_close_time();
-            lcd_now_state = timing_relay_close;
-            m_arry[chose_relays_num] = 4;
-            show_e_f = 3;
-        }
-        //退出设置模式
-        else if (m_arry[chose_relays_num] == 4)
-        {
-            time_unit = 0;
-
-            sum_open_minute_second();    // 记录8路的开机时间
-            sum_close_minute_second();  // 记录8路的关机时间
-
-            write_relays_countdown_open_time();     // 记录8路定时开的时间
-            write_relays_countdown_close_time();    // 记录8路定时关的时间
-
-            clean_dis(clrbit(SEG_S3));clean_dis(clrbit(SEG_S4));
-            make_dis(SEG_S5); // "V"
-            make_dis(SEG_S6); // "W"
-            lcd_now_state = show_power;
-            m_arry[chose_relays_num] = 0;
-            save_sequencers_data_area3();
-        }
-
-        break;
-        //第三路
-    case KEY2_AD_LONG:
-        chose_relays_num = 2;
-        clean_num(1);clean_num(2);clean_num(3);   //清
-        clean_num(4);clean_num(5);clean_num(6); clean_num(7);  // 清屏
-
-        //设置开机时间模式
-        if (m_arry[chose_relays_num] == 0)
-        {
-            time_unit = 0; //确保每次进入，都是从分开始
-            make_alphabet(0);  make_num(3, chose_relays_num + 1);  // 显示P  对应的第几个继电器
-            clean_dis(clrbit(SEG_S5)); clean_dis(clrbit(SEG_S6)); // 关闭“V”"W""
-            // make_dis(SEG_S3);make_dis(SEG_S4);  // 显示 “ " ”  “ ' ”
-            split_open_minute_second();
-
-
-            //读取当前的开机时序数据
-            // make_num(4, split_open_time[chose_relays_num][0]);
-            // make_num(5, split_open_time[chose_relays_num][1]);
-            // make_num(6, split_open_time[chose_relays_num][2]);
-            // make_num(7, split_open_time[chose_relays_num][3]);
-
-            lcd_now_state = open_dev_time;
-            m_arry[chose_relays_num] = 1;
-        }
-        // 设置关机时间模式
-        else if (m_arry[chose_relays_num] == 1)
-        {
-            time_unit = 0;
-            make_alphabet(1);  make_num(3, chose_relays_num + 1);
-            // make_dis(SEG_S3);make_dis(SEG_S4); // 显示 “ " ”  “ ' ”
-            clean_dis(clrbit(SEG_S5)); clean_dis(clrbit(SEG_S6));
-            split_close_minute_second();
-
-            //读取当前的关机时序
-            // make_num(4, split_close_time[chose_relays_num][0]);
-            // make_num(5, split_close_time[chose_relays_num][1]);
-            // make_num(6, split_close_time[chose_relays_num][2]);
-            // make_num(7, split_close_time[chose_relays_num][3]);
-
-            lcd_now_state = close_dev_time;
-            m_arry[chose_relays_num] = 2;
-
-        }
-        // 设置继电器定时开
-        else if (m_arry[chose_relays_num] == 2)
-        {
-
-            time_unit = 0; //确保每次进入，都是从分开始
-            make_alphabet(2);  make_num(3, chose_relays_num + 1);  // 显示e  对应的第几个继电器
-            read_relays_countdown_open_time();
-            lcd_now_state = timing_relay_open;
-            m_arry[chose_relays_num] = 3;
-            show_e_f = 2;
-        }
-        // 设置继电器定时关
-        else if (m_arry[chose_relays_num] == 3)
-        {
-
-            time_unit = 0; //确保每次进入，都是从分开始
-            make_alphabet(3);  make_num(3, chose_relays_num + 1);  // 显示f  对应的第几个继电器
-            read_relays_countdown_close_time();
-            lcd_now_state = timing_relay_close;
-            m_arry[chose_relays_num] = 4;
-            show_e_f = 3;
-        }
-        //退出设置模式
-        else if (m_arry[chose_relays_num] == 4)
-        {
-            time_unit = 0;
-
-            sum_open_minute_second();    // 记录8路的开机时间
-            sum_close_minute_second();  // 记录8路的关机时间
-
-            write_relays_countdown_open_time();     // 记录8路定时开的时间
-            write_relays_countdown_close_time();    // 记录8路定时关的时间
-
-
-            clean_dis(clrbit(SEG_S3));clean_dis(clrbit(SEG_S4));
-            make_dis(SEG_S5); // "V"
-            make_dis(SEG_S6); // "W"
-            lcd_now_state = show_power;
-            m_arry[chose_relays_num] = 0;
-            save_sequencers_data_area3();
-        }
-
-        break;
-        //第四路
-    case KEY3_AD_LONG:
-        chose_relays_num = 3;
-        clean_num(1);clean_num(2);clean_num(3);   //清
-        clean_num(4);clean_num(5);clean_num(6); clean_num(7);  // 清屏
-
-        //设置开机时间模式
-        if (m_arry[chose_relays_num] == 0)
-        {
-            time_unit = 0; //确保每次进入，都是从分开始
-            make_alphabet(0);  make_num(3, chose_relays_num + 1);  // 显示P  对应的第几个继电器
-            clean_dis(clrbit(SEG_S5)); clean_dis(clrbit(SEG_S6)); // 关闭“V”"W""
-            // make_dis(SEG_S3);make_dis(SEG_S4);  // 显示 “ " ”  “ ' ”
-            split_open_minute_second();
-
-            //读取当前的开机时序数据
-            // make_num(4, split_open_time[chose_relays_num][0]);
-            // make_num(5, split_open_time[chose_relays_num][1]);
-            // make_num(6, split_open_time[chose_relays_num][2]);
-            // make_num(7, split_open_time[chose_relays_num][3]);
-
-            lcd_now_state = open_dev_time;
-            m_arry[chose_relays_num] = 1;
-        }
-        // 设置关机时间模式
-        else if (m_arry[chose_relays_num] == 1)
-        {
-            time_unit = 0;
-            make_alphabet(1);  make_num(3, chose_relays_num + 1);
-            // make_dis(SEG_S3);make_dis(SEG_S4); // 显示 “ " ”  “ ' ”
-            clean_dis(clrbit(SEG_S5)); clean_dis(clrbit(SEG_S6));
-            split_close_minute_second();
-
-            //读取当前的关机时序
-            // make_num(4, split_close_time[chose_relays_num][0]);
-            // make_num(5, split_close_time[chose_relays_num][1]);
-            // make_num(6, split_close_time[chose_relays_num][2]);
-            // make_num(7, split_close_time[chose_relays_num][3]);
-
-            lcd_now_state = close_dev_time;
-            m_arry[chose_relays_num] = 2;
-
-        }
-        // 设置继电器定时开
-        else if (m_arry[chose_relays_num] == 2)
-        {
-
-            time_unit = 0; //确保每次进入，都是从分开始
-            make_alphabet(2);  make_num(3, chose_relays_num + 1);  // 显示e  对应的第几个继电器
-            read_relays_countdown_open_time();
-            lcd_now_state = timing_relay_open;
-            m_arry[chose_relays_num] = 3;
-            show_e_f = 2;
-        }
-        // 设置继电器定时关
-        else if (m_arry[chose_relays_num] == 3)
-        {
-
-            time_unit = 0; //确保每次进入，都是从分开始
-            make_alphabet(3);  make_num(3, chose_relays_num + 1);  // 显示f  对应的第几个继电器
-            read_relays_countdown_close_time();
-            lcd_now_state = timing_relay_close;
-            m_arry[chose_relays_num] = 4;
-            show_e_f = 3;
-        }
-        //退出设置模式
-        else if (m_arry[chose_relays_num] == 4)
-        {
-            time_unit = 0;
-
-            sum_open_minute_second();    // 记录8路的开机时间
-            sum_close_minute_second();  // 记录8路的关机时间
-
-            write_relays_countdown_open_time();     // 记录8路定时开的时间
-            write_relays_countdown_close_time();    // 记录8路定时关的时间
-
-            clean_dis(clrbit(SEG_S3));clean_dis(clrbit(SEG_S4));
-            make_dis(SEG_S5); // "V"
-            make_dis(SEG_S6); // "W"
-            lcd_now_state = show_power;
-            m_arry[chose_relays_num] = 0;
-            save_sequencers_data_area3();
-        }
-
-        break;
-        //第五路
-    case KEY4_AD_LONG:
-        chose_relays_num = 4;
-        clean_num(1);clean_num(2);clean_num(3);   //清
-        clean_num(4);clean_num(5);clean_num(6); clean_num(7);  // 清屏
-
-        //设置开机时间模式
-        if (m_arry[chose_relays_num] == 0)
-        {
-            time_unit = 0; //确保每次进入，都是从分开始
-            make_alphabet(0);  make_num(3, chose_relays_num + 1);  // 显示P  对应的第几个继电器
-            clean_dis(clrbit(SEG_S5)); clean_dis(clrbit(SEG_S6)); // 关闭“V”"W""
-            // make_dis(SEG_S3);make_dis(SEG_S4);  // 显示 “ " ”  “ ' ”
-            split_open_minute_second();
-
-
-            //读取当前的开机时序数据
-            // make_num(4, split_open_time[chose_relays_num][0]);
-            // make_num(5, split_open_time[chose_relays_num][1]);
-            // make_num(6, split_open_time[chose_relays_num][2]);
-            // make_num(7, split_open_time[chose_relays_num][3]);
-
-            lcd_now_state = open_dev_time;
-            m_arry[chose_relays_num] = 1;
-        }
-        // 设置关机时间模式
-        else if (m_arry[chose_relays_num] == 1)
-        {
-            time_unit = 0;
-            make_alphabet(1);  make_num(3, chose_relays_num + 1);
-            // make_dis(SEG_S3);make_dis(SEG_S4); // 显示 “ " ”  “ ' ”
-            clean_dis(clrbit(SEG_S5)); clean_dis(clrbit(SEG_S6));
-            split_close_minute_second();
-
-            //读取当前的关机时序
-            // make_num(4, split_close_time[chose_relays_num][0]);
-            // make_num(5, split_close_time[chose_relays_num][1]);
-            // make_num(6, split_close_time[chose_relays_num][2]);
-            // make_num(7, split_close_time[chose_relays_num][3]);
-
-            lcd_now_state = close_dev_time;
-            m_arry[chose_relays_num] = 2;
-
-        }
-        // 设置继电器定时开
-        else if (m_arry[chose_relays_num] == 2)
-        {
-
-            time_unit = 0; //确保每次进入，都是从分开始
-            make_alphabet(2);  make_num(3, chose_relays_num + 1);  // 显示e  对应的第几个继电器
-            read_relays_countdown_open_time();
-            lcd_now_state = timing_relay_open;
-            m_arry[chose_relays_num] = 3;
-            show_e_f = 2;
-        }
-        // 设置继电器定时关
-        else if (m_arry[chose_relays_num] == 3)
-        {
-
-            time_unit = 0; //确保每次进入，都是从分开始
-            make_alphabet(3);  make_num(3, chose_relays_num + 1);  // 显示f  对应的第几个继电器
-            read_relays_countdown_close_time();
-            lcd_now_state = timing_relay_close;
-            m_arry[chose_relays_num] = 4;
-            show_e_f = 3;
-        }
-        //退出设置模式
-        else if (m_arry[chose_relays_num] == 4)
-        {
-            time_unit = 0;
-
-            sum_open_minute_second();    // 记录8路的开机时间
-            sum_close_minute_second();  // 记录8路的关机时间
-
-            write_relays_countdown_open_time();     // 记录8路定时开的时间
-            write_relays_countdown_close_time();    // 记录8路定时关的时间
-
-
-            clean_dis(clrbit(SEG_S3));clean_dis(clrbit(SEG_S4));
-            make_dis(SEG_S5); // "V"
-            make_dis(SEG_S6); // "W"
-            lcd_now_state = show_power;
-            m_arry[chose_relays_num] = 0;
-            save_sequencers_data_area3();
-        }
-
-        break;
-        //第六路
-    case KEY5_AD_LONG:
-        chose_relays_num = 5;
-        clean_num(1);clean_num(2);clean_num(3);   //清
-        clean_num(4);clean_num(5);clean_num(6); clean_num(7);  // 清屏
-
-        //设置开机时间模式
-        if (m_arry[chose_relays_num] == 0)
-        {
-            time_unit = 0; //确保每次进入，都是从分开始
-            make_alphabet(0);  make_num(3, chose_relays_num + 1);  // 显示P  对应的第几个继电器
-            clean_dis(clrbit(SEG_S5)); clean_dis(clrbit(SEG_S6)); // 关闭“V”"W""
-            // make_dis(SEG_S3);make_dis(SEG_S4);  // 显示 “ " ”  “ ' ”
-            split_open_minute_second();
-
-
-            //读取当前的开机时序数据
-            // make_num(4, split_open_time[chose_relays_num][0]);
-            // make_num(5, split_open_time[chose_relays_num][1]);
-            // make_num(6, split_open_time[chose_relays_num][2]);
-            // make_num(7, split_open_time[chose_relays_num][3]);
-
-            lcd_now_state = open_dev_time;
-            m_arry[chose_relays_num] = 1;
-        }
-        // 设置关机时间模式
-        else if (m_arry[chose_relays_num] == 1)
-        {
-            time_unit = 0;
-            make_alphabet(1);  make_num(3, chose_relays_num + 1);
-            // make_dis(SEG_S3);make_dis(SEG_S4); // 显示 “ " ”  “ ' ”
-            clean_dis(clrbit(SEG_S5)); clean_dis(clrbit(SEG_S6));
-            split_close_minute_second();
-            //读取当前的关机时序
-            // make_num(4, split_close_time[chose_relays_num][0]);
-            // make_num(5, split_close_time[chose_relays_num][1]);
-            // make_num(6, split_close_time[chose_relays_num][2]);
-            // make_num(7, split_close_time[chose_relays_num][3]);
-            lcd_now_state = close_dev_time;
-            m_arry[chose_relays_num] = 2;
-
-        }
-        // 设置继电器定时开
-        else if (m_arry[chose_relays_num] == 2)
-        {
-
-            time_unit = 0; //确保每次进入，都是从分开始
-            make_alphabet(2);  make_num(3, chose_relays_num + 1);  // 显示e  对应的第几个继电器
-            read_relays_countdown_open_time();
-            lcd_now_state = timing_relay_open;
-            m_arry[chose_relays_num] = 3;
-            show_e_f = 2;
-        }
-        // 设置继电器定时关
-        else if (m_arry[chose_relays_num] == 3)
-        {
-
-            time_unit = 0; //确保每次进入，都是从分开始
-            make_alphabet(3);  make_num(3, chose_relays_num + 1);  // 显示f  对应的第几个继电器
-            read_relays_countdown_close_time();
-            lcd_now_state = timing_relay_close;
-            m_arry[chose_relays_num] = 4;
-            show_e_f = 3;
-        }
-        //退出设置模式
-        else if (m_arry[chose_relays_num] == 4)
-        {
-            time_unit = 0;
-
-            sum_open_minute_second();    // 记录8路的开机时间
-            sum_close_minute_second();  // 记录8路的关机时间
-
-            write_relays_countdown_open_time();     // 记录8路定时开的时间
-            write_relays_countdown_close_time();    // 记录8路定时关的时间
-
-            clean_dis(clrbit(SEG_S3));clean_dis(clrbit(SEG_S4));
-            make_dis(SEG_S5); // "V"
-            make_dis(SEG_S6); // "W"
-            lcd_now_state = show_power;
-            m_arry[chose_relays_num] = 0;
-            save_sequencers_data_area3();
-        }
-
-        break;
-        //第七路
-    case KEY6_AD_LONG:
-        chose_relays_num = 6;
-        clean_num(1);clean_num(2);clean_num(3);   //清
-        clean_num(4);clean_num(5);clean_num(6); clean_num(7);  // 清屏
-
-        //设置开机时间模式
-        if (m_arry[chose_relays_num] == 0)
-        {
-            time_unit = 0; //确保每次进入，都是从分开始
-            make_alphabet(0);  make_num(3, chose_relays_num + 1);  // 显示P  对应的第几个继电器
-            clean_dis(clrbit(SEG_S5)); clean_dis(clrbit(SEG_S6)); // 关闭“V”"W""
-            // make_dis(SEG_S3);make_dis(SEG_S4);  // 显示 “ " ”  “ ' ”
-            split_open_minute_second();
-
-
-            //读取当前的开机时序数据
-            // make_num(4, split_open_time[chose_relays_num][0]);
-            // make_num(5, split_open_time[chose_relays_num][1]);
-            // make_num(6, split_open_time[chose_relays_num][2]);
-            // make_num(7, split_open_time[chose_relays_num][3]);
-            lcd_now_state = open_dev_time;
-            m_arry[chose_relays_num] = 1;
-        }
-        // 设置关机时间模式
-        else if (m_arry[chose_relays_num] == 1)
-        {
-            time_unit = 0;
-            make_alphabet(1);  make_num(3, chose_relays_num + 1);
-            // make_dis(SEG_S3);make_dis(SEG_S4);// 显示 “ " ”  “ ' ”
-            clean_dis(clrbit(SEG_S5)); clean_dis(clrbit(SEG_S6));
-            split_close_minute_second();
-
-            //读取当前的关机时序
-            // make_num(4, split_close_time[chose_relays_num][0]);
-            // make_num(5, split_close_time[chose_relays_num][1]);
-            // make_num(6, split_close_time[chose_relays_num][2]);
-            // make_num(7, split_close_time[chose_relays_num][3]);
-
-            lcd_now_state = close_dev_time;
-            m_arry[chose_relays_num] = 2;
-
-        }
-        // 设置继电器定时开
-        else if (m_arry[chose_relays_num] == 2)
-        {
-
-            time_unit = 0; //确保每次进入，都是从分开始
-            make_alphabet(2);  make_num(3, chose_relays_num + 1);  // 显示e  对应的第几个继电器
-            read_relays_countdown_open_time();
-            lcd_now_state = timing_relay_open;
-            m_arry[chose_relays_num] = 3;
-            show_e_f = 2;
-        }
-        // 设置继电器定时关
-        else if (m_arry[chose_relays_num] == 3)
-        {
-
-            time_unit = 0; //确保每次进入，都是从分开始
-            make_alphabet(3);  make_num(3, chose_relays_num + 1);  // 显示f  对应的第几个继电器
-            read_relays_countdown_close_time();
-            lcd_now_state = timing_relay_close;
-            m_arry[chose_relays_num] = 4;
-            show_e_f = 3;
-        }
-        //退出设置模式
-        else if (m_arry[chose_relays_num] == 4)
-        {
-            time_unit = 0;
-
-            sum_open_minute_second();    // 记录8路的开机时间
-            sum_close_minute_second();  // 记录8路的关机时间
-
-            write_relays_countdown_open_time();     // 记录8路定时开的时间
-            write_relays_countdown_close_time();    // 记录8路定时关的时间
-
-
-            clean_dis(clrbit(SEG_S3));clean_dis(clrbit(SEG_S4));
-            make_dis(SEG_S5); // "V"
-            make_dis(SEG_S6); // "W"
-            lcd_now_state = show_power;
-            m_arry[chose_relays_num] = 0;
-            save_sequencers_data_area3();
-        }
-
-        break;
-        //第八路
-    case KEY7_AD_LONG:
-        chose_relays_num = 7;
-        clean_num(1);clean_num(2);clean_num(3);   //清
-        clean_num(4);clean_num(5);clean_num(6); clean_num(7);  // 清屏
-
-        //设置开机时间模式
-        if (m_arry[chose_relays_num] == 0)
-        {
-            time_unit = 0; //确保每次进入，都是从分开始
-            make_alphabet(0);  make_num(3, chose_relays_num + 1);  // 显示P  对应的第几个继电器
-            clean_dis(clrbit(SEG_S5)); clean_dis(clrbit(SEG_S6)); // 关闭“V”"W""
-            // make_dis(SEG_S3);make_dis(SEG_S4);  // 显示 “ " ”  “ ' ”
-            split_open_minute_second();
-
-
-            //读取当前的开机时序数据
-            // make_num(4, split_open_time[chose_relays_num][0]);
-            // make_num(5, split_open_time[chose_relays_num][1]);
-            // make_num(6, split_open_time[chose_relays_num][2]);
-            // make_num(7, split_open_time[chose_relays_num][3]);
-
-            lcd_now_state = open_dev_time;
-            m_arry[chose_relays_num] = 1;
-        }
-        // 设置关机时间模式
-        else if (m_arry[chose_relays_num] == 1)
-        {
-            time_unit = 0;
-            make_alphabet(1);  make_num(3, chose_relays_num + 1);
-            // make_dis(SEG_S3);make_dis(SEG_S4);// 显示 “ " ”  “ ' ”
-            clean_dis(clrbit(SEG_S5)); clean_dis(clrbit(SEG_S6));
-            split_close_minute_second();
-
-            //读取当前的关机时序
-            // make_num(4, split_close_time[chose_relays_num][0]);
-            // make_num(5, split_close_time[chose_relays_num][1]);
-            // make_num(6, split_close_time[chose_relays_num][2]);
-            // make_num(7, split_close_time[chose_relays_num][3]);
-
-            lcd_now_state = close_dev_time;
-            m_arry[chose_relays_num] = 2;
-
-        }
-        // 设置继电器定时开
-        else if (m_arry[chose_relays_num] == 2)
-        {
-
-            time_unit = 0; //确保每次进入，都是从分开始
-            make_alphabet(2);  make_num(3, chose_relays_num + 1);  // 显示e  对应的第几个继电器
-            read_relays_countdown_open_time();
-            lcd_now_state = timing_relay_open;
-            m_arry[chose_relays_num] = 3;
-            show_e_f = 2;
-        }
-        // 设置继电器定时关
-        else if (m_arry[chose_relays_num] == 3)
-        {
-
-            time_unit = 0; //确保每次进入，都是从分开始
-            make_alphabet(3);  make_num(3, chose_relays_num + 1);  // 显示f  对应的第几个继电器
-            read_relays_countdown_close_time();
-            lcd_now_state = timing_relay_close;
-            m_arry[chose_relays_num] = 4;
-            show_e_f = 3;
-        }
-        //退出设置模式
-        else if (m_arry[chose_relays_num] == 4)
-        {
-            time_unit = 0;
-
-            sum_open_minute_second();    // 记录8路的开机时间
-            sum_close_minute_second();  // 记录8路的关机时间
-
-            write_relays_countdown_open_time();     // 记录8路定时开的时间
-            write_relays_countdown_close_time();    // 记录8路定时关的时间
-
-            clean_dis(clrbit(SEG_S3));clean_dis(clrbit(SEG_S4));
-            make_dis(SEG_S5); // "V"
-            make_dis(SEG_S6); // "W"
-            lcd_now_state = show_power;
-            m_arry[chose_relays_num] = 0;
-            save_sequencers_data_area3();
-        }
-
-        break;
-    case KEY8_AD_LONG:   break;
-    case KEY9_AD_LONG:   /* 锁屏  设置系统时间 */
-        if (lcd_now_state == set_sys_time)
-        {
-            lcd_now_state = show_power;
-            update_cnt = 950;
-            make_dis(SEG_S5); // "V"
-            make_dis(SEG_S6); // "W"
-            input_sys_time();  // 录入系统时间
-        }
-        else
-        {
-            loc_screen_f = 1;
-            make_lock_screen();
-        }
-
-
-        break;
-    case KEY10_AD_LONG:  break;
-
-    default: break;
-
-    }
-
-#endif
 }
 
 /**
@@ -3979,22 +1311,6 @@ void ir_key_event_handle(int keyevent)
             // 这里如果快速短按按键，会重复进入，目前在sequencer_power_on()内部判断是否处于延时，防止重复触发
 
             printf("ir key_master_on_off open\n");
-#if 0
-            //开机，点亮三个mp3按键的灯 
-            // gpio_direction_output(IO_PORTA_11, 1);
-            // gpio_direction_output(IO_PORTC_03, 1);
-            // gpio_direction_output(IO_PORTC_02, 1);
-
-            //开机点亮LCD屏的背光灯
-            gpio_direction_output(lcd_light, 1); //背光灯默认关
-
-            //lcd屏幕显示轮廓
-            lcd_open_frame();
-
-            read_flash_sequencers_status_init();  //读取开机时序信息
-            find_max_time(DEVICE_ON);
-            open_timer_test();//开始时序
-#endif
 
             // //开机点亮LCD屏的背光灯
             // gpio_direction_output(lcd_light, 1);
@@ -4013,7 +1329,7 @@ void ir_key_event_handle(int keyevent)
             // 这里如果快速短按按键，会重复进入，目前在sequencer_power_off()内部判断是否处于延时，防止重复触发
             printf("ir key_master_on_off off\n");
 #if 0
-            read_flash_sequencers_status_init();  //读取关机时序信息
+            save_user_data_init();  //读取关机时序信息
             find_max_time(DEVICE_OFF);
             close_timer_test(); //关机时序
             make_dis(SEG_T);   // 音符
@@ -4063,12 +1379,12 @@ void ir_key_event_handle(int keyevent)
     {
         if (sequencers.on_ff == DEVICE_ON)
         {
-            adkey_control(sw1_led, 0);   fd_relay_state();
+            adkey_control(sw1_led, 0);
 
             // 继电器状态变化后，立刻更新继电器状态
             sequencers.realy[0].cur_status_on_off = temp_on_off[0];
             sequencers.realy[0].last_status_on_off = temp_on_off[0];
-            os_taskq_post("msg_task", 1, MSG_SEQUENCER_SAVE_INFO); // 将保存数据的消息，发送给对应的线程
+            os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO); // 将保存数据的消息，发送给对应的线程
         }
     }
     break;
@@ -4076,11 +1392,11 @@ void ir_key_event_handle(int keyevent)
     {
         if (sequencers.on_ff == DEVICE_ON)
         {
-            adkey_control(sw2_led, 1);   fd_relay_state();
+            adkey_control(sw2_led, 1);
             // 继电器状态变化后，立刻更新继电器状态
             sequencers.realy[1].cur_status_on_off = temp_on_off[1];
             sequencers.realy[1].last_status_on_off = temp_on_off[1];
-            os_taskq_post("msg_task", 1, MSG_SEQUENCER_SAVE_INFO); // 将保存数据的消息，发送给对应的线程
+            os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO); // 将保存数据的消息，发送给对应的线程
         }
     }
     break;
@@ -4092,7 +1408,7 @@ void ir_key_event_handle(int keyevent)
             // 继电器状态变化后，立刻更新继电器状态
             sequencers.realy[2].cur_status_on_off = temp_on_off[2];
             sequencers.realy[2].last_status_on_off = temp_on_off[2];
-            os_taskq_post("msg_task", 1, MSG_SEQUENCER_SAVE_INFO); // 将保存数据的消息，发送给对应的线程
+            os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO); // 将保存数据的消息，发送给对应的线程
         }
     }
     break;
@@ -4103,7 +1419,7 @@ void ir_key_event_handle(int keyevent)
             adkey_control(sw4_led, 3);   fd_relay_state();
             sequencers.realy[3].cur_status_on_off = temp_on_off[3];
             sequencers.realy[3].last_status_on_off = temp_on_off[3];
-            os_taskq_post("msg_task", 1, MSG_SEQUENCER_SAVE_INFO); // 将保存数据的消息，发送给对应的线程
+            os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO); // 将保存数据的消息，发送给对应的线程
         }
     }
     break;
@@ -4114,7 +1430,7 @@ void ir_key_event_handle(int keyevent)
             adkey_control(sw5_led, 4);   fd_relay_state();
             sequencers.realy[4].cur_status_on_off = temp_on_off[4];
             sequencers.realy[4].last_status_on_off = temp_on_off[4];
-            os_taskq_post("msg_task", 1, MSG_SEQUENCER_SAVE_INFO); // 将保存数据的消息，发送给对应的线程
+            os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO); // 将保存数据的消息，发送给对应的线程
         }
     }
     break;
@@ -4125,7 +1441,7 @@ void ir_key_event_handle(int keyevent)
             adkey_control(sw6_led, 5);   fd_relay_state();
             sequencers.realy[5].cur_status_on_off = temp_on_off[5];
             sequencers.realy[5].last_status_on_off = temp_on_off[5];
-            os_taskq_post("msg_task", 1, MSG_SEQUENCER_SAVE_INFO); // 将保存数据的消息，发送给对应的线程
+            os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO); // 将保存数据的消息，发送给对应的线程
         }
     }
     break;
@@ -4136,7 +1452,7 @@ void ir_key_event_handle(int keyevent)
             adkey_control(sw7_led, 6);   fd_relay_state();
             sequencers.realy[6].cur_status_on_off = temp_on_off[6];
             sequencers.realy[6].last_status_on_off = temp_on_off[6];
-            os_taskq_post("msg_task", 1, MSG_SEQUENCER_SAVE_INFO); // 将保存数据的消息，发送给对应的线程
+            os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO); // 将保存数据的消息，发送给对应的线程
         }
     }
     break;
@@ -4147,7 +1463,7 @@ void ir_key_event_handle(int keyevent)
             adkey_control(sw8_led, 7);   fd_relay_state();
             sequencers.realy[7].cur_status_on_off = temp_on_off[7];
             sequencers.realy[7].last_status_on_off = temp_on_off[7];
-            os_taskq_post("msg_task", 1, MSG_SEQUENCER_SAVE_INFO); // 将保存数据的消息，发送给对应的线程
+            os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO); // 将保存数据的消息，发送给对应的线程
         }
     }
     break;
@@ -4155,57 +1471,6 @@ void ir_key_event_handle(int keyevent)
 
 
 
-#if 0
-
-    u8 flag_is_all_relays_colse = 1;
-    u8 i = 0;
-    for (i = 0; i < RELAYS_MAX; i++)
-    {
-        if (temp_on_off[i] == DEVICE_ON)
-        {
-            flag_is_all_relays_colse = 0;
-            break;
-        }
-    }
-
-    if (flag_is_all_relays_colse && DEVICE_ON == sequencers.on_ff)
-    {
-        // 所有继电器都关闭，但是设备还是开着的 
-        all_shutdowm();  //确保所有继电器的状态是关机状态
-        gpio_direction_output(sw0_led, 0); //关闭总开关的指示灯 
-        sequencers.on_ff = DEVICE_OFF;
-        os_taskq_post("msg_task", 1, MSG_SEQUENCER_SAVE_INFO); // 将保存数据的消息，发送给对应的线程
-    }
-
-    /*
-        检查继电器是否全部关闭 或是 有一个继电器开启
-    */
-    u8 flag_is_all_relays_colse = 1;
-    u8 i = 0;
-    for (i = 0; i < RELAYS_MAX; i++)
-    {
-        if (temp_on_off[i] == DEVICE_ON)
-        {
-            flag_is_all_relays_colse = 0;
-            break;
-        }
-    }
-
-
-    if (flag_is_all_relays_colse && DEVICE_ON == sequencers.on_ff)
-    {
-        // 所有继电器都关闭，但是设备还是开着的 
-        all_shutdowm();  //确保所有继电器的状态是关机状态
-        gpio_direction_output(sw0_led, 0); //关闭总开关的指示灯 
-        sequencers.on_ff = DEVICE_OFF;
-    }
-    else if (0 == flag_is_all_relays_colse && DEVICE_OFF == sequencers.on_ff)
-    {
-        // 至少有一个继电器开启，但是设备是关闭的
-        gpio_direction_output(sw0_led, 1); // 开灯（总开关对应的按键灯）
-        sequencers.on_ff = DEVICE_ON;
-    }
-#endif
 
 
 }
@@ -4228,7 +1493,7 @@ void irket_on_off(int keyevent)
 
 
 
-    read_flash_sequencers_status_init();  //读取开机时序信息
+    save_user_data_init();  //读取开机时序信息
     find_max_time(DEVICE_ON);
     open_timer_test();//开始时序
 
@@ -4280,7 +1545,7 @@ void irkey_16way_click_music(int keyevent)
 
 
 
-            read_flash_sequencers_status_init();  //读取开机时序信息
+            save_user_data_init();  //读取开机时序信息
             find_max_time(DEVICE_ON);
             open_timer_test();//开始时序
 
@@ -4307,7 +1572,7 @@ void irkey_16way_click_music(int keyevent)
         {
             printf("adkey_master_on_off   off");
 
-            read_flash_sequencers_status_init();  //读取关机时序信息
+            save_user_data_init();  //读取关机时序信息
             find_max_time(DEVICE_OFF);
             close_timer_test(); //关机时序
             make_dis(SEG_T);   // 音符

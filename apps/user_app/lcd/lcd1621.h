@@ -1,5 +1,11 @@
-#ifndef _LCD1621_H_
-#define _LCD1621_H_
+#ifndef __LCD1621_H__
+#define __LCD1621_H__
+
+#include "includes.h"
+// #include "../../../apps/user_app/user_config.h" 
+// #include "../../../apps/user_app/user_driver/relay_handle.h"
+// #include "relay_handle.h"
+
 extern u8 lcd1621_sendbuf[16];
 
 
@@ -147,11 +153,19 @@ typedef enum
 
 extern  unsigned char dis_data[32];
 
+u16 clrbit(u16 x);
+
+
 void lcd1621_value_set(u8* buff, u8 len);
 void lcd1621_init(void);
 
-extern void lcd_clear_relay_icon(u8 relay_number);
+void lcd_show_relay_icon(u8 relay_index);
+void lcd_clear_relay_icon(u8 relay_number);
 // void lcd1621_icon_update(void);
 // void lcd1621_flash_icon(void);
+
+// 在这里编译会报错： relay_index_t 没有定义
+// void lcd_relay_icon_show(relay_index_t relay_index); // lcd 显示 对应的继电器图标
+// void lcd_relay_icon_unshow(relay_index_t relay_index); // lcd 不显示 对应的继电器图标
 
 #endif

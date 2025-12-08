@@ -52,50 +52,13 @@ static int sleep_key_event_opr(struct sys_event* event)
 
     printf("%s\n", __func__);
 
-    // if (KEW_PROW_IO == key_event)
-    // {
-    //     printf("io key click\n");
-    // }
-    // else if (KEY_PROW_IO_LONG == key_event)
-    // {
-    //     printf("io key long\n");
-    // }
-    // else if (KEY_PROW_IO_HOLD == key_event)
-    // {
-    //     printf("io key hold\n");
-    // }
-
 
     if (key_event_type == KEY_DRIVER_TYPE_IO && // 是io按键事件
         ((key_event == KEW_PROW_IO && sequencers.timeing_flag == 1) || // 总开关短按，并且此时没有在开关机的计时
             (key_event == KEY_PROW_IO_LONG && sequencers.timeing_flag == 1))) // 总开关触发LONG事件，并且此时没有在开关机的计时
-        // if (key_event == KEW_PROW_IO && sequencers.timeing_flag == 0)
     {
-        // sequencers.timeing_flag = 0;
         adkey_master_on_off();
-
-        // app_task_switch_to(APP_BT_TASK);
     }
-
-    // if (key_event == APP_CMD)  //上位机读取当前状态
-    // {
-    //     fd_relay_state();
-    // }
-
-    // if (key_event_type == KEY_DRIVER_TYPE_AD)
-    // {
-    //     printf("key event ad occur\n");
-
-    //     if (key_event == KEY0_AD_CLICK)
-    //     {
-    //         printf("ad 0 click\n");
-    //     }
-    //     else if (key_event == KEY0_AD_LONG)
-    //     {
-    //         printf("ad 0 long\n");
-    //     }
-
-    // }
 
 
 
@@ -109,21 +72,12 @@ static int sleep_key_event_opr(struct sys_event* event)
                 ad_key_event_handle(key_event);
             }
         }
-    }
-
-
-
-    // //长按ad按键 开机状态且计时完成
-    // if (sequencers.on_ff == DEVICE_ON && sequencers.timeing_flag == 1)
-    //     // if (sequencers.on_ff == DEVICE_ON && sequencers.timeing_flag == 0)
-    // {
-
-    // }
+    } 
 
     //单击红外按键
     if (key_event_type == KEY_DRIVER_TYPE_IR)
-    { 
-        if (sequencers.timeing_flag == 1)
+    {
+        if (sequencers.timeing_flag == 1) // 没有在开关机的计时
         {
             extern void ir_key_event_handle(int keyevent);
             ir_key_event_handle(key_event);
@@ -177,7 +131,7 @@ static int sleep_sys_event_handler(struct sys_event* event)
     switch (event->type)
     {
 
-    case SYS_KEY_EVENT:   //博朗时序器AD按键处理消息
+    case SYS_KEY_EVENT:   //  时序器 处理按键事件
 
         sleep_key_event_opr(event);
         return 1;

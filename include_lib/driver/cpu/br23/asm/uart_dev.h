@@ -15,8 +15,7 @@
  
 
 
-
-void uart_event_handler(struct sys_event* e);
+ 
 //-----耀祥时序器 END-----
 
 #pragma region 

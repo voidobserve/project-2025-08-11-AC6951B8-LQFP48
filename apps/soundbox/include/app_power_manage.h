@@ -37,7 +37,6 @@ void check_power_on_voltage(void);
 void app_reset_vddiom_lev(u8 lev);
 void vbat_timer_update(u32 msec);
 
-// void uart_event_handler(struct sys_event *e);
 
 #endif
 

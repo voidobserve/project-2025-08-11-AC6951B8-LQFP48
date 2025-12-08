@@ -5,7 +5,10 @@
 #include "ui/ui_api.h"
 
 #if 1  // USER_UI_1621LCD_ENABLE
+
 #include "lcd1621.h"
+
+#include "../../../apps/user_app/user_config.h"
 
 //////////////////显示命令字典/////////////////////
 #define CMD_BYTE   8
@@ -457,6 +460,49 @@ void lcd_show_relay_icon(u8 relay_index)
 
 	}
 }
+
+/**
+ * @brief lcd 显示 对应的继电器图标
+ * 
+ * @param relay_index 继电器的索引值
+ * @return * void 
+ */
+void lcd_relay_icon_show(relay_index_t relay_index)
+{
+	switch (relay_index)
+	{
+	case RELAY_INDEX_0: make_dis(SEG_1); break;
+	case RELAY_INDEX_1: make_dis(SEG_2); break;
+	case RELAY_INDEX_2: make_dis(SEG_3); break;
+	case RELAY_INDEX_3: make_dis(SEG_4); break;
+	case RELAY_INDEX_4: make_dis(SEG_5); break;
+	case RELAY_INDEX_5: make_dis(SEG_6); break;
+	case RELAY_INDEX_6: make_dis(SEG_7); break;
+	case RELAY_INDEX_7: make_dis(SEG_8); break;
+	}
+}
+
+/**
+ * @brief lcd 不显示 对应的继电器图标
+ * 
+ * @param relay_index 继电器的索引值
+ * @return * void 
+ */
+void lcd_relay_icon_unshow(relay_index_t relay_index)
+{
+	switch (relay_index)
+	{
+	case RELAY_INDEX_0: clean_dis(clrbit(SEG_1)); break;
+	case RELAY_INDEX_1: clean_dis(clrbit(SEG_2)); break;
+	case RELAY_INDEX_2: clean_dis(clrbit(SEG_3)); break;
+	case RELAY_INDEX_3: clean_dis(clrbit(SEG_4)); break;
+	case RELAY_INDEX_4: clean_dis(clrbit(SEG_5)); break;
+	case RELAY_INDEX_5: clean_dis(clrbit(SEG_6)); break;
+	case RELAY_INDEX_6: clean_dis(clrbit(SEG_7)); break;
+	case RELAY_INDEX_7: clean_dis(clrbit(SEG_8)); break;
+	}
+}
+
 
 
 //灭指定段

@@ -74,7 +74,7 @@ void sequencer_first_power_on_task(void)
             // printf("%d\n", __LINE__);
             // printf("sequencers.on_ff %u\n", (u16)sequencers.on_ff);
 
-            os_taskq_post("msg_task", 1, MSG_SEQUENCER_SAVE_INFO);
+            os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO);
             // os_taskq_post("msg_task", 1, 197);
         }
     }
@@ -128,7 +128,7 @@ void sequencer_first_power_on_task(void)
                 sequencers.on_ff = DEVICE_ON; // 表示设备已经开机
                 // printf("%d\n", __LINE__);
                 // printf("sequencers.on_ff %u\n", (u16)sequencers.on_ff);
-                os_taskq_post("msg_task", 1, MSG_SEQUENCER_SAVE_INFO);
+                os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO);
                 // os_taskq_post("msg_task", 1, 197);
             }
         }
@@ -194,7 +194,7 @@ void sequencer_power_on_task(void* p)
             // printf("%d\n", __LINE__);
             // printf("sequencers.on_ff %u\n", (u16)sequencers.on_ff);
 
-            os_taskq_post("msg_task", 1, MSG_SEQUENCER_SAVE_INFO);
+            os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO);
             // os_taskq_post("msg_task", 1, 197);
         }
     }
@@ -252,94 +252,14 @@ void sequencer_power_on_task(void* p)
                 sequencers.on_ff = DEVICE_ON; // 表示设备已经开机
                 // printf("%d\n", __LINE__);
                 // printf("sequencers.on_ff %u\n", (u16)sequencers.on_ff);
-                os_taskq_post("msg_task", 1, MSG_SEQUENCER_SAVE_INFO);
+                os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO);
                 // os_taskq_post("msg_task", 1, 197);
             }
         }
         // }
     }
 #endif
-
-#if 0
-    int msg[32];
-    u8 cur_relay_index = 0; // 当前继电器索引
-    u8 cur_relay_open_time = 0; // 当前继电器开机延时时间
-    u8 flag_is_in_counting = 0; // 标志位，是否正在倒计时
-    // 刚进入开机任务，找到要进行开机的继电器
-    for (u8 i = 0; i < sequencers.relay_number; i++)
-    {
-        if (sequencers.realy[i].cur_status_on_off == DEVICE_OFF &&
-            sequencers.realy[i].last_status_on_off == DEVICE_ON)
-        {
-            /*
-                如果当前继电器是关着的，并且上次是开着的，则说明是要准备开机的继电器
-            */
-            cur_relay_index = i;
-            cur_relay_open_time = sequencers.realy[i].open_time;
-
-            flag_is_in_counting = 1;
-            sequencers.timeing_flag = 0; // 表示时序器正在开机的延时中（正在执行开机）
-            break;
-        }
-    }
-
-    sequencer_power_on_timer_isr_id = sys_hi_timer_add(NULL, sequencer_power_on_timer_isr, 1000);
-    led_power_flash_timer_isr_id = sys_hi_timer_add(NULL, led_power_flash_task, 500); // 电源灯光闪烁动画
-
-    while (1)
-    {
-        int ret = os_taskq_pend(SEQUENCER_POWER_ON_TASK_NAME, msg, 0); // 阻塞等待
-        if (ret == 0 && msg[0] == 1)
-        {
-            if (cur_relay_open_time > 0)
-            {
-                cur_relay_open_time--;
-            }
-
-            if (cur_relay_open_time == 0) // 如果减到0秒
-            {
-                // 对应的继电器开机：
-                temp_on_off[cur_relay_index] = sequencers.realy[cur_relay_index].open_on_off; // 继电器 开机时对应的状态
-                relay_off_on(relay_table[cur_relay_index], cur_relay_index); // 继电器对应的图标、按键灯的开关 
-                sequencers.realy[cur_relay_index].cur_status_on_off = DEVICE_ON;
-                sequencers.realy[cur_relay_index].last_status_on_off = DEVICE_ON;
-                flag_is_in_counting = 0;
-
-                // 寻找下一个要开机的继电器 
-                for (u8 i = cur_relay_index; i < sequencers.relay_number; i++)
-                {
-                    if (sequencers.realy[i].cur_status_on_off == DEVICE_OFF &&
-                        sequencers.realy[i].last_status_on_off == DEVICE_ON)
-                    {
-                        /*
-                            如果当前继电器是关着的，并且上次是开着的，则说明是要准备开机的继电器
-                        */
-                        cur_relay_index = i;
-                        cur_relay_open_time = sequencers.realy[i].open_time;
-
-                        flag_is_in_counting = 1;
-                        sequencers.timeing_flag = 0; // 表示时序器正在开机的延时中（正在执行开机）
-                        break;
-                    }
-                }
-
-                // 如果运行到这里，并且没有在倒计时，说明所有继电器的开机延时都已经完成，关闭该开机任务
-                if (0 == flag_is_in_counting)
-                {
-                    // sys_hi_timer_del(sequencer_power_on_timer_isr_id);
-                    sys_hi_timer_del(led_power_flash_timer_isr_id);
-                    task_exit(SEQUENCER_POWER_ON_TASK_NAME);
-                    gpio_direction_output(sw0_led, 1); // 开灯（总开关对应的按键灯）
-                    sequencers.timeing_flag = 1; // 表示时序器执行完了开机延时
-
-                    cur_relay_index = 0;
-                    sequencers.on_ff == DEVICE_ON; // 表示设备已经开机
-                }
-            }
-        }
-
-    }
-#endif
+ 
 }
 
 void sequencer_power_off_task(void)
@@ -381,7 +301,7 @@ void sequencer_power_off_task(void)
             gpio_direction_output(sw0_led, 0); // 关闭电源对应的按键灯
             sequencers.timeing_flag = 1; // 表示时序器执行完了关机延时
             sequencers.on_ff = DEVICE_OFF; // 表示设备已经关机
-            os_taskq_post("msg_task", 1, MSG_SEQUENCER_SAVE_INFO);
+            os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO);
             // os_taskq_post("msg_task", 1, 197);
         }
     }
@@ -425,7 +345,7 @@ void sequencer_power_off_task(void)
                 gpio_direction_output(sw0_led, 0); // 关闭电源对应的按键灯
                 sequencers.timeing_flag = 1; // 表示时序器执行完了关机延时
                 sequencers.on_ff = DEVICE_OFF; // 表示设备已经关机
-                os_taskq_post("msg_task", 1, MSG_SEQUENCER_SAVE_INFO);
+                os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO);
                 // os_taskq_post("msg_task", 1, 197);
             }
         }
