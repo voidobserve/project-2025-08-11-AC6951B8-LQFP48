@@ -3,7 +3,7 @@
 
 #include "includes.h"
 // #include "../../../apps/user_app/user_config.h" 
-// #include "../../../apps/user_app/user_driver/relay_handle.h"
+#include "../../../apps/user_app/user_driver/relay_handle.h"
 // #include "relay_handle.h"
 
 extern u8 lcd1621_sendbuf[16];
@@ -165,7 +165,9 @@ void lcd_clear_relay_icon(u8 relay_number);
 // void lcd1621_flash_icon(void);
 
 // 在这里编译会报错： relay_index_t 没有定义
-// void lcd_relay_icon_show(relay_index_t relay_index); // lcd 显示 对应的继电器图标
-// void lcd_relay_icon_unshow(relay_index_t relay_index); // lcd 不显示 对应的继电器图标
+// typedef u8 relay_index_t 
+// relay_index_t 可用的值，在 relay_handle.h 中有定义
+void lcd_relay_icon_show(relay_index_t relay_index); // lcd 显示 对应的继电器图标
+void lcd_relay_icon_unshow(relay_index_t relay_index); // lcd 不显示 对应的继电器图标
 
 #endif

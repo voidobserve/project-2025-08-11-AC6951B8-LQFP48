@@ -8,36 +8,19 @@ void user_main_task(void* p)
 
     while (1)
     {
-
-
-        // if (instruction_buffer_get_count())
-        // {
-        //     u8 byte = instruction_buffer_get();
-        //     // printf ("byte == %u\n", (u16)byte);
-        //     Uart1_Send_Tx(&byte, 1); // 会有延迟，缓冲区会有数据残留
-        // }
-
-
         // {
         //     static u8 cnt = 0;
         //     cnt++;
         //     if (cnt >= 50)
         //     {
         //         cnt = 0;
-
-        //         relay_status_toggle(RELAY_INDEX_0);
-        //         if (RELAY_STATUS_ACTIVE == relay_status_get(RELAY_INDEX_0))
-        //         {
-
-        //             lcd_relay_icon_show(RELAY_INDEX_0);
-        //         }
-        //         else
-        //         {
-        //             lcd_relay_icon_unshow(RELAY_INDEX_0);
-        //         }
+        //         power_light_toggle();
         //     }
         // }
+        // dev_ioctl(dev_handle, IOCTL_GET_SYS_TIME, (u32)time)
 
+
+        instruction_scan();
         instruction_handle(); // 从串口缓冲区中取出数据，分析是否有指令，并进行处理
 
 

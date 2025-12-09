@@ -605,8 +605,7 @@ extern u8 chose_relays_num;
 
 unsigned char voltage_array[3] = { 0 }; // 存放要显示的电压
 unsigned char  power_array[4] = { 0 }; // 存放要显示的功率
-
-// extern SEQUENCER  sequencers;
+ 
 u16 update_cnt = 0;
 
 extern struct sys_time sys_current_time;

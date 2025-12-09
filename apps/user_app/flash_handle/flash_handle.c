@@ -35,7 +35,7 @@ void save_user_data_init(void)
     }
     else
     {
-        memcpy((u8*)(&sequencers), (u8*)(&save_flash3.seq_save), sizeof(SEQUENCER));
+        memcpy((u8*)(&sequencers), (u8*)(&save_flash3.seq_save), sizeof(SEQUENCER_T));
         printf("read sequencers data\n");
     }
 
@@ -49,7 +49,7 @@ void save_user_data_area3(void)
 {
     save_flash_t save_data;
     save_data.header = FLASH_CRC_DATA;
-    memcpy((u8*)(&save_data.seq_save), (u8*)(&sequencers), sizeof(SEQUENCER));
+    memcpy((u8*)(&save_data.seq_save), (u8*)(&sequencers), sizeof(SEQUENCER_T));
     os_time_dly(1); // 先让出cpu，处理其他任务，防止看门狗复位
     syscfg_write(CFG_USER_CLOSE_SEQUENCER_DATA, (u8*)(&save_data), sizeof(save_flash_t));
 

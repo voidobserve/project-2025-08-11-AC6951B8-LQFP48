@@ -1,5 +1,5 @@
-#ifndef __FLASH_HANDLE_H
-#define __FLASH_HANDLE_H 
+#ifndef __FLASH_HANDLE_H__
+#define __FLASH_HANDLE_H__
 
 #include "includes.h"
 #include "../../../apps/user_app/sequencer/sequencer.h"
@@ -8,7 +8,7 @@
 typedef struct
 {
     unsigned char header;           //头部 判断数据是否第一次写入  
-    SEQUENCER seq_save; 
+    SEQUENCER_T seq_save; 
 }save_flash_t;
 
 #pragma pack ()

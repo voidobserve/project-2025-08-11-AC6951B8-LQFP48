@@ -934,8 +934,7 @@ static struct rtc_ui_opr *ui_opr = NULL;
 struct sys_time sys_current_time = {2023,11,25,12,12,12};
 
 struct sys_time sys_setting_time = {2023,11,25,12,12,12};
-
-// extern SEQUENCER  sequencers;
+ 
 
 u8 temp_year[4] = {0};
 u8 temp_month[2] = {0};
@@ -1018,7 +1017,7 @@ void read_sys_current_time(void)
 }
 
 
-
+#if 0
 void relay_timer_handle(void)
 {
     u8 i;
@@ -1029,17 +1028,17 @@ void relay_timer_handle(void)
     // 遍历8个继电器
     for(i = 0; i < 8; i++)
     {
-        if( sys_current_time.year  == sequencers.realy[i].countdown_open_time.year)   // 年
+        if( sys_current_time.year  == sequencers.relay[i].countdown_open_time.year)   // 年
         {
-            if( sys_current_time.month == sequencers.realy[i].countdown_open_time.month) // 月
+            if( sys_current_time.month == sequencers.relay[i].countdown_open_time.month) // 月
             {
-                if( sys_current_time.day == sequencers.realy[i].countdown_open_time.day)  // 日
+                if( sys_current_time.day == sequencers.relay[i].countdown_open_time.day)  // 日
                 { 
-                    if( sys_current_time.hour == sequencers.realy[i].countdown_open_time.hour)  // 时
+                    if( sys_current_time.hour == sequencers.relay[i].countdown_open_time.hour)  // 时
                     { 
-                        if( sys_current_time.min == sequencers.realy[i].countdown_open_time.min) // 分
+                        if( sys_current_time.min == sequencers.relay[i].countdown_open_time.min) // 分
                         {
-                            if( sys_current_time.sec == sequencers.realy[i].countdown_open_time.sec)  // 秒
+                            if( sys_current_time.sec == sequencers.relay[i].countdown_open_time.sec)  // 秒
                             {
                                 // 开启继电器
                                 printf("open ----------------");
@@ -1063,17 +1062,17 @@ void relay_timer_handle(void)
     // 遍历8个继电器
     for(i = 0; i < 8; i++)
     {
-        if( sys_current_time.year  == sequencers.realy[i].countdown_close_time.year)// 年
+        if( sys_current_time.year  == sequencers.relay[i].countdown_close_time.year)// 年
         {
-            if( sys_current_time.month == sequencers.realy[i].countdown_close_time.month)// 月
+            if( sys_current_time.month == sequencers.relay[i].countdown_close_time.month)// 月
             {
-                if( sys_current_time.day == sequencers.realy[i].countdown_close_time.day)// 日
+                if( sys_current_time.day == sequencers.relay[i].countdown_close_time.day)// 日
                 {
-                    if( sys_current_time.hour == sequencers.realy[i].countdown_close_time.hour)// 时
+                    if( sys_current_time.hour == sequencers.relay[i].countdown_close_time.hour)// 时
                     {
-                        if( sys_current_time.min == sequencers.realy[i].countdown_close_time.min)// 分
+                        if( sys_current_time.min == sequencers.relay[i].countdown_close_time.min)// 分
                         {
-                            if( sys_current_time.sec == sequencers.realy[i].countdown_close_time.sec) // 秒
+                            if( sys_current_time.sec == sequencers.relay[i].countdown_close_time.sec) // 秒
                             {
                                 // 关闭继电器
                                 printf("close ----------------");
@@ -1090,7 +1089,7 @@ void relay_timer_handle(void)
     }
 
 }
-
+#endif
 
 
 

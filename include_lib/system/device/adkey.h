@@ -12,7 +12,7 @@
 
 //耀祥时序器相关的灯
 //电源指示灯
-#define pwoer_light IO_PORTB_00
+// #define pwoer_light IO_PORTB_00
 
 //LCD屏的指示灯
 #define lcd_light IO_PORTA_07

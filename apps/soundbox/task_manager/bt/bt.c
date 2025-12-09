@@ -891,11 +891,10 @@ int bt_background_event_handler(struct sys_event* event)
 #include "adkey.h"
 // #include "lcd1621.h"
 #include "../../../../apps/user_app/user_config.h"
-#include "../../../../apps/user_app/sequencer/sequencer.h"
-// extern SEQUENCER sequencers;
+// #include "../../../../apps/user_app/sequencer/sequencer.h" 
 extern u8 lcd_now_state;
-extern void adkey_master_on_off(void);
-extern void ad_key_event_handle(int keyevent);
+// extern void adkey_master_on_off(void);
+// extern void ad_key_event_handle(int keyevent);
 extern void adkey_16way_long(int keyevent);
 
 /*----------------------------------------------------------------------------*/
@@ -923,52 +922,7 @@ int bt_key_event_handler(struct sys_event* event)
     if (bt_key_event_filter_after(key_event) == true) {
         return true;
     }
-
-
-#if 0
-    if (key_event == KEW_PROW_IO && sequencers.timeing_flag == 1)
-        // if (key_event == KEW_PROW_IO && sequencers.timeing_flag == 0)
-    {
-        // sequencers.timeing_flag = 0;
-        adkey_master_on_off();
-
-    }
-
-    // 单击ad按键  开机状态且计时完成
-    if (sequencers.on_ff == DEVICE_ON && sequencers.timeing_flag == 1)
-        // if(sequencers.on_ff == DEVICE_ON && sequencers.timeing_flag == 0)
-        // if (sequencers.timeing_flag) // 如果没有在开关机的延时中
-    {
-        // if(loc_screen_f == 0)
-        {
-            ad_key_event_handle(key_event);
-
-        }
-    }
-    // 长按ad按键 开机状态且计时完成
-    if (sequencers.on_ff == DEVICE_ON && sequencers.timeing_flag == 1)
-    {
-
-
-    }
-
-    // 单击红外按键
-    if (sequencers.timeing_flag == 1) // 如果没有在开关机的延时中
-        // if (sequencers.timeing_flag == 0) // 如果没有在开关机的延时中
-    {
-        // printf("%s\n", __func__);
-        ir_key_event_handle(key_event);
-    }
-
-
-    if (key_event == APP_CMD)  //上位机读取当前状态
-    {
-        fd_relay_state();
-    }
-
-#endif
-
-
+  
     //-------------------------------------------------------------------------------
             /* 处理三个蓝牙ad按键的 */
     switch (key_event) {

@@ -11,6 +11,7 @@
 				<Option type="1" />
 				<Option compiler="pi32v2_r3_lto_compiler" />
 				<Compiler>
+					<Add option="-flto" />
 					<Add option="-Wundef" />
 					<Add option="-g" />
 					<Add option="-Wuninitialized" />
@@ -18,7 +19,6 @@
 					<Add option="-fno-common" />
 					<Add option="-integrated-as" />
 					<Add option="-Oz" />
-					<Add option="-flto" />
 					<Add option="-fallow-pointer-null" />
 					<Add option="-fprefer-gnu-section" />
 					<Add option="-Wno-shift-negative-value" />
@@ -141,9 +141,14 @@
 					<Add directory="apps/soundbox/smartbox/file_transfer" />
 					<Add directory="apps/soundbox/smartbox/tuya" />
 					<Add directory="apps/soundbox/include/ui/color_led" />
+					<Add directory="apps/user_app" />
 					<Add directory="apps/user_app/lcd" />
+					<Add directory="apps/user_app/sequencer" />
+					<Add directory="apps/user_app/user_driver" />
+					<Add directory="apps/user_app/flash_handle" />
 				</Compiler>
 				<Linker>
+					<Add option="-flto" />
 					<Add option="--plugin-opt=-pi32v2-always-use-itblock=false" />
 					<Add option="--plugin-opt=-enable-ipra=true" />
 					<Add option="--plugin-opt=-pi32v2-merge-max-offset=4096" />
@@ -1717,6 +1722,10 @@
 		<Unit filename="apps/user_app/hlw8032/HLW8032.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="apps/user_app/instruction_handle/instruction_handle.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="apps/user_app/instruction_handle/instruction_handle.h" />
 		<Unit filename="apps/user_app/ir_key/ir_key.h" />
 		<Unit filename="apps/user_app/ir_key/ir_key_app.c">
 			<Option compilerVar="CC" />
@@ -1738,6 +1747,27 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="apps/user_app/sequencer/sequencer_device_on_off.h" />
+		<Unit filename="apps/user_app/user_config.h" />
+		<Unit filename="apps/user_app/user_driver/power_light.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="apps/user_app/user_driver/power_light.h" />
+		<Unit filename="apps/user_app/user_driver/relay_handle.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="apps/user_app/user_driver/relay_handle.h" />
+		<Unit filename="apps/user_app/user_driver/user_uart1_driver.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="apps/user_app/user_driver/user_uart1_driver.h" />
+		<Unit filename="apps/user_app/user_driver/user_uart_driver.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="apps/user_app/user_driver/user_uart_driver.h" />
+		<Unit filename="apps/user_app/user_main_task.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="apps/user_app/user_main_task.h" />
 		<Unit filename="cpu/br23/adc_api.c">
 			<Option compilerVar="CC" />
 		</Unit>

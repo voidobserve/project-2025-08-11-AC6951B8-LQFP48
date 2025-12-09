@@ -5,7 +5,7 @@
 #define UART1_RXCBUF_SIZE            128 // 接收溢出产生中断的大小
 #define UART1_RX_TIMEROUT             50 // 接收超时时间
 
-#define UART1_BAUDRATE               115200
+#define UART1_BAUDRATE               9600
 
 
 //串口1

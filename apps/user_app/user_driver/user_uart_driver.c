@@ -266,6 +266,7 @@ void uart_event_handler(struct sys_event* e)
             uart2_bus = (const uart_bus_t*)e->u.dev.value;
             uart2_rcv_len = uart2_bus->read(uart2_rxbuf, sizeof(uart2_rxbuf), 0);
             printf_buf(uart2_rxbuf, uart2_rcv_len);
+            
             if (uart2_rcv_len) {
                 uart2_rcv_flag = 1;
                 // uart2_bus->write(uart2_rxbuf, uart2_rcv_len);
@@ -283,7 +284,8 @@ void uart_event_handler(struct sys_event* e)
             uart2_bus = (const uart_bus_t*)e->u.dev.value;
             uart2_rcv_len = uart2_bus->read(uart2_rxbuf, sizeof(uart2_rxbuf), 0);
             printf_buf(uart2_rxbuf, uart2_rcv_len);
-            parse_uart2_data(uart2_rxbuf, uart2_rcv_len);
+
+            // parse_uart2_data(uart2_rxbuf, uart2_rcv_len);
 
             if (uart2_rcv_len) {
                 uart2_rcv_flag = 1;

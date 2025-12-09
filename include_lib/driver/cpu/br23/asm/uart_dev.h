@@ -10,7 +10,7 @@
 
 //---------耀祥时序器
 
-#include "../../apps/user_app/sequencer/sequencer.h" // 时序器相关变量类型和变量定义
+// #include "../../apps/user_app/sequencer/sequencer.h" // 时序器相关变量类型和变量定义
 
  
 

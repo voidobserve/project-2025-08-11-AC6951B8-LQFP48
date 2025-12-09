@@ -573,11 +573,10 @@ void music_player_err_deal(int err)
 #include "adkey.h"
 // #include "lcd1621.h"
 #include "../../../../apps/user_app/user_config.h"
-#include "../../../../apps/user_app/sequencer/sequencer.h"
-// extern SEQUENCER sequencers;
+// #include "../../../../apps/user_app/sequencer/sequencer.h" 
 
-extern void adkey_master_on_off(void);
-extern void ad_key_event_handle(int keyevent);
+// extern void adkey_master_on_off(void);
+// extern void ad_key_event_handle(int keyevent);
 
 extern u8 lcd_now_state;
 
@@ -613,69 +612,8 @@ static int music_key_event_opr(struct sys_event* event)
 
     printf("%s\n", __func__);
 
-#if  0
-    if (key_event == KEW_PROW_IO && sequencers.timeing_flag == 1)
-        // if(key_event == KEW_PROW_IO  && sequencers.timeing_flag == 0)
-    {
-        // sequencers.timeing_flag = 0;
-        adkey_master_on_off();
-
-    }
-    //单击ad按键  开机状态且计时完成
-    if (sequencers.on_ff == DEVICE_ON && sequencers.timeing_flag == 1) // 如果没有在开关机的延时中
-        // if(sequencers.on_ff == DEVICE_ON && sequencers.timeing_flag == 0) // 如果没有在开关机的延时中
-    {
-        // if(loc_screen_f == 0)  
-        {
-            ad_key_event_handle(key_event);
-
-        }
-    }
-    //长按ad按键 开机状态且计时完成
-    if (sequencers.on_ff == DEVICE_ON && sequencers.timeing_flag == 1)
-        // if(sequencers.on_ff == DEVICE_ON && sequencers.timeing_flag == 0)
-    {
-        // if(loc_screen_f)
-        {
-            // if(key_event == KEY9_AD_LONG)
-            // {
-            //     // loc_screen_f  = 0;
-            //     dis_lock_screen();
-            // }
-        }
-        // else
-        // {
-        //     adkey_16way_long(key_event);
-        // }
-
-    }
-    //单击红外按键
-    if (sequencers.timeing_flag == 1)
-        // if( sequencers.timeing_flag == 0)
-    {
-        // printf("%s\n", __func__);
-        irkey_16way_click_music(key_event);
-    }
-
-
-    if (key_event == APP_CMD)  //上位机读取当前状态
-    {
-        fd_relay_state();
-    }
-
-
-#endif
-
-
-
 
     // -----------------  end ------------------------------
-
-
-
-
-
-
 
     switch (msg[0]) {
     case KEY_MUSIC_DEVICE_TONE_END:

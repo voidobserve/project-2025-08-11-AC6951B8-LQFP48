@@ -1,5 +1,5 @@
-#ifndef ASM_INCLUDES_H
-#define ASM_INCLUDES_H
+#ifndef __ASM_INCLUDES_H__
+#define __ASM_INCLUDES_H__
 
 #include "asm/cpu.h"
 #include "asm/crc16.h"
@@ -16,10 +16,7 @@
 
 
 
-
-
-
-
+ 
 
 
 

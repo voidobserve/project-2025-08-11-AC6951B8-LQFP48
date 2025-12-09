@@ -1,11 +1,12 @@
-#ifndef __SEQUENCER_H 
-#define __SEQUENCER_H 
+#ifndef __SEQUENCER_H__ 
+#define __SEQUENCER_H__ 
 
 #include "includes.h"
+// #include "../../../apps/user_app/user_config.h"
+
+#include "../../../apps/user_app/user_driver/relay_handle.h"
 #include "../../include_lib/system/sys_time.h"
-
-
-
+ 
 
 #define RELAYS_MAX 8
 
@@ -19,14 +20,15 @@ typedef enum
 
 typedef struct
 {
-    ON_OFF_FLAG open_on_off;  // 继电器的开启时的开关状态（开关对应的状态）
-    ON_OFF_FLAG clod_on_off;  // 继电器的关闭时的开关状态（开关对应的状态）
+    // ON_OFF_FLAG open_on_off;  // 继电器的开启时的开关状态（开关对应的状态）
+    // ON_OFF_FLAG clod_on_off;  // 继电器的关闭时的开关状态（开关对应的状态）
 
     u8 last_status_on_off; // 继电器之前的状态，0--关闭，1--开启（每次设置完 cur_status_on_off，都应该更新 last_status_on_off）
     u8 cur_status_on_off; // 继电器当前状态，0--关闭，1--开启
 
-    uint8_t open_time;   // 继电器开机延时时间
-    uint8_t close_time;  // 继电器关机延时时间
+    u16 open_time;   // 继电器开机延时时间
+    u16 close_time;  // 继电器关机延时时间
+
     struct sys_time countdown_open_time;   // 继电器的定时开机的时间  月 日 时 分 秒  
     struct sys_time countdown_close_time;  // 继电器的定时关机的时间  月 日 时 分 秒  
 
@@ -37,14 +39,16 @@ typedef struct
     ON_OFF_FLAG on_ff;  // 总开关
 
     uint8_t addr;  //设备地址
-    RELAYS  realy[RELAYS_MAX];  // 继电器 relay（原本的工程中是realy）
-    uint8_t timeing_flag;  // 0:计时中 1：计时结束
+    RELAYS  relay[RELAYS_MAX];  // 继电器 relay  
+    // uint8_t timeing_flag;  // 0:计时中 1：计时结束 
     // uint8_t open_timeing;   // 开机时序的计时时间
-    u16 open_timeing; // 继电器开机时序的计时时间
-    // uint8_t close_timeing;   // 关机时序而定计时时间
-    u16 close_timeing; // 继电器关机时序的计时时间
-    uint8_t relay_number;    //多少路继电器 （继电器总数）
-}SEQUENCER;
+    u32 open_timeing; // 继电器开机时序的计时时间 
+    u32 close_timeing; // 继电器关机时序的计时时间
+
+    uint8_t relay_number;    // 多少路继电器 （继电器总数）
+
+    u8 is_in_delay; // 是否处于开机或关机的延时中
+} SEQUENCER_T ;
 
 enum
 {
@@ -52,17 +56,20 @@ enum
     // MSG_SEQUENCER_SAVE_INFO,
     // MSG_SEQUENCER_READ_INFO,
 
-    MSG_USER_SAVE_INFO,
+    MSG_USER_SAVE_INFO, // 保存用户数据
 };
 
 extern volatile u8 flag_is_lcd_screen_on; // 标志位，lcd屏幕状态，0--未点亮，1--点亮
 
 extern const u8 relay_table[RELAYS_MAX];
 extern volatile ON_OFF_FLAG temp_on_off[16];  //继电器的开关
-extern volatile SEQUENCER  sequencers;
+extern volatile SEQUENCER_T  sequencers;
+
+void sequencer_relay_status_record(relay_index_t relay_index, relay_status_t relay_status);
+void sequencer_relay_status_setting(relay_index_t relay_index, relay_status_t relay_status);
+void sequencer_relay_status_toggle(relay_index_t relay_index);
 
 
-extern void relay_off_on(u32 relay_led, u8 relay_number);
 void user_msg_handle_task(void* p);
 
 

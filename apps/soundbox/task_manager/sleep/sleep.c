@@ -29,9 +29,6 @@
 
 extern void app_status_handler(enum APP_STATUS status);
 
-// extern SEQUENCER sequencers;
-
-extern void adkey_master_on_off(void);
 //*----------------------------------------------------------------------------*/
 /**@brief    sleep 按键消息入口
   @param    无
@@ -53,31 +50,35 @@ static int sleep_key_event_opr(struct sys_event* event)
     printf("%s\n", __func__);
 
 
+    // if (key_event_type == KEY_DRIVER_TYPE_IO && // 是io按键事件
+    //     ((key_event == KEW_PROW_IO && sequencers.timeing_flag == 1) || // 总开关短按，并且此时没有在开关机的计时
+    //         (key_event == KEY_PROW_IO_LONG && sequencers.timeing_flag == 1))) // 总开关触发LONG事件，并且此时没有在开关机的计时
     if (key_event_type == KEY_DRIVER_TYPE_IO && // 是io按键事件
-        ((key_event == KEW_PROW_IO && sequencers.timeing_flag == 1) || // 总开关短按，并且此时没有在开关机的计时
-            (key_event == KEY_PROW_IO_LONG && sequencers.timeing_flag == 1))) // 总开关触发LONG事件，并且此时没有在开关机的计时
+        (0 == is_sequencer_in_delay() &&   // 没有在开关机的计时
+            (KEW_PROW_IO == key_event || KEY_PROW_IO_LONG == key_event))  // 总开关短按或长按事件触发，并且此时没有在开关机的计时
+        )
     {
-        adkey_master_on_off();
+        extern void iokey_master_on_off(void);
+        iokey_master_on_off();
     }
-
-
 
     // 如果是ad按键事件
     if (key_event_type == KEY_DRIVER_TYPE_AD)
     {
-        if (sequencers.on_ff == DEVICE_ON && sequencers.timeing_flag == 1)
+        // if (sequencers.on_ff == DEVICE_ON && sequencers.timeing_flag == 1)
+        if (DEVICE_ON == sequencers.on_ff && 0 == is_sequencer_in_delay())
         { // 单击ad按键  开机状态且计时完成
-            {
-                extern void ad_key_event_handle(int keyevent);
-                ad_key_event_handle(key_event);
-            }
-        }
-    } 
 
-    //单击红外按键
+            extern void ad_key_event_handle(int keyevent);
+            ad_key_event_handle(key_event);
+        }
+    }
+
     if (key_event_type == KEY_DRIVER_TYPE_IR)
     {
-        if (sequencers.timeing_flag == 1) // 没有在开关机的计时
+        // 如果是红外按键事件
+
+        if (0 == is_sequencer_in_delay()) // 没有在开关机的计时
         {
             extern void ir_key_event_handle(int keyevent);
             ir_key_event_handle(key_event);
@@ -217,10 +218,5 @@ void app_sleep_task()
 
 #else
 
-
-void app_sleep_task()
-{
-
-}
 
 #endif

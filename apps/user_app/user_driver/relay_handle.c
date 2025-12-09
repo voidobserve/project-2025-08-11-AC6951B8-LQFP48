@@ -33,7 +33,7 @@ void relay_status_init(void)
     由于驱动继电器的引脚也会连接到对应按键的led，
     这里也会设置led的状态（点亮或熄灭）
  *
- * @param relay_index
+ * @param relay_index 继电器索引，从0开始
  */
 void relay_status_setting(relay_index_t relay_index, relay_status_t relay_status)
 {
@@ -58,7 +58,7 @@ void relay_status_setting(relay_index_t relay_index, relay_status_t relay_status
     这里也会设置led的状态（点亮或熄灭）
  *
  * 
- * @param relay_index 
+ * @param relay_index 继电器索引，从0开始
  */
 void relay_status_toggle(relay_index_t relay_index)
 {

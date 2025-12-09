@@ -9,16 +9,13 @@
 #include "chgbox_ctrl.h"
 #include "update_loader_download.h"
 
-#include "../../apps/soundbox/include/key_event_deal.h" // 按键消息类型定义
-#include "../../user_app/lcd/lcd1621.h"
-#include "../../user_app/sequencer/sequencer.h" // 时序器变量类型和变量定义
-#include "../../user_app/sequencer/sequencer_device_on_off.h" // 时序器设备开关控制
-#include "../../user_app/flash_handle/flash_handle.h" // flash读写接口
-
-#include "../../user_app/ac_detection/ac_detection.h" // 交流电电压检测
-
 #include "../../user_app/user_config.h" // 用户配置头文件
 #include "../../user_app/user_main_task.h" // 用户主任务
+
+#include "../../apps/soundbox/include/key_event_deal.h" // 按键消息类型定义
+  
+
+
 
 
 extern void setup_arch();
@@ -111,14 +108,14 @@ static void check_power_on_key(void)
 #include "adkey.h"
 
 //耀祥时序器，电源指示灯，通电就亮
-void power_light_gpio_init(void)
-{
-    gpio_set_pull_down(pwoer_light, 0);
-    gpio_set_pull_up(pwoer_light, 0);
-    gpio_direction_output(pwoer_light, 0);
+// void power_light_gpio_init(void)
+// {
+//     gpio_set_pull_down(pwoer_light, 0);
+//     gpio_set_pull_up(pwoer_light, 0);
+//     gpio_direction_output(pwoer_light, 0);
 
 
-}
+// }
 
 
 //耀祥时序器 MP3的三个灯
@@ -167,7 +164,8 @@ void lcd_first_pwr_on_isr(void)
         printf("===================\n");
         printf("first power on\n");
         printf("device on\n");
-        sequencer_first_power_on();
+        // sequencer_first_power_on();
+        sequencer_power_on();
     }
     else
     {
@@ -209,7 +207,7 @@ static void app_init()
 
 
     // ---------- 耀祥时序器  ---------
-
+    power_light_init();
 
     // Uart0_Init(); //耀祥串口0  功率计
     Uart1_Init(); //耀祥串口1  向下一级
@@ -217,20 +215,20 @@ static void app_init()
 
     ac_detection_init(); // 交流电电压检测 
 
-    power_light_gpio_init();
+    // power_light_gpio_init();
     // mp3key_light_gpio_init();
     User_rtc_load_save(1); // 初始化系统时间 
     read_sys_current_time();
 
     // extern void set_open_machine_flag(void);
     save_user_data_init(); // 读取flash信息，初始化相应变量
+
     extern void lcd1621_init(void);
     lcd1621_init();
     // set_open_machine_flag();   // 上电初始化
 
-    extern void  lcdseg_handle(void);
-    extern void  printf_current_time(void);
-    extern void relay_timer_handle(void);
+    extern void  lcdseg_handle(void); 
+    // extern void relay_timer_handle(void);
     sys_timer_add(NULL, lcdseg_handle, 10);  // LCD屏显示处理
     // sys_timer_add(NULL, relay_timer_handle, 1000); // 继电器定时开关机处理
     sys_hi_timer_add(NULL, ac_detection_update, 2); // 采集交流电检测脚上的ad值
