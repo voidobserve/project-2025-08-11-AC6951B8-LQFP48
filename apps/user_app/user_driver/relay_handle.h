@@ -46,6 +46,8 @@ typedef enum
 void relay_status_init(void); // 继电器状态初始化，默认为不激活的状态
 void relay_status_setting(relay_index_t relay_index, relay_status_t relay_status); // 设置继电器的状态，会直接操作继电器
 void relay_status_toggle(relay_index_t relay_index); //  翻转 继电器的状态 ， 会直接操作继电器
+void relay_status_setting_dly(relay_index_t relay_index, relay_status_t relay_status, u8 delay_time);
+
 relay_status_t relay_status_get(relay_index_t relay_index);
 
 

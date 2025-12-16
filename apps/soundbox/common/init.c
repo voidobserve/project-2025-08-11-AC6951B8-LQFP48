@@ -225,12 +225,11 @@ static void app_init()
 
     extern void lcd1621_init(void);
     lcd1621_init();
-    // set_open_machine_flag();   // 上电初始化
 
     extern void  lcdseg_handle(void); 
     // extern void relay_timer_handle(void);
     sys_timer_add(NULL, lcdseg_handle, 10);  // LCD屏显示处理
-    // sys_timer_add(NULL, relay_timer_handle, 1000); // 继电器定时开关机处理
+
     sys_hi_timer_add(NULL, ac_detection_update, 2); // 采集交流电检测脚上的ad值
     sys_hi_timer_add(NULL, ac_voltage_update, 1500); // 计算、更新交流电电压值
 
@@ -240,33 +239,7 @@ static void app_init()
 
     // 创建用户的主任务线程
     task_create(user_main_task, NULL , "user_task");
-
-    // os_task_create();
-
-    /*
-        上电之后，只点亮LCD屏幕和主开关对应的灯
-        但是刚上电就点亮LCD会导致lcd所有内容都显示出来
-    */
-
-    // os_time_dly(100);
-    // gpio_direction_output(lcd_light, 1);     // 开机点亮LCD屏的背光灯 
-    // lcd_open_frame();//lcd屏幕显示轮廓
-    // // // read_flash_sequencers_status_init();  //读取开机时序信息
-    // // // find_max_time(DEVICE_ON); 
-    // gpio_direction_output(sw0_led, 1); // 开灯（总开关对应的按键灯）
-    // flag_is_lcd_screen_on = 1; // 表示屏幕开启
-
-    // read_flash_sequencers_status_init();  //读取开机时序信息
-    //开机点亮LCD屏的背光灯
-    // gpio_direction_output(lcd_light, 1);
-    //lcd屏幕显示轮廓
-    // memset(dis_data, 0, sizeof(dis_data));
-
-    // lcd
-    // lcd1621_write_cmd(0x02); // #define LCD_OFF_1621    0x02
-    // lcd_open_frame();
-    // find_max_time(DEVICE_ON);
-    // open_timer_test();//开始时序
+ 
     // ---------- 耀祥时序器 END --------
 
 

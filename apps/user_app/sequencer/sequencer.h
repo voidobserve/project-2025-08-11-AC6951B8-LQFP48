@@ -39,9 +39,7 @@ typedef struct
     ON_OFF_FLAG on_ff;  // 总开关
 
     uint8_t addr;  //设备地址
-    RELAYS  relay[RELAYS_MAX];  // 继电器 relay  
-    // uint8_t timeing_flag;  // 0:计时中 1：计时结束 
-    // uint8_t open_timeing;   // 开机时序的计时时间
+    RELAYS  relay[RELAYS_MAX];  // 继电器 relay   
     u32 open_timeing; // 继电器开机时序的计时时间 
     u32 close_timeing; // 继电器关机时序的计时时间
 
@@ -65,10 +63,10 @@ extern const u8 relay_table[RELAYS_MAX];
 extern volatile ON_OFF_FLAG temp_on_off[16];  //继电器的开关
 extern volatile SEQUENCER_T  sequencers;
 
-void sequencer_relay_status_record(relay_index_t relay_index, relay_status_t relay_status);
+void sequencer_relay_status_update(relay_index_t relay_index, relay_status_t relay_status);
 void sequencer_relay_status_setting(relay_index_t relay_index, relay_status_t relay_status);
 void sequencer_relay_status_toggle(relay_index_t relay_index);
-
+void sequencer_relay_status_setting_dly(relay_index_t relay_index, relay_status_t relay_status , u8 delay_time);
 
 void user_msg_handle_task(void* p);
 

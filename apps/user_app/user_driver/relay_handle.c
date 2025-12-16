@@ -16,7 +16,7 @@ static volatile relay_status_t relay_status_buff[8] = { 0 };
 
 /**
  * @brief 继电器状态初始化，默认为不激活的状态
- * 
+ *
  */
 void relay_status_init(void)
 {
@@ -34,6 +34,10 @@ void relay_status_init(void)
     这里也会设置led的状态（点亮或熄灭）
  *
  * @param relay_index 继电器索引，从0开始
+ * @param relay_status 继电器状态
+ *          RELAY_STATUS_DEACTIVE   继电器 不激活（关闭、断开）
+            RELAY_STATUS_ACTIVE   继电器 激活（启动、闭合）
+ *
  */
 void relay_status_setting(relay_index_t relay_index, relay_status_t relay_status)
 {
@@ -57,7 +61,7 @@ void relay_status_setting(relay_index_t relay_index, relay_status_t relay_status
     由于驱动继电器的引脚也会连接到对应按键的led，
     这里也会设置led的状态（点亮或熄灭）
  *
- * 
+ *
  * @param relay_index 继电器索引，从0开始
  */
 void relay_status_toggle(relay_index_t relay_index)
@@ -75,8 +79,27 @@ void relay_status_toggle(relay_index_t relay_index)
 }
 
 /**
+ * @brief 延时设置继电器的状态
+ *
+ *     由于驱动继电器的引脚也会连接到对应按键的led，
+        这里也会设置led的状态（点亮或熄灭）
+ *
+
+    @param relay_index 继电器索引，从0开始
+    @param relay_status 继电器状态
+                RELAY_STATUS_DEACTIVE   继电器 不激活（关闭、断开）
+                RELAY_STATUS_ACTIVE   继电器 激活（启动、闭合）
+    @param delay_ms 延时，单位：10 ms
+ */
+void relay_status_setting_dly(relay_index_t relay_index, relay_status_t relay_status, u8 delay_time)
+{
+    os_time_dly(delay_time);
+    relay_status_setting(relay_index, relay_status);
+}
+
+/**
  * @brief 获取 指定 继电器 的状态
- * 
+ *
  * @param relay_index 继电器索引
  * @return relay_status_t 继电器状态
  *          RELAY_STATUS_ACTIVE：激活

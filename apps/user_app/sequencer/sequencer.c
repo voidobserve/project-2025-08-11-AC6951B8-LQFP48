@@ -18,7 +18,7 @@ volatile SEQUENCER_T  sequencers;
  *          RELAY_STATUS_DEACTIVE 不激活
  * @return * void
  */
-void sequencer_relay_status_record(relay_index_t relay_index, relay_status_t relay_status)
+void sequencer_relay_status_update(relay_index_t relay_index, relay_status_t relay_status)
 {
     sequencers.relay[relay_index].cur_status_on_off = relay_status;
     sequencers.relay[relay_index].last_status_on_off = relay_status;
@@ -43,7 +43,7 @@ void sequencer_relay_status_setting(relay_index_t relay_index, relay_status_t re
         lcd_relay_icon_unshow(relay_index);
     }
 
-    sequencer_relay_status_record(relay_index, relay_status);
+    sequencer_relay_status_update(relay_index, relay_status);
 }
 
 /**
@@ -59,13 +59,19 @@ void sequencer_relay_status_toggle(relay_index_t relay_index)
     if (RELAY_STATUS_ACTIVE == relay_status_get(relay_index))
     {
         lcd_relay_icon_show(relay_index);
-        sequencer_relay_status_record(relay_index, RELAY_STATUS_ACTIVE);
+        sequencer_relay_status_update(relay_index, RELAY_STATUS_ACTIVE);
     }
     else
     {
         lcd_relay_icon_unshow(relay_index);
-        sequencer_relay_status_record(relay_index, RELAY_STATUS_DEACTIVE);
+        sequencer_relay_status_update(relay_index, RELAY_STATUS_DEACTIVE);
     }
+}
+
+void sequencer_relay_status_setting_dly(relay_index_t relay_index, relay_status_t relay_status , u8 delay_time)
+{
+    os_time_dly(delay_time);
+    sequencer_relay_status_setting(relay_index, relay_status);
 }
 
 
