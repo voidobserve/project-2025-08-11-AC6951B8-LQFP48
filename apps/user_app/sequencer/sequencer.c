@@ -68,6 +68,13 @@ void sequencer_relay_status_toggle(relay_index_t relay_index)
     }
 }
 
+/**
+ * @brief 延时一段时间，再直接操作继电器
+ * 
+ * @param relay_index 继电器索引
+ * @param relay_status 要设置的继电器状态
+ * @param delay_time 要延时操作的时间
+ */
 void sequencer_relay_status_setting_dly(relay_index_t relay_index, relay_status_t relay_status , u8 delay_time)
 {
     os_time_dly(delay_time);

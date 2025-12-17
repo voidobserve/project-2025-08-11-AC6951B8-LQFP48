@@ -1,6 +1,6 @@
 #include "instruction_handle.h" 
-
 #include "user_config.h"
+#include "instruction_handler_func.h"
 
 #define INSTRUCTION_BUFFER_LEN ((u16) 128) // 环形缓冲区长度
 
@@ -27,13 +27,13 @@ typedef void (*instruction_handler_t)(void);
 
 // 定义 指令与对应的处理函数查找表
 // rf24_key_handle_func_buff
-const instruction_handler_t instruction_handler_func_buff[10] =
-{
+// const instruction_handler_t instruction_handler_func_buff[10] =
+// {
 //    [INSTRUCTION_TYPE_DEVICE_ON_OFF] = handle_device_on_off,
-    // handle_relay_on_off,
-    // handle_relay_deactive_time,
-    // handle_relay_active_time,
-}; 
+//     // handle_relay_on_off,
+//     // handle_relay_deactive_time,
+//     // handle_relay_active_time,
+// }; 
 
 u16 instruction_buffer_get_count(void)
 {
@@ -121,10 +121,22 @@ void instruction_scan(void)
             dest_recv_instruction_len = 4; // 要接收总共 4 个字节的命令 
         }
         break;
-
+        // ============================================================================
         case INSTRUCTION_TYPE_RELAY_ON_OFF:
         {
             dest_recv_instruction_len = 5; // 要接收总共 5 个字节的命令 
+        }
+        break;
+        // ============================================================================
+        case INSTRUCTION_TYPE_RELAY_ACTIVE_TIME:
+        {
+            dest_recv_instruction_len = 6; // 要接收总共 6 个字节的命令 
+        }
+        break;
+        // ============================================================================
+        case INSTRUCTION_TYPE_RELAY_DEACTIVE_TIME:
+        {
+            dest_recv_instruction_len = 6; // 要接收总共 6 个字节的命令 
         }
         break;
 
@@ -144,8 +156,8 @@ void instruction_scan(void)
             cur_recv_instruction_status = INSTRUCTION_STATUS_END;
 
             // 接收到了完整的一帧数据
-            printf("recved instruction: \n");
-            printf_buf(recv_instruction_buff, dest_recv_instruction_len);
+            // printf("recved instruction: \n");
+            // printf_buf(recv_instruction_buff, dest_recv_instruction_len);
         }
     }
 
@@ -166,135 +178,60 @@ void __instruction_handle_exit__(void)
 
 void instruction_handle(void)
 {
+    u8 sequencer_addr = 0x00;
+    // instruction_t instruction_structure;
+
     if (INSTRUCTION_STATUS_END != cur_recv_instruction_status)
     {
         // 如果指令未接收完，或者是没有指令到来，直接退出
         return;
     }
 
+    sequencer_addr = recv_instruction_buff[2]; // 存放 时序器 地址
+    // instruction_structure.sequencer_addr = recv_instruction_buff[2]; // 存放 时序器 地址
+
     switch (recv_instruction_buff[1])
     {
     case INSTRUCTION_TYPE_DEVICE_ON_OFF:
     {
-        
         printf("INSTRUCTION TYPE DEVICE_ON_OFF \n");
-        // USER_TO_DO : 
-        // if (0xFF == recv_instruction_buff[2])
-        if (0)
-        {
-            // 如果地址不一样，直接退出
-            // __instruction_handle_exit__(); 
-            // 指令有误，或者是处理完了指令，给状态机更新，让扫描函数重新接收指令
-            cur_recv_instruction_status = INSTRUCTION_STATUS_NONE;
-            return;
-        }
-
-        if (0x01 == recv_instruction_buff[3])
-        {
-            // 如果是 开启设备 的命令
-            if (DEVICE_ON == sequencers.on_ff)
-            {
-                // 如果设备已经开启
-                cur_recv_instruction_status = INSTRUCTION_STATUS_NONE;
-                return;
-            }
-
-            if (sequencers.is_in_delay)
-            {
-                // 如果设备正在开关机的延时中
-                cur_recv_instruction_status = INSTRUCTION_STATUS_NONE;
-                return;
-            }
-
-            // 进入到这里，说明设备没有开启，并且设备不处于开关机的延时中
-            sequencer_power_on();
-        }
-        else if (0x00 == recv_instruction_buff[3])
-        {
-            // 如果是 关闭设备 的命令
-            if (DEVICE_OFF == sequencers.on_ff)
-            {
-                // 如果设备已经关闭
-                cur_recv_instruction_status = INSTRUCTION_STATUS_NONE;
-                return;
-            }
-
-            if (sequencers.is_in_delay)
-            {
-                // 如果设备正在开关机的延时中
-                cur_recv_instruction_status = INSTRUCTION_STATUS_NONE;
-                return;
-            }
-
-            // 进入到这里，说明设备没有关闭，并且设备不处于开关机的延时中
-            sequencer_power_off();
-        }
-        else
-        {
-            // 如果命令格式有误
-        }
+        handle_device_on_off(sequencer_addr, recv_instruction_buff[3]);
     }
     break;
-
+    // ===================================================================
     case INSTRUCTION_TYPE_RELAY_ON_OFF:
     {
-        printf("INSTRUCTION_TYPE_RELAY_ON_OFF \n");
-        // extern void printf_buf(u8 * buf, u32 len);
-        // printf_buf(recv_instruction_buff, dest_recv_instruction_len);
-
-        // 如果 设备ID 是指定所有设备
-        // if (0xFF == recv_instruction_buff[2])
-        if (1)
-        {
-            if (DEVICE_OFF == sequencers.on_ff)
-            {
-                // 如果设备没有开启，则不能操作继电器
-                // __instruction_handle_exit__(); 
-                // 指令有误，或者是处理完了指令，给状态机更新，让扫描函数重新接收指令
-                cur_recv_instruction_status = INSTRUCTION_STATUS_NONE;
-                return;
-            }
-
-            if (recv_instruction_buff[3] > 8 || 0 == recv_instruction_buff[3])
-            {
-                // 继电器的索引 超过了 继电器的数量
-                // __instruction_handle_exit__(); 
-                // 指令有误，或者是处理完了指令，给状态机更新，让扫描函数重新接收指令
-                cur_recv_instruction_status = INSTRUCTION_STATUS_NONE;
-                return;
-            }
-
-            if (0x01 == recv_instruction_buff[4])
-            {
-                // relay_status_setting(recv_instruction_buff[3] - 1, RELAY_STATUS_ACTIVE);
-                // relay_status_setting_dly(recv_instruction_buff[3] - 1, RELAY_STATUS_ACTIVE, 50 / 10); // 串口控制的继电器开关，添加 延时
-                // lcd_relay_icon_show(recv_instruction_buff[3] - 1);
-                sequencer_relay_status_setting_dly(recv_instruction_buff[3] - 1, RELAY_STATUS_ACTIVE, 50 / 10);
-            }
-            else if (0x00 == recv_instruction_buff[4])
-            {
-                // relay_status_setting(recv_instruction_buff[3] - 1, RELAY_STATUS_DEACTIVE);
-                // relay_status_setting_dly(recv_instruction_buff[3] - 1, RELAY_STATUS_DEACTIVE, 50 / 10); // 串口控制的继电器开关，添加 延时
-                // lcd_relay_icon_unshow(recv_instruction_buff[3] - 1);
-                sequencer_relay_status_setting_dly(recv_instruction_buff[3] - 1, RELAY_STATUS_DEACTIVE, 50 / 10);
-            }
-            else
-            {
-                // 格式有误
-            }
-        }
+        printf("INSTRUCTION TYPE RELAY_ON_OFF \n");
+        handle_relay_status_setting(sequencer_addr, recv_instruction_buff[3], recv_instruction_buff[4]);
     }
     break;
-
-
+    // ===================================================================
+    case INSTRUCTION_TYPE_RELAY_ACTIVE_TIME:
+    {
+        // 继电器 激活时间 1 ~ 999 s
+        printf("INSTRUCTION_TYPE RELAY_ACTIVE_TIME \n");
+        handle_relay_active_time(sequencer_addr,
+            recv_instruction_buff[3],
+            ((u16)recv_instruction_buff[4] << 8) | recv_instruction_buff[5]);
+    }
+    break;
+    // ===================================================================
+    case INSTRUCTION_TYPE_RELAY_DEACTIVE_TIME:
+    {
+        // 继电器 停用时间 1 ~ 999 s
+        printf("INSTRUCTION_TYPE RELAY_DEACTIVE_TIME \n");
+        handle_relay_deactive_time(sequencer_addr,
+            recv_instruction_buff[3],
+            ((u16)recv_instruction_buff[4] << 8) | recv_instruction_buff[5]);
+    }
+    break;
+    // ===================================================================
     default:
     {
         printf("instruction_handle() unknown type %u\n", (u16)recv_instruction_buff[1]);
     } break;
     }
 
-
-    // __instruction_handle_exit__();
     // 指令有误，或者是处理完了指令，给状态机更新，让扫描函数重新接收指令
     cur_recv_instruction_status = INSTRUCTION_STATUS_NONE;
 }

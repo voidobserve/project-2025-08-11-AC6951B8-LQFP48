@@ -211,7 +211,7 @@ static void app_init()
 
     // Uart0_Init(); //耀祥串口0  功率计
     Uart1_Init(); //耀祥串口1  向下一级
-    Uart2_Init(); //耀祥串口2  连接PC
+    Uart2_Init(); //耀祥串口2  连接PC或者上一级的设备
 
     ac_detection_init(); // 交流电电压检测 
 

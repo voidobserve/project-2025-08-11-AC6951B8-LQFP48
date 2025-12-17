@@ -933,7 +933,8 @@ static struct rtc_ui_opr *ui_opr = NULL;
 
 struct sys_time sys_current_time = {2023,11,25,12,12,12};
 
-struct sys_time sys_setting_time = {2023,11,25,12,12,12};
+// struct sys_time sys_setting_time = {2023,11,25,12,12,12};
+// struct sys_time sys_setting_time = {2025,12,17,12,12,12};
  
 
 u8 temp_year[4] = {0};

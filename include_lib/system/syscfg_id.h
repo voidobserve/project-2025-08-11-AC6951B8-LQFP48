@@ -69,6 +69,7 @@ u8 *syscfg_ptr_read(u16 item_id, u16 *len);
 //=================================================================================//
 #define 	CFG_USER_DEFINE_BEGIN		1
 #define     CFG_USER_CLOSE_SEQUENCER_DATA    3
+#define     CFG_USER_SCHEDULE_INFO      4 
 
 #define 	CFG_USER_DEFINE_END			49
 

@@ -13,7 +13,7 @@ void sequencer_flag_in_delay_set(void); // 置位 时序器的开关机延时状
 void sequencer_flag_in_delay_clear(void); // 清除 时序器的开关机延时状态标志
 
 
-void sequencer_first_power_on(void);
+// void sequencer_first_power_on(void);
 void sequencer_power_on(void);
 void sequencer_power_off(void);
 

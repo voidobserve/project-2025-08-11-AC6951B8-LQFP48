@@ -11,6 +11,8 @@ struct sys_time {
     u8 hour;
     u8 min;
     u8 sec;
+
+    // u8 weekday;
 };
 
 #if 0

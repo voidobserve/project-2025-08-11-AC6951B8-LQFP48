@@ -75,7 +75,7 @@ static void Uart1_isr_hook(void* arg, u32 status)
         printf("uart 1 rx buff overflow\n"); // 接收缓冲区满
 
         e.type = SYS_DEVICE_EVENT;
-        e.arg = (void*)DEVICE_EVENT_FROM_UART_RX_OVERFLOW;
+        e.arg = (void*)DEVICE_EVENT_FROM_UART_RX_OVERFLOW; // 使用了默认的系统事件，uart rx overflow
         e.u.dev.event = DEVICE_EVENT_CHANGE;
         e.u.dev.value = (int)ubus;
         sys_event_notify(&e);
@@ -85,7 +85,7 @@ static void Uart1_isr_hook(void* arg, u32 status)
         printf("uart 1 rx timeout\n"); // 接收超时
 
         e.type = SYS_DEVICE_EVENT;
-        e.arg = (void*)DEVICE_EVENT_FROM_UART_RX_OUTTIME;
+        e.arg = (void*)DEVICE_EVENT_FROM_UART_RX_OUTTIME; // 使用了默认的系统事件，uart rx outtime
         e.u.dev.event = DEVICE_EVENT_CHANGE;
         e.u.dev.value = (int)ubus;
         sys_event_notify(&e);
@@ -94,7 +94,7 @@ static void Uart1_isr_hook(void* arg, u32 status)
 
 
 /**
- * @brief 串口1设备事件处理
+ * @brief 串口1 设备事件处理
  *
  * @param e 系统事件->串口中断事件
  */
@@ -114,7 +114,7 @@ void uart1_event_handler(struct sys_event* e)
                 // 往指令处理数组中存放数据
                 for (u32 i = 0; i < uart1_rcv_len; i++) {
                     // printf("uart1_rxbuf[%u] = 0x%02x\n", (u16)i, uart1_rxbuf[i]);
-                    instruction_buffer_put(uart1_rxbuf[i]);
+                    // instruction_buffer_put(uart1_rxbuf[i]);
                 }
             }
 
@@ -134,7 +134,7 @@ void uart1_event_handler(struct sys_event* e)
                 // 往指令处理数组中存放数据
                 for (u32 i = 0; i < uart1_rcv_len; i++) {
                     // printf("uart1_rxbuf[%u] = 0x%02x\n", (u16)i, uart1_rxbuf[i]);
-                    instruction_buffer_put(uart1_rxbuf[i]);
+                    // instruction_buffer_put(uart1_rxbuf[i]);
                 }
             }
 
@@ -142,5 +142,6 @@ void uart1_event_handler(struct sys_event* e)
     }
     //串口1 end
 }
+// 将该函数加入SYS_DEVICE_EVENT队列中, 当队列中有新的推送消息时, 会进入这里进行判断
 SYS_EVENT_HANDLER(SYS_DEVICE_EVENT, uart1_event_handler, 0);   // 
 

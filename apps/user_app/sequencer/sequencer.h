@@ -55,6 +55,10 @@ enum
     // MSG_SEQUENCER_READ_INFO,
 
     MSG_USER_SAVE_INFO, // 保存用户数据
+
+    MSG_USER_SAVE_TIME, // 保存时间数据
+
+    
 };
 
 extern volatile u8 flag_is_lcd_screen_on; // 标志位，lcd屏幕状态，0--未点亮，1--点亮

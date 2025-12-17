@@ -146,6 +146,7 @@
 					<Add directory="apps/user_app/sequencer" />
 					<Add directory="apps/user_app/user_driver" />
 					<Add directory="apps/user_app/flash_handle" />
+					<Add directory="apps/user_app/instruction_handle" />
 				</Compiler>
 				<Linker>
 					<Add option="-flto" />
@@ -1722,10 +1723,18 @@
 		<Unit filename="apps/user_app/hlw8032/HLW8032.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="apps/user_app/instruction_handle/instruction_feedback.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="apps/user_app/instruction_handle/instruction_feedback.h" />
 		<Unit filename="apps/user_app/instruction_handle/instruction_handle.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="apps/user_app/instruction_handle/instruction_handle.h" />
+		<Unit filename="apps/user_app/instruction_handle/instruction_handler_func.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="apps/user_app/instruction_handle/instruction_handler_func.h" />
 		<Unit filename="apps/user_app/ir_key/ir_key.h" />
 		<Unit filename="apps/user_app/ir_key/ir_key_app.c">
 			<Option compilerVar="CC" />
@@ -1760,6 +1769,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="apps/user_app/user_driver/user_uart1_driver.h" />
+		<Unit filename="apps/user_app/user_driver/user_uart2_driver.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="apps/user_app/user_driver/user_uart2_driver.h" />
 		<Unit filename="apps/user_app/user_driver/user_uart_driver.c">
 			<Option compilerVar="CC" />
 		</Unit>
