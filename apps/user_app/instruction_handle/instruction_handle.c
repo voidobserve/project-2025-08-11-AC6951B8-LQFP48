@@ -1,6 +1,7 @@
 #include "instruction_handle.h" 
 #include "user_config.h"
 #include "instruction_handler_func.h"
+#include "user_sys_time.h"
 
 #define INSTRUCTION_BUFFER_LEN ((u16) 128) // 环形缓冲区长度
 
@@ -139,11 +140,37 @@ void instruction_scan(void)
             dest_recv_instruction_len = 6; // 要接收总共 6 个字节的命令 
         }
         break;
-
+        // ============================================================================
+        case INSTRUCTION_TYPE_SET_SYS_TIME:
+        {
+            /*
+                要接收总共 10 个字节的命令
+                格式头 + 指令类型 + 设备地址 +
+                年份(2byte) + 月份(1byte) + 日(1byte) +
+                小时(1byte) + 分钟(1byte) + 秒(1byte)
+            */
+            dest_recv_instruction_len = 10;
+        }
+        break;
+        // ============================================================================
+        case INSTRUCTION_TYPE_SET_TIME_TO_SWITCH_ON_OFF:
+        {
+            /*
+                要接收总共 10 个字节的命令
+                格式头 + 指令类型 + 设备地址 +
+                星期(1byte) +
+                小时(1byte) + 分钟(1byte) + 秒(1byte) +
+                小时(1byte) + 分钟(1byte) + 秒(1byte)
+            */
+            dest_recv_instruction_len = 10;
+        }
+        break;
+        // ============================================================================
 
         default: {} break;
         }
 
+        printf("recv type %u\n", (u16)recv_byte);
         __recv_instruction_update__(recv_byte);
         cur_recv_instruction_status = INSTRUCTION_STATUS_TYPE;
     }
@@ -226,9 +253,30 @@ void instruction_handle(void)
     }
     break;
     // ===================================================================
+    case INSTRUCTION_TYPE_SET_SYS_TIME:
+    {
+        printf("INSTRUCTION_TYPE SET_SYS_TIME \n");
+        user_sys_time_t time;
+        time.year = ((u16)recv_instruction_buff[3] << 8) | recv_instruction_buff[4];
+        time.month = recv_instruction_buff[5];
+        time.day = recv_instruction_buff[6];
+        time.hour = recv_instruction_buff[7];
+        time.min = recv_instruction_buff[8];
+        time.sec = recv_instruction_buff[9];
+        handle_set_sys_time(sequencer_addr, time);
+    }
+    break;
+    // ===================================================================
+    case INSTRUCTION_TYPE_SET_TIME_TO_SWITCH_ON_OFF:
+    {
+        printf("INSTRUCTION_TYPE SET_TIME_TO_SWITCH_ON_OFF \n");
+        
+    } 
+    break;
+    // ===================================================================
     default:
     {
-        printf("instruction_handle() unknown type %u\n", (u16)recv_instruction_buff[1]);
+        printf("%s unknown type: %u\n", __func__, (u16)recv_instruction_buff[1]);
     } break;
     }
 

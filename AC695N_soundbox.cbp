@@ -141,6 +141,7 @@
 					<Add directory="apps/soundbox/smartbox/file_transfer" />
 					<Add directory="apps/soundbox/smartbox/tuya" />
 					<Add directory="apps/soundbox/include/ui/color_led" />
+					<Add directory="apps/soundbox/include/task_manager/rtc" />
 					<Add directory="apps/user_app" />
 					<Add directory="apps/user_app/lcd" />
 					<Add directory="apps/user_app/sequencer" />
@@ -1765,6 +1766,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="apps/user_app/user_driver/relay_handle.h" />
+		<Unit filename="apps/user_app/user_driver/user_sys_time.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="apps/user_app/user_driver/user_sys_time.h" />
 		<Unit filename="apps/user_app/user_driver/user_uart1_driver.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -1781,6 +1786,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="apps/user_app/user_main_task.h" />
+		<Unit filename="apps/user_app/user_schedule/user_schedule.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="apps/user_app/user_schedule/user_schedule.h" />
 		<Unit filename="cpu/br23/adc_api.c">
 			<Option compilerVar="CC" />
 		</Unit>

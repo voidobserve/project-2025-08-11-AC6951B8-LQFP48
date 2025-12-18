@@ -4,7 +4,7 @@
 #include "typedef.h"
 
 
-struct sys_time {
+typedef struct sys_time {
     u16 year;
     u8 month;
     u8 day;
@@ -13,7 +13,7 @@ struct sys_time {
     u8 sec;
 
     // u8 weekday;
-};
+} sys_time_t;
 
 #if 0
 struct tm {
@@ -29,10 +29,10 @@ struct tm {
 
 # ifdef	__USE_MISC
     long int tm_gmtoff;		/* Seconds east of UTC.  */
-    const char *tm_zone;		/* Timezone abbreviation.  */
+    const char* tm_zone;		/* Timezone abbreviation.  */
 # else
     long int __tm_gmtoff;		/* Seconds east of UTC.  */
-    const char *__tm_zone;	/* Timezone abbreviation.  */
+    const char* __tm_zone;	/* Timezone abbreviation.  */
 # endif
 };
 
@@ -45,4 +45,4 @@ struct tm {
 
 
 
- 
+

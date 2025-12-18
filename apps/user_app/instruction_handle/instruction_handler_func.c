@@ -1,5 +1,7 @@
 #include "instruction_handler_func.h"
 #include "sequencer.h"
+#include "user_sys_time.h"
+#include "instruction_feedback.h"
 
 /**
  * @brief 收到对应的串口指令后，控制时序器开关机
@@ -174,4 +176,64 @@ void handle_relay_deactive_time(u8 sequencer_addr, u8 relay_index, u16 deactive_
     sequencers.relay[relay_index - 1].close_time = deactive_time;
 }
 
+/**
+ * @brief 收到对应的串口指令后，设置系统时间
+ *
+ * @param sequencer_addr 设备地址
+ * @param time 要设置的时间，年、月、日、时、分、秒（不用设置星期，星期可以计算得出）
+ */
+void handle_set_sys_time(u8 sequencer_addr, user_sys_time_t time)
+{
+    if (sequencer_addr != 0xFF && sequencer_addr != sequencers.addr)
+    {
+        // 如果地址不一样，直接退出
+        return;
+    }
 
+    // 判断时间是否合法
+    if (time.year < 2000 || time.year > 2099 || // 超出了 2000 ~ 2099 的范围
+        time.month < 1 || time.month > 12 || // 超出了 1 ~ 12 的范围
+        time.day < 1 || time.day > 31 || // 超出了 1 ~ 31 的范围
+        time.hour > 23 || // 超出了 0 ~ 23 的范围
+        time.min > 59 || // 超出了 0 ~ 59 的范围
+        time.sec > 59 // 超出了 0 ~ 59 的范围
+        )
+    {
+        // u8 buffer[20] = {0};
+        // int len = sprintf(buffer, "time format error\n");
+        // instruction_feedback_buffer(buffer, len);        
+        return;
+    }
+
+    user_sys_time_set(&time);
+
+    printf("set time ok \n");
+
+    // 测试给上位机反馈信息：
+    // u8 buffer[20] = {0};
+    // int len = sprintf(buffer, "device id[%u]\n", (u16)sequencers.addr);
+    // extern void instruction_feedback_buffer(u8 * buffer, u8 len);
+    // printf("len %d \n", len);
+    // instruction_feedback_buffer(buffer, len);
+
+    // time.hour = hour;
+    // time.min = minute;
+}
+
+/**
+ * @brief 收到对应的串口指令后，设置时序器设备开机、关机时间
+ * 
+ * @param sequencer_addr 
+ * @param power_on_time 定时开机时间
+ * @param power_off_time 定时关机时间
+ */
+void handle_set_time_to_switch_on_off(u8 sequencer_addr, user_sys_time_t power_on_time, user_sys_time_t power_off_time)
+{
+    if (sequencer_addr != 0xFF && sequencer_addr != sequencers.addr)
+    {
+        // 如果地址不一样，直接退出
+        return;
+    }
+    
+    
+}

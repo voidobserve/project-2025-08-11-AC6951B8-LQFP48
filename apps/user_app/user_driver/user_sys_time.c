@@ -3,7 +3,8 @@
 
 /**
  * @brief 获取系统时间
- * 
+ *      需要注意 传参类型  
+ *       
  * @param time 
  * @return int 0：获取成功，1：获取失败
  */
@@ -38,10 +39,18 @@ int user_sys_time_get(user_sys_time_t* time)
 
 /**
  * @brief 设置系统时间
+ *      需要注意 传参类型     
  * 
  * @param time 
  */
 void user_sys_time_set(user_sys_time_t* time)
-{
-    rtc_update_time_api(time);
+{  
+    sys_time_t sys_time = {0};
+    sys_time.year = time->year;
+    sys_time.month = time->month;
+    sys_time.day = time->day;
+    sys_time.hour = time->hour;
+    sys_time.min = time->min;
+    sys_time.sec = time->sec;
+    rtc_update_time_api(&sys_time);
 }

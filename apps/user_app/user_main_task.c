@@ -2,13 +2,10 @@
 
 #include "user_sys_time.h"
 #include "alarm.h" 
-
-extern void lcd_relay_icon_show(relay_index_t relay_index);
-extern void lcd_relay_icon_unshow(relay_index_t relay_index); // lcd 不显示 对应的继电器图标
-
+ 
 void user_main_task(void* p)
 {
-    struct sys_time time = { 2025, 12, 20 , 16 , 37 };
+    user_sys_time_t time = { 2025, 12, 20 , 16 , 37 };
     user_sys_time_set(&time);
 
     while (1)

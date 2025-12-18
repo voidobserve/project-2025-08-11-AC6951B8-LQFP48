@@ -69,7 +69,7 @@ void sequencer_power_on_task(void* p)
     static u8 cur_relay_index = 0; // 当前继电器索引
     static u16 cur_relay_open_time = 0; // 当前继电器开机延时时间（单位：秒）
     static u8 flag_is_in_counting = 0; // 标志位，是否正在倒计时
- 
+
 #if 1 // 可能还要再优化压缩一下
 
     if (0 == flag_is_in_counting) // 如果不在倒计时中
@@ -129,7 +129,7 @@ void sequencer_power_on_task(void* p)
         }
 
         if (cur_relay_open_time == 0) // 如果减到0秒
-        { 
+        {
             relay_status_setting(cur_relay_index, RELAY_STATUS_ACTIVE); // 开启继电器
             lcd_relay_icon_show(cur_relay_index); // lcd 显示对应的继电器图标
 
@@ -137,7 +137,7 @@ void sequencer_power_on_task(void* p)
             sequencers.relay[cur_relay_index].cur_status_on_off = RELAY_STATUS_ACTIVE;
             // sequencers.relay[cur_relay_index].last_status_on_off = RELAY_STATUS_ACTIVE;
 
-            flag_is_in_counting = 0; 
+            flag_is_in_counting = 0;
 
             // 寻找下一个要开机的继电器 
             for (u8 i = cur_relay_index; i < sequencers.relay_number; i++)
@@ -233,8 +233,8 @@ void sequencer_power_off_task(void* p)
 
             relay_status_setting(cur_relay_index, RELAY_STATUS_DEACTIVE); // 继电器关闭
             lcd_relay_icon_unshow(cur_relay_index); // lcd 不显示对应的继电器图标
-    
-            sequencers.relay[cur_relay_index].cur_status_on_off = RELAY_STATUS_DEACTIVE; 
+
+            sequencers.relay[cur_relay_index].cur_status_on_off = RELAY_STATUS_DEACTIVE;
             flag_is_in_counting = 0;
 
             // 寻找下一个要关机的继电器 
@@ -255,11 +255,11 @@ void sequencer_power_off_task(void* p)
             if (0 == flag_is_in_counting)
             {
                 sys_hi_timer_del(sequencer_power_off_timer_isr_id);
-                sys_hi_timer_del(led_power_flash_timer_isr_id); 
+                sys_hi_timer_del(led_power_flash_timer_isr_id);
                 power_light_off(); // 关闭电源指示灯（关机后，电源指示灯熄灭）
                 sequencer_flag_in_delay_clear(); // 表示时序器执行完了关机延时
                 sequencers.on_ff = DEVICE_OFF; // 表示设备已经关机
-                os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO); 
+                os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO);
             }
         }
     }

@@ -4,8 +4,8 @@
 #include "includes.h"
 // #include "../../../apps/user_app/user_config.h"
 
-#include "../../../apps/user_app/user_driver/relay_handle.h"
-#include "../../include_lib/system/sys_time.h"
+#include "relay_handle.h"
+#include "sys_time.h"
  
 
 #define RELAYS_MAX 8

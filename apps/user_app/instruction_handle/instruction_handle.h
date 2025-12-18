@@ -2,7 +2,7 @@
 #define __INSTRUCTION_HANDLE_H__ 
 
 #include "includes.h"
- 
+
 
 #define INSTRUCTION_FORMAT_HEAD ((u8)0xC5)
 
@@ -13,7 +13,7 @@ typedef enum
     INSTRUCTION_STATUS_FORMAT_HEAD,
     INSTRUCTION_STATUS_TYPE, // 控制命令
     INSTRUCTION_STATUS_END,
-} ;
+};
 
 // 定义各个不同的指令
 typedef enum
@@ -26,7 +26,11 @@ typedef enum
     INSTRUCTION_TYPE_RELAY_ACTIVE_TIME = 0x03, // 单个继电器 激活 延时（开启延时）
     INSTRUCTION_TYPE_RELAY_DEACTIVE_TIME = 0x04, // 单个继电器 停用 延时（关闭延时）
 
-} instruction_type_t ;
+    INSTRUCTION_TYPE_SET_SYS_TIME = 0x05,// 设置系统时间
+
+    INSTRUCTION_TYPE_SET_TIME_TO_SWITCH_ON_OFF = 0x06, // 设置定时开关机
+
+} instruction_type_t;
 
 // typedef struct
 // {
