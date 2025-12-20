@@ -636,9 +636,7 @@ u8 show_e_f = 0; // 显示e还是显示f
 void ad_key_event_handle(int keyevent)
 {
     switch (keyevent)
-    {
-        // USER_TO_DO 后续需要添加独立的开机和关机延时， 加上 232 的反馈信息
-        //继电器                  //控灯                       向上位机反馈
+    { 
     case KEY0_AD_CLICK: // 第一路对应的继电器按键 
     case KEY0_AD_LONG:
     {
@@ -719,33 +717,31 @@ void ad_key_event_handle(int keyevent)
 }
 
 //将开机时拆分成分秒的格式
-void split_open_minute_second()
-{
-    u8 i = 0;
-    // read_flash_sequencers_status_init();
-    for (i = 0; i < 8; i++)
-    {
-        split_open_time[i][0] = 0;
-        split_open_time[i][1] = sequencers.relay[i].open_time / 60;
-        split_open_time[i][2] = (sequencers.relay[i].open_time % 60) / 10;
-        split_open_time[i][3] = (sequencers.relay[i].open_time % 60) % 10;
-    }
-
-
-}
-//将关机时拆分成分秒的格式
-void split_close_minute_second()
-{
-    u8 i = 0;
-    // read_flash_sequencers_status_init();
-    for (i = 0; i < 8; i++)
-    {
-        split_close_time[i][0] = 0;
-        split_close_time[i][1] = sequencers.relay[i].close_time / 60;
-        split_close_time[i][2] = (sequencers.relay[i].close_time % 60) / 10;
-        split_close_time[i][3] = (sequencers.relay[i].close_time % 60) % 10;
-    }
-}
+// void split_open_minute_second()
+// {
+//     u8 i = 0;
+//     // read_flash_sequencers_status_init();
+//     for (i = 0; i < 8; i++)
+//     {
+//         split_open_time[i][0] = 0;
+//         split_open_time[i][1] = sequencers.relay[i].open_time / 60;
+//         split_open_time[i][2] = (sequencers.relay[i].open_time % 60) / 10;
+//         split_open_time[i][3] = (sequencers.relay[i].open_time % 60) % 10;
+//     } 
+// }
+// //将关机时拆分成分秒的格式
+// void split_close_minute_second()
+// {
+//     u8 i = 0;
+//     // read_flash_sequencers_status_init();
+//     for (i = 0; i < 8; i++)
+//     {
+//         split_close_time[i][0] = 0;
+//         split_close_time[i][1] = sequencers.relay[i].close_time / 60;
+//         split_close_time[i][2] = (sequencers.relay[i].close_time % 60) / 10;
+//         split_close_time[i][3] = (sequencers.relay[i].close_time % 60) % 10;
+//     }
+// }
 
 
 

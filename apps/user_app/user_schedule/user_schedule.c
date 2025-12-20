@@ -29,7 +29,7 @@ void weekly_schedule_info_init(void)
  * @brief 根据传入的时间，设置周的开关机计划
  *      注意：输入的参数，必须为 同一个 星期名称。
  *      例如 power_on_time 为星期一，power_off_time 也要是星期一
- * 
+ *
  * @param power_on_time 计划开机时间
  * @param power_off_time 计划关机时间
  */
@@ -46,7 +46,7 @@ void weekly_schedule_info_set(const user_sys_time_t power_on_time, const user_sy
     {
         /*
             如果传参不是同一个星期名称，或者传入的 时分秒 不合法，则退出函数
-        */ 
+        */
         printf("[%s]: parameter invalled\n", __func__);
         return;
     }
@@ -100,6 +100,5 @@ void weekly_schedule_info_handle(void)
             printf("power off time comes\n");
             sequencer_power_off();
         }
-
     }
 }

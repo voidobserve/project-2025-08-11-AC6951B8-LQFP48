@@ -3899,8 +3899,8 @@ obj/Release/apps/user_app/instruction_handle/instruction_handler_func.o
 -r=obj/Release/apps/user_app/instruction_handle/instruction_handler_func.o,handle_relay_active_time,pl
 -r=obj/Release/apps/user_app/instruction_handle/instruction_handler_func.o,handle_relay_deactive_time,pl
 -r=obj/Release/apps/user_app/instruction_handle/instruction_handler_func.o,handle_set_sys_time,pl
--r=obj/Release/apps/user_app/instruction_handle/instruction_handler_func.o,instruction_feedback_buffer,l
 -r=obj/Release/apps/user_app/instruction_handle/instruction_handler_func.o,user_sys_time_set,l
+-r=obj/Release/apps/user_app/instruction_handle/instruction_handler_func.o,handle_set_time_to_switch_on_off,pl
 -r=obj/Release/apps/user_app/instruction_handle/instruction_handler_func.o,puts,l
 -r=obj/Release/apps/user_app/instruction_handle/instruction_handler_func.o,sequencers,l
 obj/Release/apps/user_app/ir_key/ir_key_app.o
@@ -5400,8 +5400,6 @@ obj/Release/cpu/br23/uart_test.o
 -r=obj/Release/cpu/br23/uart_test.o,ad_key_event_handle,pl
 -r=obj/Release/cpu/br23/uart_test.o,sequencer_relay_status_toggle,l
 -r=obj/Release/cpu/br23/uart_test.o,os_taskq_post,l
--r=obj/Release/cpu/br23/uart_test.o,split_open_minute_second,pl
--r=obj/Release/cpu/br23/uart_test.o,split_close_minute_second,pl
 -r=obj/Release/cpu/br23/uart_test.o,sum_open_minute_second,pl
 -r=obj/Release/cpu/br23/uart_test.o,sum_close_minute_second,pl
 -r=obj/Release/cpu/br23/uart_test.o,read_relays_countdown_open_time,pl

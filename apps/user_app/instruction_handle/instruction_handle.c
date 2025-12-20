@@ -256,7 +256,7 @@ void instruction_handle(void)
     case INSTRUCTION_TYPE_SET_SYS_TIME:
     {
         printf("INSTRUCTION_TYPE SET_SYS_TIME \n");
-        user_sys_time_t time;
+        user_sys_time_t time = {0};
         time.year = ((u16)recv_instruction_buff[3] << 8) | recv_instruction_buff[4];
         time.month = recv_instruction_buff[5];
         time.day = recv_instruction_buff[6];
@@ -269,8 +269,21 @@ void instruction_handle(void)
     // ===================================================================
     case INSTRUCTION_TYPE_SET_TIME_TO_SWITCH_ON_OFF:
     {
+        user_sys_time_t power_on_time = {0};
+        user_sys_time_t power_off_time = {0};
+        u8 weekday = 255;
         printf("INSTRUCTION_TYPE SET_TIME_TO_SWITCH_ON_OFF \n");
-        
+
+        weekday = recv_instruction_buff[3]; // 星期x
+        power_on_time.hour = recv_instruction_buff[4];
+        power_on_time.min = recv_instruction_buff[5];
+        power_on_time.sec = recv_instruction_buff[6];
+
+        power_off_time.hour = recv_instruction_buff[7];
+        power_off_time.min = recv_instruction_buff[8];
+        power_off_time.sec = recv_instruction_buff[9];
+
+        handle_set_weekly_schedule(sequencer_addr, weekday, power_on_time, power_off_time);
     } 
     break;
     // ===================================================================

@@ -227,7 +227,9 @@ void handle_set_sys_time(u8 sequencer_addr, user_sys_time_t time)
  * @param power_on_time 定时开机时间
  * @param power_off_time 定时关机时间
  */
-void handle_set_time_to_switch_on_off(u8 sequencer_addr, user_sys_time_t power_on_time, user_sys_time_t power_off_time)
+// void handle_set_time_to_switch_on_off(u8 sequencer_addr, user_sys_time_t power_on_time, user_sys_time_t power_off_time)
+// 设置每周的开关机计划时间
+void handle_set_weekly_schedule(u8 sequencer_addr, u8 weekday, user_sys_time_t power_on_time, user_sys_time_t power_off_time)
 {
     if (sequencer_addr != 0xFF && sequencer_addr != sequencers.addr)
     {

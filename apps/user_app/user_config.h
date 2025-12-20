@@ -21,7 +21,7 @@
 #include "instruction_handle/instruction_handle.h"
 
 
-
+#define USER_DEBUG_ENABLE 1
 
 
 #endif
