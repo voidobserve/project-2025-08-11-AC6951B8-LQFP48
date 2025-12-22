@@ -3888,6 +3888,7 @@ obj/Release/apps/user_app/instruction_handle/instruction_handle.o
 -r=obj/Release/apps/user_app/instruction_handle/instruction_handle.o,handle_relay_active_time,l
 -r=obj/Release/apps/user_app/instruction_handle/instruction_handle.o,handle_relay_deactive_time,l
 -r=obj/Release/apps/user_app/instruction_handle/instruction_handle.o,handle_set_sys_time,l
+-r=obj/Release/apps/user_app/instruction_handle/instruction_handle.o,handle_set_weekly_schedule,l
 -r=obj/Release/apps/user_app/instruction_handle/instruction_handle.o,puts,l
 -r=obj/Release/apps/user_app/instruction_handle/instruction_handle.o,recv_instruction_buff,pl
 obj/Release/apps/user_app/instruction_handle/instruction_handler_func.o
@@ -3899,8 +3900,10 @@ obj/Release/apps/user_app/instruction_handle/instruction_handler_func.o
 -r=obj/Release/apps/user_app/instruction_handle/instruction_handler_func.o,handle_relay_active_time,pl
 -r=obj/Release/apps/user_app/instruction_handle/instruction_handler_func.o,handle_relay_deactive_time,pl
 -r=obj/Release/apps/user_app/instruction_handle/instruction_handler_func.o,handle_set_sys_time,pl
+-r=obj/Release/apps/user_app/instruction_handle/instruction_handler_func.o,is_user_time_valid,l
 -r=obj/Release/apps/user_app/instruction_handle/instruction_handler_func.o,user_sys_time_set,l
--r=obj/Release/apps/user_app/instruction_handle/instruction_handler_func.o,handle_set_time_to_switch_on_off,pl
+-r=obj/Release/apps/user_app/instruction_handle/instruction_handler_func.o,handle_set_weekly_schedule,pl
+-r=obj/Release/apps/user_app/instruction_handle/instruction_handler_func.o,weekly_schedule_info_set,l
 -r=obj/Release/apps/user_app/instruction_handle/instruction_handler_func.o,puts,l
 -r=obj/Release/apps/user_app/instruction_handle/instruction_handler_func.o,sequencers,l
 obj/Release/apps/user_app/ir_key/ir_key_app.o
@@ -4017,6 +4020,7 @@ obj/Release/apps/user_app/user_driver/relay_handle.o
 -r=obj/Release/apps/user_app/user_driver/relay_handle.o,relay_status_get,pl
 -r=obj/Release/apps/user_app/user_driver/relay_handle.o,relay_pin_buff,pl
 obj/Release/apps/user_app/user_driver/user_sys_time.o
+-r=obj/Release/apps/user_app/user_driver/user_sys_time.o,is_user_time_valid,pl
 -r=obj/Release/apps/user_app/user_driver/user_sys_time.o,user_sys_time_get,pl
 -r=obj/Release/apps/user_app/user_driver/user_sys_time.o,dev_open,l
 -r=obj/Release/apps/user_app/user_driver/user_sys_time.o,dev_ioctl,l
@@ -4058,7 +4062,6 @@ obj/Release/apps/user_app/user_driver/user_uart_driver.o
 obj/Release/apps/user_app/user_main_task.o
 -r=obj/Release/apps/user_app/user_main_task.o,user_main_task,pl
 -r=obj/Release/apps/user_app/user_main_task.o,user_sys_time_set,l
--r=obj/Release/apps/user_app/user_main_task.o,user_sys_time_get,l
 -r=obj/Release/apps/user_app/user_main_task.o,instruction_scan,l
 -r=obj/Release/apps/user_app/user_main_task.o,instruction_handle,l
 -r=obj/Release/apps/user_app/user_main_task.o,save_user_data_time_count_down,l

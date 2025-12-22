@@ -3,14 +3,19 @@
 
 #include "includes.h"
 
+#include "user_sys_time.h"
+
 // 定义每天的开关机时间结构
 typedef struct
 {
     u8 enable;              // 该天是否启用定时开关机
-    u8 on_hour;             // 开机 小时
+
+    // power on time
+    u8 on_hour; // 开机 小时 
     u8 on_minute;           // 开机 分钟
     u8 on_second; // 开机 秒
 
+    // power off time
     u8 off_hour;            // 关机 小时
     u8 off_minute; // 关机 分钟
     u8 off_second; // 关机 秒

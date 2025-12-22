@@ -14,6 +14,7 @@ typedef struct
     u8 weekday; // 星期：0 ~ 6；  0：星期日，1：星期一
 } user_sys_time_t;
 
+u8 is_user_time_valid(user_sys_time_t time);
 int user_sys_time_get(user_sys_time_t* time);
 void user_sys_time_set(user_sys_time_t* time);
 

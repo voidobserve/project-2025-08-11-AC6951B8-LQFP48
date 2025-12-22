@@ -2,6 +2,9 @@
 #include "sequencer.h"
 #include "user_sys_time.h"
 #include "instruction_feedback.h"
+// #include "user_schedule.h"
+
+// #include "user_config.h"
 
 /**
  * @brief 收到对应的串口指令后，控制时序器开关机
@@ -191,17 +194,17 @@ void handle_set_sys_time(u8 sequencer_addr, user_sys_time_t time)
     }
 
     // 判断时间是否合法
-    if (time.year < 2000 || time.year > 2099 || // 超出了 2000 ~ 2099 的范围
-        time.month < 1 || time.month > 12 || // 超出了 1 ~ 12 的范围
-        time.day < 1 || time.day > 31 || // 超出了 1 ~ 31 的范围
-        time.hour > 23 || // 超出了 0 ~ 23 的范围
-        time.min > 59 || // 超出了 0 ~ 59 的范围
-        time.sec > 59 // 超出了 0 ~ 59 的范围
-        )
+    // if (time.year < 2000 || time.year > 2099 || // 超出了 2000 ~ 2099 的范围
+    //     time.month < 1 || time.month > 12 || // 超出了 1 ~ 12 的范围
+    //     time.day < 1 || time.day > 31 || // 超出了 1 ~ 31 的范围
+    //     time.hour > 23 || // 超出了 0 ~ 23 的范围
+    //     time.min > 59 || // 超出了 0 ~ 59 的范围
+    //     time.sec > 59 // 超出了 0 ~ 59 的范围
+    //     )
+    if (!is_user_time_valid(time))
     {
-        // u8 buffer[20] = {0};
-        // int len = sprintf(buffer, "time format error\n");
-        // instruction_feedback_buffer(buffer, len);        
+        // USER_PRINTF_FUNC();
+        printf("time invalid \n");
         return;
     }
 
@@ -222,13 +225,13 @@ void handle_set_sys_time(u8 sequencer_addr, user_sys_time_t time)
 
 /**
  * @brief 收到对应的串口指令后，设置时序器设备开机、关机时间
- * 
- * @param sequencer_addr 
+ *
+ * @param sequencer_addr
  * @param power_on_time 定时开机时间
  * @param power_off_time 定时关机时间
  */
-// void handle_set_time_to_switch_on_off(u8 sequencer_addr, user_sys_time_t power_on_time, user_sys_time_t power_off_time)
-// 设置每周的开关机计划时间
+ // void handle_set_time_to_switch_on_off(u8 sequencer_addr, user_sys_time_t power_on_time, user_sys_time_t power_off_time)
+ // 设置每周的开关机计划时间
 void handle_set_weekly_schedule(u8 sequencer_addr, u8 weekday, user_sys_time_t power_on_time, user_sys_time_t power_off_time)
 {
     if (sequencer_addr != 0xFF && sequencer_addr != sequencers.addr)
@@ -236,6 +239,26 @@ void handle_set_weekly_schedule(u8 sequencer_addr, u8 weekday, user_sys_time_t p
         // 如果地址不一样，直接退出
         return;
     }
-    
-    
+
+    if (weekday < 1 || weekday > 7)
+    {
+        // 如果星期值超界，直接退出
+        return;
+    }
+
+    if (!is_user_time_valid(power_on_time) ||
+        !is_user_time_valid(power_off_time))
+    {
+        // 如果时间不合法，直接退出
+#if USER_DEBUG_ENABLE
+        // USER_PRINTF_FUNC();
+        pritnf("time invalid \n");
+#endif
+        return;
+    }
+
+    weekly_schedule_info_set(power_on_time, power_off_time);
+#if USER_DEBUG_ENABLE
+    printf("set schedule ok \n");
+#endif
 }
