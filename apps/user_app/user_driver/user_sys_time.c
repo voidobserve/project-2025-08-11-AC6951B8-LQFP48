@@ -4,8 +4,8 @@
 /**
  * @brief 判断传入的时间是否合法（没有超出时间范围）
  *      注意：判断的时间不包括星期值
- * 
- * @param time 
+ *
+ * @param time
  * @return u8 1：合法，0：不合法
  */
 u8 is_user_time_valid(user_sys_time_t time)
@@ -25,6 +25,35 @@ u8 is_user_time_valid(user_sys_time_t time)
     return 1;
 }
 
+u8 is_user_hour_valid(user_sys_time_t time)
+{
+    if (time.hour > 23)
+    {
+        return 0;
+    }
+
+    return 1;
+}
+
+u8 is_user_min_valid(user_sys_time_t time)
+{
+    if (time.min > 59)
+    {
+        return 0;
+    }
+
+    return 1;
+}
+
+u8 is_user_sec_valid(user_sys_time_t time)
+{
+    if (time.sec > 59)
+    {
+        return 0;
+    }
+
+    return 1;
+}
 
 /**
  * @brief 获取系统时间
@@ -44,12 +73,16 @@ int user_sys_time_get(user_sys_time_t* time)
         dev_ioctl(rtc_dev, IOCTL_GET_SYS_TIME, (u32*)time);
 
         // 打印当前时间
-        printf("Current time: %d-%02d-%02d %02d:%02d:%02d\n",
-            time->year, time->month, time->day,
-            time->hour, time->min, time->sec);
+#if USER_DEBUG_ENABLE
+        // printf("Current time: %d-%02d-%02d %02d:%02d:%02d\n",
+        //     time->year, time->month, time->day,
+        //     time->hour, time->min, time->sec);
+#endif
 
         time->weekday = rtc_calculate_week_val(time);
+#if USER_DEBUG_ENABLE
         printf("cur weekday: %d\n", time->weekday);
+#endif
 
         dev_close(rtc_dev);
     }
@@ -78,4 +111,11 @@ void user_sys_time_set(user_sys_time_t* time)
     sys_time.min = time->min;
     sys_time.sec = time->sec;
     rtc_update_time_api(&sys_time);
+}
+
+void user_sys_time_init(void)
+{
+    // 2000-01-01 00:00:00
+    volatile user_sys_time_t time = { 2000, 01, 01 , 00 , 00, 00 };
+    user_sys_time_set(&time);
 }

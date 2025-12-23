@@ -148,6 +148,7 @@
 					<Add directory="apps/user_app/user_driver" />
 					<Add directory="apps/user_app/flash_handle" />
 					<Add directory="apps/user_app/instruction_handle" />
+					<Add directory="apps/user_app/user_schedule" />
 				</Compiler>
 				<Linker>
 					<Add option="-flto" />
@@ -1736,6 +1737,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="apps/user_app/instruction_handle/instruction_handler_func.h" />
+		<Unit filename="apps/user_app/instruction_handle/instruction_transmit.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="apps/user_app/instruction_handle/instruction_transmit.h" />
 		<Unit filename="apps/user_app/ir_key/ir_key.h" />
 		<Unit filename="apps/user_app/ir_key/ir_key_app.c">
 			<Option compilerVar="CC" />

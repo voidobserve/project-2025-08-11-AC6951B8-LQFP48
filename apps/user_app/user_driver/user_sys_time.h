@@ -15,7 +15,13 @@ typedef struct
 } user_sys_time_t;
 
 u8 is_user_time_valid(user_sys_time_t time);
+u8 is_user_hour_valid(user_sys_time_t time);
+u8 is_user_min_valid(user_sys_time_t time);
+u8 is_user_sec_valid(user_sys_time_t time);
+
 int user_sys_time_get(user_sys_time_t* time);
 void user_sys_time_set(user_sys_time_t* time);
+
+void user_sys_time_init(void);
 
 #endif

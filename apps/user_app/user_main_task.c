@@ -2,11 +2,14 @@
 
 #include "user_sys_time.h"
 #include "alarm.h" 
+#include "user_schedule.h"
 
 void user_main_task(void* p)
 {
-    user_sys_time_t time = { 2025, 12, 20 , 16 , 37 };
-    user_sys_time_set(&time);
+    // volatile user_sys_time_t time = { 2000, 01, 01 , 00 , 01 };
+    // user_sys_time_set(&time);
+    volatile user_sys_time_t time;
+    user_sys_time_init();
 
     while (1)
     {
@@ -14,14 +17,27 @@ void user_main_task(void* p)
         {
             static u8 cnt = 0;
             cnt++;
-            if (cnt >= 100) // 100 --> 100 * 10ms，每1s进入一次
+            // if (cnt >= 100) // 100 --> 100 * 10ms，每1s进入一次
+            // if (cnt >= 50) // 50 --> 50 * 10ms，每 500 ms进入一次
+            if (cnt >= 20) // 20 --> 20 * 10ms，每 200 ms进入一次
             {
                 cnt = 0;
+                weekly_schedule_info_handle(); // 可能需要每200ms扫描一次
+            }
+        }
 
-                // user_sys_time_t time = { 0 };
-                // user_sys_time_get(&time);
-
-                
+        { // 每隔一段时间，打印一下当前系统时间
+            static u16 cnt = 0;
+            cnt++;
+            if (cnt >= 500)
+            {
+                cnt = 0;
+                user_sys_time_get(&time);
+                printf("Current time: %d-%02d-%02d %02d:%02d:%02d\n",
+                    time.year, time.month, time.day,
+                    time.hour, time.min, time.sec);
+                time.weekday = rtc_calculate_week_val(&time);
+                printf("cur weekday: %d\n", time.weekday);
             }
         }
 #endif

@@ -317,6 +317,8 @@ void sequencer_power_on(void)
         return;
     }
 
+    printf("sequencer power on begin\n");
+
     // sequencers.timeing_flag = 0; // 表示正在开/关机的延时
     sequencer_flag_in_delay_set();// 表示正在开/关机的延时
 
@@ -340,6 +342,8 @@ void sequencer_power_off(void)
         // 如果正在开/关机的延时，直接返回
         return;
     }
+
+    printf("sequencer power off begin\n");
 
     // sequencers.timeing_flag = 0; // 表示正在开/关机的延时
     sequencer_flag_in_delay_set();// 表示正在开/关机的延时

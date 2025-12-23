@@ -1,10 +1,12 @@
 #include "instruction_handler_func.h"
+#include "user_config.h"
+
 #include "sequencer.h"
 #include "user_sys_time.h"
 #include "instruction_feedback.h"
-// #include "user_schedule.h"
+#include "user_schedule.h"
 
-// #include "user_config.h"
+
 
 /**
  * @brief 收到对应的串口指令后，控制时序器开关机
@@ -185,12 +187,12 @@ void handle_relay_deactive_time(u8 sequencer_addr, u8 relay_index, u16 deactive_
  * @param sequencer_addr 设备地址
  * @param time 要设置的时间，年、月、日、时、分、秒（不用设置星期，星期可以计算得出）
  */
-void handle_set_sys_time(u8 sequencer_addr, user_sys_time_t time)
+int handle_set_sys_time(u8 sequencer_addr, user_sys_time_t time)
 {
     if (sequencer_addr != 0xFF && sequencer_addr != sequencers.addr)
     {
         // 如果地址不一样，直接退出
-        return;
+        return 1;
     }
 
     // 判断时间是否合法
@@ -205,12 +207,14 @@ void handle_set_sys_time(u8 sequencer_addr, user_sys_time_t time)
     {
         // USER_PRINTF_FUNC();
         printf("time invalid \n");
-        return;
+        return 2;
     }
 
     user_sys_time_set(&time);
 
+#if USER_DEBUG_ENABLE
     printf("set time ok \n");
+#endif
 
     // 测试给上位机反馈信息：
     // u8 buffer[20] = {0};
@@ -221,17 +225,17 @@ void handle_set_sys_time(u8 sequencer_addr, user_sys_time_t time)
 
     // time.hour = hour;
     // time.min = minute;
+
+    return 0;
 }
 
 /**
- * @brief 收到对应的串口指令后，设置时序器设备开机、关机时间
+ * @brief 收到对应的串口指令后，设置时序器设备每周的开机、关机时间
  *
  * @param sequencer_addr
  * @param power_on_time 定时开机时间
  * @param power_off_time 定时关机时间
  */
- // void handle_set_time_to_switch_on_off(u8 sequencer_addr, user_sys_time_t power_on_time, user_sys_time_t power_off_time)
- // 设置每周的开关机计划时间
 void handle_set_weekly_schedule(u8 sequencer_addr, u8 weekday, user_sys_time_t power_on_time, user_sys_time_t power_off_time)
 {
     if (sequencer_addr != 0xFF && sequencer_addr != sequencers.addr)
@@ -240,25 +244,144 @@ void handle_set_weekly_schedule(u8 sequencer_addr, u8 weekday, user_sys_time_t p
         return;
     }
 
-    if (weekday < 1 || weekday > 7)
+    if (weekday >= 7)
     {
         // 如果星期值超界，直接退出
+#if USER_DEBUG_ENABLE
+        USER_PRINTF_FUNC();
+        printf("weekday invalid \n");
+#endif 
         return;
     }
 
-    if (!is_user_time_valid(power_on_time) ||
-        !is_user_time_valid(power_off_time))
+    if (power_on_time.hour > 23 ||
+        power_on_time.min > 59 ||
+        power_on_time.sec > 59 ||
+        power_off_time.hour > 23 ||
+        power_off_time.min > 59 ||
+        power_off_time.sec > 59)
     {
         // 如果时间不合法，直接退出
 #if USER_DEBUG_ENABLE
-        // USER_PRINTF_FUNC();
-        pritnf("time invalid \n");
+        USER_PRINTF_FUNC();
+        printf("time invalid \n");
 #endif
         return;
     }
+
+    power_on_time.weekday = weekday;
+    power_off_time.weekday = weekday;
 
     weekly_schedule_info_set(power_on_time, power_off_time);
 #if USER_DEBUG_ENABLE
     printf("set schedule ok \n");
 #endif
+}
+
+/**
+ * @brief 收到对应的串口指令后，取消时序器每周对应星期值的定时开关机
+ *
+ * @param sequencer_addr 设备地址
+ * @param weekday 星期值
+ *
+ * @return
+ */
+int handle_cancel_weekly_schedule(u8 sequencer_addr, u8 weekday)
+{
+    if (sequencer_addr != 0xFF && sequencer_addr != sequencers.addr)
+    {
+        // 如果地址不一样，直接退出
+        return 1;
+    }
+
+    if (weekday >= 7)
+    {
+        // 如果星期值超界，直接退出
+#if USER_DEBUG_ENABLE
+        USER_PRINTF_FUNC();
+        printf("weekday invalid \n");
+#endif
+        return 2;
+    }
+
+    // printf("weekday %u\n", (u16)weekday);
+
+    weekly_schedule_info_cancel(weekday);
+#if USER_DEBUG_ENABLE
+    printf("cancel schedule ok \n");
+#endif
+
+    return 0;
+}
+
+/**
+ * @brief 收到对应的串口指令后，初始化时序器设备地址
+ *
+ * @param sequencer_addr 设备地址
+ */
+void handle_init_all_device_addr(u8 sequencer_addr)
+{
+    sequencers.addr = sequencer_addr;
+}
+
+/**
+ * @brief 收到对应的串口指令后，复位时序器设备为出厂设置
+ *
+ * @param sequencer_addr 设备地址
+ * @return int
+ */
+int handle_reset_to_factory_setting(u8 sequencer_addr)
+{
+    if (sequencer_addr != 0xFF && sequencer_addr != sequencers.addr)
+    {
+        // 如果地址不一样，直接退出
+        return 1;
+    }
+
+    if (is_sequencer_in_delay())
+    {
+        // 如果设备正在开关机的延时中，不进行设置
+#if USER_DEBUG_ENABLE
+        USER_PRINTF_FUNC();
+        printf("sequencer is in delay \n");
+#endif
+        return 2;
+    }
+
+    if (sequencers.on_ff == DEVICE_ON)
+    {
+        // 如果设备处于开机状态
+        /*
+            这里不能直接调用 sequencers_data_init() 函数，
+            会把记录当前开启的继电器状态都变成默认值，
+            导致后续无法关机
+        */
+        // sequencers_data_init();
+
+        sequencers.addr = 1; // 默认设备地址为 1
+        sequencers.on_ff = DEVICE_OFF; // 默认不要开机
+        sequencers.relay_number = RELAYS_MAX; // 继电器数量
+        sequencer_flag_in_delay_clear(); // 默认设备不处于开关机的延时中
+
+        // 初始化继电器的开机延时和关机延时：
+        for (u8 i = 0; i < RELAYS_MAX; i++)
+        {
+            sequencers.relay[i].open_time = 1;
+        }
+
+        for (u8 i = 0; i < RELAYS_MAX; i++)
+        {
+            sequencers.relay[i].close_time = 1;
+        }
+
+        sequencer_power_off();
+    }
+    else
+    {
+        // 如果当前设备已经关机，直接初始化相关变量
+        sequencers_data_init();
+    }
+
+
+    return 0;
 }

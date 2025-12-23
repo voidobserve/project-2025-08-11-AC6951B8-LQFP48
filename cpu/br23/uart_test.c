@@ -427,49 +427,7 @@ void parse_uart2_data(u8* RxBuf, u32 Len)
 
 
 #endif
-/**
- * @brief 设备第一次使用的初始化
- *
- */
-void sequencers_data_init()
-{
-    printf("-------------------------------------------------sequencers_data_init");
-    u8 open_set_cnt;
-    u8 close_set_cnt;
-    u8 i = RELAYS_MAX;
-    sequencers.addr = 1; // 0：作用是：地址需要设置了才能用
-    sequencers.on_ff = DEVICE_OFF; // 默认不要开机
-    sequencers.relay_number = RELAYS_MAX; // 继电器数量
-    // sequencers.timeing_flag = 1; // 表示时序器不处于开关机的延时状态
-    // sequencers.open_timeing = 0; //默认设备开关机时序不计时 
-    sequencer_flag_in_delay_clear(); // 默认设备不处于开关机的延时中
 
-    //默认开机时逐个亮
-    for (open_set_cnt = 0; open_set_cnt < RELAYS_MAX; open_set_cnt++)
-    {
-        // sequencers.relay[open_set_cnt].open_time = open_set_cnt + 1;
-
-        // sequencers.relay[open_set_cnt].open_time = i;
-        sequencers.relay[open_set_cnt].open_time = 1;
-        // sequencers.relay[open_set_cnt].open_time = 0; // 测试，如果开机延时时间为0
-    }
-
-    //默认关机时逐个灭
-    for (close_set_cnt = 0; close_set_cnt < RELAYS_MAX; close_set_cnt++)
-    {
-        // sequencers.relay[close_set_cnt].close_time = close_set_cnt + 1;
-        sequencers.relay[close_set_cnt].close_time = 1;
-    }
-
-    for (u8 i = 0; i < RELAYS_MAX; i++)
-    {
-        sequencers.relay[i].last_status_on_off = DEVICE_ON; // 初始化，下次开机让所有继电器打开
-        sequencers.relay[i].cur_status_on_off = DEVICE_OFF; // 继电器当前的初始状态
-    }
-
-    // find_max_time(DEVICE_ON);
-    // find_max_time(DEVICE_OFF);
-}
 
 /**
  * @brief  APP指令控制继电器
@@ -532,7 +490,7 @@ int temp_time = 0;
 
 u8 delay_2s_close_f = 0;
 /****************************************************************   关机  **************************************/
-void all_shutdowm(void);
+// void all_shutdowm(void);
 
 
 /**
@@ -591,7 +549,7 @@ extern u16 blink_cnt;
 
 // }
 
-
+#if 0
 #define pre_tiem 20
 
 
@@ -624,7 +582,7 @@ u8 m_arry[8] = { 0,0,0,0,0,0,0,0 };
 u8 show_e_f = 0; // 显示e还是显示f
 
 // void sequencer_relay_status_update(relay_index_t relay_index , relay_status_t relay_status)
-
+#endif
 
 
 
@@ -636,7 +594,7 @@ u8 show_e_f = 0; // 显示e还是显示f
 void ad_key_event_handle(int keyevent)
 {
     switch (keyevent)
-    { 
+    {
     case KEY0_AD_CLICK: // 第一路对应的继电器按键 
     case KEY0_AD_LONG:
     {
@@ -748,7 +706,7 @@ void ad_key_event_handle(int keyevent)
 
 
 
-
+#if 0
 //将设置完成的8路开机时间，存在结构体中
 void sum_open_minute_second(void)
 {
@@ -894,7 +852,7 @@ void write_relays_countdown_close_time(void)
     // }
 
 }
-
+#endif
 
 
 
@@ -915,17 +873,17 @@ void adkey_16way_long(int keyevent)
 }
 
 
-void all_shutdowm(void)
-{
-    u32 sw;
-    for (u8 i = 0; i < RELAYS_MAX;i++)
-    {
-        temp_on_off[i] = DEVICE_OFF;
-        sw = relay_table[i];
-        relay_off_on(sw, i);
-    }
+// void all_shutdowm(void)
+// {
+//     u32 sw;
+//     for (u8 i = 0; i < RELAYS_MAX;i++)
+//     {
+//         temp_on_off[i] = DEVICE_OFF;
+//         sw = relay_table[i];
+//         relay_off_on(sw, i);
+//     }
 
-}
+// }
 
 
 
@@ -933,16 +891,16 @@ void all_shutdowm(void)
  * @brief 总开关灯闪烁
  *
  */
-void master_led_flashing(void)
-{
-    static u8 sw0_led_flag = 0;  //作用：灯闪烁
-    if (sw0_led_flag)
-        gpio_direction_output(sw0_led, 1); //开灯
-    else
-        gpio_direction_output(sw0_led, 0); //关灯
+ // void master_led_flashing(void)
+ // {
+ //     static u8 sw0_led_flag = 0;  //作用：灯闪烁
+ //     if (sw0_led_flag)
+ //         gpio_direction_output(sw0_led, 1); //开灯
+ //     else
+ //         gpio_direction_output(sw0_led, 0); //关灯
 
-    sw0_led_flag = !sw0_led_flag;
-}
+ //     sw0_led_flag = !sw0_led_flag;
+ // }
 
 
 

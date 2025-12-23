@@ -28,6 +28,7 @@ typedef struct
 } weekly_schedule_t;
 
 void weekly_schedule_info_set(const user_sys_time_t power_on_time, const user_sys_time_t power_off_time);
+void weekly_schedule_info_cancel(u8 weekday);
 void weekly_schedule_info_handle(void);
 
 #endif

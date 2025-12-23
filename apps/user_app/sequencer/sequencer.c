@@ -70,16 +70,50 @@ void sequencer_relay_status_toggle(relay_index_t relay_index)
 
 /**
  * @brief 延时一段时间，再直接操作继电器
- * 
+ *
  * @param relay_index 继电器索引
  * @param relay_status 要设置的继电器状态
  * @param delay_time 要延时操作的时间
  */
-void sequencer_relay_status_setting_dly(relay_index_t relay_index, relay_status_t relay_status , u8 delay_time)
+void sequencer_relay_status_setting_dly(relay_index_t relay_index, relay_status_t relay_status, u8 delay_time)
 {
     os_time_dly(delay_time);
     sequencer_relay_status_setting(relay_index, relay_status);
 }
+
+/**
+ * @brief 设备第一次使用的初始化
+ *
+ */
+void sequencers_data_init(void)
+{
+#if USER_DEBUG_ENABLE
+    USER_PRINTF_FUNC();
+#endif
+
+    sequencers.addr = 1; // 0：作用是：地址需要设置了才能用
+    sequencers.on_ff = DEVICE_OFF; // 默认不要开机
+    sequencers.relay_number = RELAYS_MAX; // 继电器数量
+    sequencer_flag_in_delay_clear(); // 默认设备不处于开关机的延时中
+
+    // 初始化继电器的开机延时和关机延时：
+    for (u8 i = 0; i < RELAYS_MAX; i++)
+    {
+        sequencers.relay[i].open_time = 1;
+    }
+
+    for (u8 i = 0; i < RELAYS_MAX; i++)
+    {
+        sequencers.relay[i].close_time = 1;
+    }
+
+    for (u8 i = 0; i < RELAYS_MAX; i++)
+    {
+        sequencers.relay[i].last_status_on_off = DEVICE_ON; // 初始化，下次有开机操作，让所有继电器打开
+        sequencers.relay[i].cur_status_on_off = DEVICE_OFF; // 继电器当前的初始状态
+    }
+}
+
 
 
 void user_msg_handle_task(void* p)

@@ -5,7 +5,7 @@
 #define UART_RXBUF_SIZE             128
 #define UART_CBUF_SIZE              128
 #define UART_TIMEROUT               50 
- 
+
 
 #define UART_BAUDRATE               9600
 

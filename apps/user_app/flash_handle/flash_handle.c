@@ -1,5 +1,6 @@
 #include "flash_handle.h"
 #include "syscfg_id.h"
+#include "sequencer.h"
 
 /*
     使用说明：

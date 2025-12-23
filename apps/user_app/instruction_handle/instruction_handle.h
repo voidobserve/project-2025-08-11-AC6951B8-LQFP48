@@ -28,8 +28,15 @@ typedef enum
 
     INSTRUCTION_TYPE_SET_SYS_TIME = 0x05,// 设置系统时间
 
-    INSTRUCTION_TYPE_SET_TIME_TO_SWITCH_ON_OFF = 0x06, // 设置定时开关机
+    INSTRUCTION_TYPE_SET_TIME_TO_SWITCH_ON_OFF = 0x06, // 设置对应星期值的定时开关机
+    INSTRUCTION_TYPE_CANCEL_TIME_TO_SWITCH_ON_OFF = 0x07, // 取消对应星期值的开关机
 
+    INSTRUCTION_TYPE_INIT_ALL_DEVICE_ADDR = 0x08, // 初始化所有时序器设备的地址
+
+    
+
+    // 恢复出厂设置
+    INSTRUCTION_TYPE_RESET_TO_FACTORY_SETTING = 0xFF, 
 } instruction_type_t;
 
 // typedef struct

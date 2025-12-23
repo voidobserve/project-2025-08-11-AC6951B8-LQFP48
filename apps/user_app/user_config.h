@@ -24,11 +24,11 @@
 #define USER_DEBUG_ENABLE 1
 
 // // 定义打印当前函数的宏函数：
-// #define USER_PRINTF_FUNC() \
-// do \
-// { \
-//     printf("%s\n", __FUNCTION__);\
-// } while (0);
+#define USER_PRINTF_FUNC()       \
+do                               \
+{                                \
+    printf("%s\n", __FUNCTION__);\
+} while (0)
 
 
 

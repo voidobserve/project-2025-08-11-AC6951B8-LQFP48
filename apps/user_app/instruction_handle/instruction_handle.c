@@ -1,7 +1,9 @@
 #include "instruction_handle.h" 
 #include "user_config.h"
-#include "instruction_handler_func.h"
 #include "user_sys_time.h"
+#include "instruction_handler_func.h"
+#include "instruction_feedback.h"
+
 
 #define INSTRUCTION_BUFFER_LEN ((u16) 128) // 环形缓冲区长度
 
@@ -166,11 +168,36 @@ void instruction_scan(void)
         }
         break;
         // ============================================================================
-
-        default: {} break;
+        case INSTRUCTION_TYPE_CANCEL_TIME_TO_SWITCH_ON_OFF:
+        {
+            // 总共要接收 4 个字节的命令 
+            dest_recv_instruction_len = 4;
+        }
+        break;
+        // ============================================================================
+        case INSTRUCTION_TYPE_INIT_ALL_DEVICE_ADDR:
+        {
+            // 总共要接收 4 个字节的命令 
+            dest_recv_instruction_len = 4;
+        }
+        break;
+        // ============================================================================
+        case INSTRUCTION_TYPE_RESET_TO_FACTORY_SETTING:
+        {
+            // 总共要接收 4 个字节的命令 
+            dest_recv_instruction_len = 4;
+        }
+        break;
+        // ============================================================================
+        default:
+        {
+            dest_recv_instruction_len = 0;
+        } break;
         }
 
+#if USER_DEBUG_ENABLE
         printf("recv type %u\n", (u16)recv_byte);
+#endif
         __recv_instruction_update__(recv_byte);
         cur_recv_instruction_status = INSTRUCTION_STATUS_TYPE;
     }
@@ -205,7 +232,9 @@ void __instruction_handle_exit__(void)
 
 void instruction_handle(void)
 {
+    int ret = 0; // 接收函数的返回值
     u8 sequencer_addr = 0x00;
+    u8 instruction_type = 0x00;
     // instruction_t instruction_structure;
 
     if (INSTRUCTION_STATUS_END != cur_recv_instruction_status)
@@ -216,13 +245,15 @@ void instruction_handle(void)
 
     sequencer_addr = recv_instruction_buff[2]; // 存放 时序器 地址
     // instruction_structure.sequencer_addr = recv_instruction_buff[2]; // 存放 时序器 地址
+    instruction_type = recv_instruction_buff[1];
 
-    switch (recv_instruction_buff[1])
+    switch (instruction_type)
     {
     case INSTRUCTION_TYPE_DEVICE_ON_OFF:
     {
         printf("INSTRUCTION TYPE DEVICE_ON_OFF \n");
         handle_device_on_off(sequencer_addr, recv_instruction_buff[3]);
+ 
     }
     break;
     // ===================================================================
@@ -230,6 +261,8 @@ void instruction_handle(void)
     {
         printf("INSTRUCTION TYPE RELAY_ON_OFF \n");
         handle_relay_status_setting(sequencer_addr, recv_instruction_buff[3], recv_instruction_buff[4]);
+
+      
     }
     break;
     // ===================================================================
@@ -263,7 +296,7 @@ void instruction_handle(void)
         time.hour = recv_instruction_buff[7];
         time.min = recv_instruction_buff[8];
         time.sec = recv_instruction_buff[9];
-        handle_set_sys_time(sequencer_addr, time);
+        ret = handle_set_sys_time(sequencer_addr, time);
     }
     break;
     // ===================================================================
@@ -272,9 +305,11 @@ void instruction_handle(void)
         user_sys_time_t power_on_time = { 0 };
         user_sys_time_t power_off_time = { 0 };
         u8 weekday = 255;
+#if USER_DEBUG_ENABLE        
         printf("INSTRUCTION_TYPE SET_TIME_TO_SWITCH_ON_OFF \n");
+#endif
 
-        weekday = recv_instruction_buff[3]; // 星期x
+        weekday = recv_instruction_buff[3]; // 星期x 
         power_on_time.hour = recv_instruction_buff[4];
         power_on_time.min = recv_instruction_buff[5];
         power_on_time.sec = recv_instruction_buff[6];
@@ -287,10 +322,69 @@ void instruction_handle(void)
     }
     break;
     // ===================================================================
+    case INSTRUCTION_TYPE_CANCEL_TIME_TO_SWITCH_ON_OFF:
+    {
+#if USER_DEBUG_ENABLE        
+        printf("INSTRUCTION_TYPE CANCEL_TIME_TO_SWITCH_ON_OFF \n");
+#endif
+
+        u8 weekday = 255;
+        weekday = recv_instruction_buff[3];
+        // printf("recv weekday %u\n", (u16)weekday);
+        printf_buf(recv_instruction_buff, 4);
+        ret = handle_cancel_weekly_schedule(sequencer_addr, weekday);
+    }
+    break;
+    // ===================================================================
+    case INSTRUCTION_TYPE_INIT_ALL_DEVICE_ADDR:
+    {
+        if (recv_instruction_buff[3] != 0x5C)
+        {
+            ret = 1;
+            break; // 提前退出当前swtich-case语句
+        }
+
+        handle_init_all_device_addr(sequencer_addr);
+
+        // 需要给下位机转发指令
+    }
+    break;
+    // ===================================================================
+    case INSTRUCTION_TYPE_RESET_TO_FACTORY_SETTING:
+    {
+#if USER_DEBUG_ENABLE        
+        printf("INSTRUCTION_TYPE RESET_TO_FACTORY_SETTING \n");
+#endif
+        if (recv_instruction_buff[3] != 0x5C)
+        {
+            ret = 1;
+            break; // 提前退出当前swtich-case语句
+        }
+
+        ret = handle_reset_to_factory_setting(sequencer_addr);
+    }
+    break;
+    // ===================================================================
+    // ===================================================================
     default:
     {
+#if USER_DEBUG_ENABLE        
         printf("%s unknown type: %u\n", __func__, (u16)recv_instruction_buff[1]);
+#endif
+        ret = 1;
+        // instruction_feedback_fail(sequencers.addr, instruction_type);
     } break;
+    }
+
+    if (ret)
+    {
+        // 如果指令出错
+        instruction_feedback_fail(sequencers.addr, instruction_type);
+    }
+    else
+    {
+        // 如果指令未出错
+        instruction_feedback_success(sequencers.addr, instruction_type);
     }
 
     // 指令有误，或者是处理完了指令，给状态机更新，让扫描函数重新接收指令

@@ -62,6 +62,18 @@ void weekly_schedule_info_set(const user_sys_time_t power_on_time, const user_sy
 }
 
 /**
+ * @brief 取消对应星期值的定时开关机计划
+ *      注意：函数内部没有检测参数的合法性，传参前需要确保合法     
+ * 
+ * @param weekday 星期值
+ * @return * void 
+ */
+void weekly_schedule_info_cancel(u8 weekday)
+{
+    weekly_schedule.schedule[weekday].enable = 0;
+}
+
+/**
  * @brief 根据 一周的开关机计划时间表，进行定时开关机
  *
  */

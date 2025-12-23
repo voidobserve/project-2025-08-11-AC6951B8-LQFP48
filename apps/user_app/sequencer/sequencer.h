@@ -6,7 +6,7 @@
 
 #include "relay_handle.h"
 #include "sys_time.h"
- 
+
 
 #define RELAYS_MAX 8
 
@@ -29,24 +29,26 @@ typedef struct
     u16 open_time;   // 继电器开机延时时间
     u16 close_time;  // 继电器关机延时时间
 
-    struct sys_time countdown_open_time;   // 继电器的定时开机的时间  月 日 时 分 秒  
-    struct sys_time countdown_close_time;  // 继电器的定时关机的时间  月 日 时 分 秒  
+    // struct sys_time countdown_open_time;   // 继电器的定时开机的时间  月 日 时 分 秒  
+    // struct sys_time countdown_close_time;  // 继电器的定时关机的时间  月 日 时 分 秒  
 
-}RELAYS;
+} relay_t;
 
 typedef struct
 {
     ON_OFF_FLAG on_ff;  // 总开关
 
     uint8_t addr;  //设备地址
-    RELAYS  relay[RELAYS_MAX];  // 继电器 relay   
-    u32 open_timeing; // 继电器开机时序的计时时间 
-    u32 close_timeing; // 继电器关机时序的计时时间
+    relay_t  relay[RELAYS_MAX];  // 继电器 relay   
 
-    uint8_t relay_number;    // 多少路继电器 （继电器总数）
+    // 由开关机任务来设置：
+    u32 open_timeing; // 继电器开机时序的计时时间 
+    u32 close_timeing; // 继电器关机时序的计时时间 
+
+    uint8_t relay_number; // 多少路继电器 （继电器总数）
 
     u8 is_in_delay; // 是否处于开机或关机的延时中
-} SEQUENCER_T ;
+} SEQUENCER_T;
 
 enum
 {
@@ -58,7 +60,7 @@ enum
 
     MSG_USER_SAVE_TIME, // 保存时间数据
 
-    
+
 };
 
 extern volatile u8 flag_is_lcd_screen_on; // 标志位，lcd屏幕状态，0--未点亮，1--点亮
@@ -70,7 +72,9 @@ extern volatile SEQUENCER_T  sequencers;
 void sequencer_relay_status_update(relay_index_t relay_index, relay_status_t relay_status);
 void sequencer_relay_status_setting(relay_index_t relay_index, relay_status_t relay_status);
 void sequencer_relay_status_toggle(relay_index_t relay_index);
-void sequencer_relay_status_setting_dly(relay_index_t relay_index, relay_status_t relay_status , u8 delay_time);
+void sequencer_relay_status_setting_dly(relay_index_t relay_index, relay_status_t relay_status, u8 delay_time);
+
+void sequencers_data_init(void);
 
 void user_msg_handle_task(void* p);
 
