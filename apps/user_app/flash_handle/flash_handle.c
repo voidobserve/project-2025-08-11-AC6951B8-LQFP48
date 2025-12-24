@@ -23,7 +23,6 @@ static volatile u8 flag_is_enable_to_save = 0; // 标志位，是否使能了保
 
 void save_user_data_init(void)
 {
-
     u8 res;
     save_flash_t save_flash3;
 

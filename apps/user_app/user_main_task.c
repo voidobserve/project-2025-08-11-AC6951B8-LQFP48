@@ -38,6 +38,10 @@ void user_main_task(void* p)
                     time.hour, time.min, time.sec);
                 time.weekday = rtc_calculate_week_val(&time);
                 printf("cur weekday: %d\n", time.weekday);
+
+
+                // printf("\n=============================================\n");
+                // printf("is sequencer in delay: %u\n", (u16)is_sequencer_in_delay());
             }
         }
 #endif

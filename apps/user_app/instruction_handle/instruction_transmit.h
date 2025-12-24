@@ -3,6 +3,6 @@
 
 #include "includes.h"
 
-
+void instruction_transmit_buff(u8* buff, u8 len);
 
 #endif

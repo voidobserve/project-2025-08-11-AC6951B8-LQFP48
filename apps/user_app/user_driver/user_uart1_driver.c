@@ -110,14 +110,14 @@ void uart1_event_handler(struct sys_event* e)
 
             if (uart1_rcv_len) {
                 // 处理接收到的数据
+                instruction_feedback_buffer(uart1_rxbuf, uart1_rcv_len);
 
                 // 往指令处理数组中存放数据
-                for (u32 i = 0; i < uart1_rcv_len; i++) {
-                    // printf("uart1_rxbuf[%u] = 0x%02x\n", (u16)i, uart1_rxbuf[i]);
-                    // instruction_buffer_put(uart1_rxbuf[i]);
-                }
+                // for (u32 i = 0; i < uart1_rcv_len; i++) {
+                //     // printf("uart1_rxbuf[%u] = 0x%02x\n", (u16)i, uart1_rxbuf[i]);
+                //     // instruction_buffer_put(uart1_rxbuf[i]);
+                // }
             }
-
         }
     }
 
@@ -130,14 +130,15 @@ void uart1_event_handler(struct sys_event* e)
 
             //接受完数据就清
             if (uart1_rcv_len) {
+                // 往指令处理数组中存放数据
+                instruction_feedback_buffer(uart1_rxbuf, uart1_rcv_len);
 
                 // 往指令处理数组中存放数据
-                for (u32 i = 0; i < uart1_rcv_len; i++) {
-                    // printf("uart1_rxbuf[%u] = 0x%02x\n", (u16)i, uart1_rxbuf[i]);
-                    // instruction_buffer_put(uart1_rxbuf[i]);
-                }
+                // for (u32 i = 0; i < uart1_rcv_len; i++) {
+                //     // printf("uart1_rxbuf[%u] = 0x%02x\n", (u16)i, uart1_rxbuf[i]);
+                //     // instruction_buffer_put(uart1_rxbuf[i]);
+                // }
             }
-
         }
     }
     //串口1 end

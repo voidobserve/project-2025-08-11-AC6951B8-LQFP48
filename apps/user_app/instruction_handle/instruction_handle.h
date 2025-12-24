@@ -28,24 +28,15 @@ typedef enum
 
     INSTRUCTION_TYPE_SET_SYS_TIME = 0x05,// 设置系统时间
 
-    INSTRUCTION_TYPE_SET_TIME_TO_SWITCH_ON_OFF = 0x06, // 设置对应星期值的定时开关机
-    INSTRUCTION_TYPE_CANCEL_TIME_TO_SWITCH_ON_OFF = 0x07, // 取消对应星期值的开关机
+    INSTRUCTION_TYPE_SET_TIME_TO_SWITCH_ON_OFF = 0x06, // 设置对应星期值的定时开关机（每周对应星期值的开关机计划）
+    INSTRUCTION_TYPE_CANCEL_TIME_TO_SWITCH_ON_OFF = 0x07, // 取消对应星期值的开关机（取消每周对应星期值的开关机计划）
 
     INSTRUCTION_TYPE_INIT_ALL_DEVICE_ADDR = 0x08, // 初始化所有时序器设备的地址
-
-    
 
     // 恢复出厂设置
     INSTRUCTION_TYPE_RESET_TO_FACTORY_SETTING = 0xFF, 
 } instruction_type_t;
 
-// typedef struct
-// {
-//     u8 instruction_type; // 指令类型
-//     u8 sequencer_addr; // 指令中的时序器地址
-//     u8 cmd; // 指令中的命令
-//     u8 data[10];
-// } instruction_t;
 
 u16 instruction_buffer_get_count(void);
 u8 instruction_buffer_get(void);

@@ -4,6 +4,7 @@
 #include "sys_time.h"
 #include "user_sys_time.h" // 用户自定义的系统时间接口
 #include "sequencer.h" 
+#include "user_config.h"
 
 #define FLASH_CRC_DATA 0xC5
 
@@ -63,10 +64,10 @@ void weekly_schedule_info_set(const user_sys_time_t power_on_time, const user_sy
 
 /**
  * @brief 取消对应星期值的定时开关机计划
- *      注意：函数内部没有检测参数的合法性，传参前需要确保合法     
- * 
+ *      注意：函数内部没有检测参数的合法性，传参前需要确保合法
+ *
  * @param weekday 星期值
- * @return * void 
+ * @return * void
  */
 void weekly_schedule_info_cancel(u8 weekday)
 {
@@ -99,7 +100,17 @@ void weekly_schedule_info_handle(void)
             current_time.min == today.on_minute &&
             current_time.sec == today.on_second)
         {
+            // 如果调用该函数的周期小于1s，那么时间到来的1s内会进入多次 
+#if USER_DEBUG_ENABLE
             printf("power on time comes\n");
+#endif
+
+            if (DEVICE_ON == sequencers.on_ff)
+            {
+                // 如果已经完成开机，不执行开机操作
+                return;
+            }
+
             sequencer_power_on();
         }
 
@@ -109,7 +120,17 @@ void weekly_schedule_info_handle(void)
             current_time.min == today.off_minute &&
             current_time.sec == today.off_second)
         {
+            // 如果调用该函数的周期小于1s，那么时间到来的1s内会进入多次
+#if USER_DEBUG_ENABLE
             printf("power off time comes\n");
+#endif
+
+            if (DEVICE_OFF == sequencers.on_ff)
+            {
+                // 如果已经完成关机，不执行关机操作
+                return;
+            } 
+            
             sequencer_power_off();
         }
     }
