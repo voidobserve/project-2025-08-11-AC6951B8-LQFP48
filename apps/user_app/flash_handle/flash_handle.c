@@ -1,6 +1,7 @@
 #include "flash_handle.h"
 #include "syscfg_id.h"
 #include "sequencer.h"
+#include "user_schedule.h"
 
 /*
     使用说明：
@@ -10,7 +11,7 @@
 
     save_user_data_enable() 放到用户消息处理的线程中，有消息到来便调用
 
-    调用 os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO); 
+    调用 os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO);
     给 用户消息处理的线程 发送消息
 */
 
@@ -32,6 +33,11 @@ void save_user_data_init(void)
     if (save_flash3.header != FLASH_CRC_DATA)  //第一次上电
     {
         sequencers_data_init();
+
+#if 1 
+        extern volatile weekly_schedule_t weekly_schedule;
+        memcpy(&weekly_schedule, &save_flash3.weekly_schedule, sizeof(weekly_schedule_t));
+#endif
     }
     else
     {
@@ -42,7 +48,6 @@ void save_user_data_init(void)
     printf("__FUN__ %s\n", __func__);
 
     printf("sequencers.on_ff = %u\n", (u16)sequencers.on_ff);
-
 }
 
 void save_user_data_area3(void)
@@ -50,6 +55,12 @@ void save_user_data_area3(void)
     save_flash_t save_data;
     save_data.header = FLASH_CRC_DATA;
     memcpy((u8*)(&save_data.seq_save), (u8*)(&sequencers), sizeof(SEQUENCER_T));
+
+#if 1  
+    extern volatile weekly_schedule_t weekly_schedule;
+    memcpy(&save_data.weekly_schedule, &weekly_schedule, sizeof(weekly_schedule_t));
+#endif
+
     os_time_dly(1); // 先让出cpu，处理其他任务，防止看门狗复位
     syscfg_write(CFG_USER_CLOSE_SEQUENCER_DATA, (u8*)(&save_data), sizeof(save_flash_t));
 
@@ -87,7 +98,7 @@ void save_user_data_time_count_down(void)
     }
 }
 
- 
+
 // 使能保存数据的倒计时，使能保存数据的操作
 void save_user_data_enable(void)
 {

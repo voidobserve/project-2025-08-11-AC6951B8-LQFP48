@@ -149,6 +149,8 @@
 					<Add directory="apps/user_app/flash_handle" />
 					<Add directory="apps/user_app/instruction_handle" />
 					<Add directory="apps/user_app/user_schedule" />
+					<Add directory="apps/user_app/io_key" />
+					<Add directory="apps/user_app/ad_key" />
 				</Compiler>
 				<Linker>
 					<Add option="-flto" />
@@ -1718,6 +1720,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="apps/user_app/ac_detection/ac_detection.h" />
+		<Unit filename="apps/user_app/ad_key/user_ad_key.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="apps/user_app/ad_key/user_ad_key.h" />
 		<Unit filename="apps/user_app/flash_handle/flash_handle.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -1741,6 +1747,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="apps/user_app/instruction_handle/instruction_transmit.h" />
+		<Unit filename="apps/user_app/io_key/user_io_key.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="apps/user_app/io_key/user_io_key.h" />
 		<Unit filename="apps/user_app/ir_key/ir_key.h" />
 		<Unit filename="apps/user_app/ir_key/ir_key_app.c">
 			<Option compilerVar="CC" />

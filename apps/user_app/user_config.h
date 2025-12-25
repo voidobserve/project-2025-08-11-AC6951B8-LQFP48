@@ -30,6 +30,11 @@ do                               \
     printf("%s\n", __FUNCTION__);\
 } while (0)
 
+#define USER_PRINTF_LINE()       \
+do                               \
+{                                \
+    printf("[ %s ]:%d\n", __FILE__, __LINE__);\
+} while (0)
 
 
 #endif

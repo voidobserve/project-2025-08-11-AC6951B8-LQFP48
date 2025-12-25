@@ -411,6 +411,7 @@ void instruction_handle(void)
         {
             // 如果指令未出错
             instruction_feedback_success(sequencers.addr, instruction_type);
+            os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO); // 保存数据到flash
         }
     }
 

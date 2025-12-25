@@ -175,7 +175,7 @@ void app_timer_led_scan(void (*led_scan)(void *))
 
 
 
-extern unsigned char dis_data[32];
+// extern unsigned char dis_data[32];
 
 /////下面函数调用的使用函数都必须放在ram
 ___interrupt

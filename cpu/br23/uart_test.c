@@ -25,6 +25,7 @@
 
 extern u8 display_data[16];   //lcd数据
 
+#if 0
 // 继电器对应的按键灯位置（索引）
 const u8 relay_table[RELAYS_MAX] = {
     //按键灯（继电器
@@ -40,7 +41,7 @@ const u8 relay_table[RELAYS_MAX] = {
 
 
 }; // 继电器对应的按键灯位置（索引）
-
+#endif
 
 
 
@@ -428,7 +429,7 @@ void parse_uart2_data(u8* RxBuf, u32 Len)
 
 #endif
 
-
+#if 0
 /**
  * @brief  APP指令控制继电器
  *
@@ -455,9 +456,11 @@ void relay_off_on(u32 relay_led, u8 relay_number)
 void fd_relay_state(void)
 {
 }
+#endif
 
 
 
+#if 0
 /**
  * @brief AD按键控制继电器
  *
@@ -477,6 +480,7 @@ void adkey_control(u32 relay_led, u8 relay_number)
     }
 
 }
+#endif
 
 
 
@@ -586,93 +590,6 @@ u8 show_e_f = 0; // 显示e还是显示f
 
 
 
-/**
- * @brief AD按键控制16路继电器
- *
- * @param keyevent    AD按键消息
- */
-void ad_key_event_handle(int keyevent)
-{
-    switch (keyevent)
-    {
-    case KEY0_AD_CLICK: // 第一路对应的继电器按键 
-    case KEY0_AD_LONG:
-    {
-        sequencer_relay_status_toggle(RELAY_INDEX_0);
-
-        os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO);
-    }
-    break;
-    // ===================================================================
-    case KEY1_AD_CLICK:
-    case KEY1_AD_LONG:
-    {
-        sequencer_relay_status_toggle(RELAY_INDEX_1);
-        os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO);
-    }
-    break;
-
-    // ===================================================================
-    case KEY2_AD_CLICK:
-    case KEY2_AD_LONG:
-    {
-        sequencer_relay_status_toggle(RELAY_INDEX_2);
-        os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO);
-    }
-    break;
-    // ===================================================================
-    case KEY3_AD_CLICK:
-    case KEY3_AD_LONG:
-    {
-        sequencer_relay_status_toggle(RELAY_INDEX_3);
-        os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO);
-    }
-    break;
-    // ===================================================================
-    case KEY4_AD_CLICK:
-    case KEY4_AD_LONG:
-    {
-        sequencer_relay_status_toggle(RELAY_INDEX_4);
-        os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO);
-    }
-    break;
-    // ===================================================================
-    case KEY5_AD_CLICK:
-    case KEY5_AD_LONG:
-    {
-        sequencer_relay_status_toggle(RELAY_INDEX_5);
-        os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO);
-    }
-    break;
-    // ===================================================================
-    case KEY6_AD_CLICK:
-    case KEY6_AD_LONG:
-    {
-        sequencer_relay_status_toggle(RELAY_INDEX_6);
-        os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO);
-    }
-    break;
-    // ===================================================================
-    case KEY7_AD_CLICK:
-    case KEY7_AD_LONG:
-    {
-        sequencer_relay_status_toggle(RELAY_INDEX_7);
-        os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO);
-    }
-    break;
-    // ===================================================================
-
-    default:
-    {
-        return;
-    }
-    break;
-
-    }// switch (keyevent)
-
-
-    os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO);
-}
 
 //将开机时拆分成分秒的格式
 // void split_open_minute_second()

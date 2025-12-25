@@ -16,8 +16,6 @@ typedef enum
     DEVICE_ON,      // 开机
 }ON_OFF_FLAG;
 
-
-
 typedef struct
 {
     // ON_OFF_FLAG open_on_off;  // 继电器的开启时的开关状态（开关对应的状态）
@@ -63,10 +61,26 @@ enum
 
 };
 
-extern volatile u8 flag_is_lcd_screen_on; // 标志位，lcd屏幕状态，0--未点亮，1--点亮
 
-extern const u8 relay_table[RELAYS_MAX];
-extern volatile ON_OFF_FLAG temp_on_off[16];  //继电器的开关
+/*
+    定义时序器的各个状态
+*/
+enum
+{
+    SEQUENCER_STATUS_NONE = 0x00,
+    SEQUENCER_STATUS_SETTING_SYS_TIME, // 设置系统时间
+    SEQUENCER_STATUS_SETTING_RELAY_POWER_ON_SCHEDULE, // 设置单个继电器的定时激活计划
+    SEQUENCER_STATUS_SETTING_RELAY_POWER_OFF_SCHEDULE, // 设置单个继电器的定时停用计划
+
+    
+};
+
+
+// extern volatile u8 flag_is_lcd_screen_on; // 标志位，lcd屏幕状态，0--未点亮，1--点亮
+
+extern volatile u8 sequencer_status;
+// extern const u8 relay_table[RELAYS_MAX];
+// extern volatile ON_OFF_FLAG temp_on_off[16];  //继电器的开关
 extern volatile SEQUENCER_T  sequencers;
 
 void sequencer_relay_status_update(relay_index_t relay_index, relay_status_t relay_status);

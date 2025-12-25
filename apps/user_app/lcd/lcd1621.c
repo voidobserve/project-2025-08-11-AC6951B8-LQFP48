@@ -9,6 +9,7 @@
 #include "lcd1621.h"
 
 #include "../../../apps/user_app/user_config.h"
+#include "user_sys_time.h"
 
 //////////////////显示命令字典/////////////////////
 #define CMD_BYTE   8
@@ -52,7 +53,11 @@
 
 //#define LCD1621_IO_INIT()			GPIOADE |= (BIT(2)|BIT(3)|BIT(4))
 
-u8 lcd1621_sendbuf[16] = { 0 };   ///2020-12-10 lcd1621传输中转
+// u8 lcd1621_sendbuf[16] = { 0 };   ///2020-12-10 lcd1621传输中转
+
+
+
+// volatile u8 cur_setting_time_unit = 
 
 void delay_lcd(u8 n)
 {
@@ -167,9 +172,23 @@ void lcd1621_value_set(u8* buff, u8 len)
 
 }
 
+/**
+ * @brief 立即刷新lcd显示，把缓冲区的数据都发送给lcd驱动ic
+ *		注意，不能在外部调用强制刷新，会导致数据冲突，lcd任务是定时器调用
+ *
+ */
+void lcd_1621_refresh(void)
+{
+	if (sequencer_status == SEQUENCER_STATUS_SETTING_SYS_TIME)
+	{
+		lcd_setting_sys_time_animation();
+	}
+
+	lcd1621_write_data(dis_data, 16); // 将lcd显示缓冲区的数据发送给屏幕驱动ic
+}
 
 
-u8 display_data[16] = { 0 };
+// u8 display_data[16] = { 0 };
 #include "adkey.h"
 void lcd1621_init(void)
 {
@@ -186,7 +205,7 @@ void lcd1621_init(void)
 	// gpio_direction_output(lcd_light, 1); // 打开背光 -- 测试时使用
 }
 
-unsigned char dis_data[32];
+volatile unsigned char dis_data[32];
 // 定义SEG的脚位，从左到右数字顺序分别是1、2、3...6
 // 最多7个byte，不足7个byte的以0xFF结束
 u16 const num1[10][7] =
@@ -370,8 +389,7 @@ u16 const alphabet_1[10][7] =
 	{SEG_1A, SEG_1B,SEG_1E,SEG_1F,SEG_1G, 0xFFFF }, //P
 	{SEG_1A, SEG_1D,SEG_1E,SEG_1F, 0xFFFF },        //C
 	{SEG_1A, SEG_1D,SEG_1E,SEG_1F,SEG_1G, 0xFFFF }, //E
-	{SEG_1A, SEG_1G,SEG_1E,SEG_1F, 0xFFFF },        //F
-
+	{SEG_1A, SEG_1G,SEG_1E,SEG_1F, 0xFFFF },        //F 
 };
 
 void make_alphabet(u8 p)
@@ -463,9 +481,9 @@ void lcd_show_relay_icon(u8 relay_index)
 
 /**
  * @brief lcd 显示 对应的继电器图标
- * 
+ *
  * @param relay_index 继电器的索引值
- * @return * void 
+ * @return * void
  */
 void lcd_relay_icon_show(relay_index_t relay_index)
 {
@@ -484,9 +502,9 @@ void lcd_relay_icon_show(relay_index_t relay_index)
 
 /**
  * @brief lcd 不显示 对应的继电器图标
- * 
+ *
  * @param relay_index 继电器的索引值
- * @return * void 
+ * @return * void
  */
 void lcd_relay_icon_unshow(relay_index_t relay_index)
 {
@@ -593,10 +611,10 @@ void clean_num(unsigned char num)
 
 
 
-u8 blink_f = 0; // 控制闪烁时间间隔的标志位
-u16 blink_cnt = 0;
+// u8 blink_f = 0; // 控制闪烁时间间隔的标志位
+// u16 blink_cnt = 0;
 // u8 lcd_now_state = set_sys_time;  // 上电默认设置系统时间
-u8 lcd_now_state = show_power;  // 上电默认显示交流电电压
+// u8 lcd_now_state = show_power;  // 上电默认显示交流电电压
 extern u8 time_unit;
 extern u8 sys_time_unit;
 extern u8 split_open_time[8][4];
@@ -605,12 +623,11 @@ extern u8 chose_relays_num;
 
 unsigned char voltage_array[3] = { 0 }; // 存放要显示的电压
 unsigned char  power_array[4] = { 0 }; // 存放要显示的功率
- 
+
 u16 update_cnt = 0;
 
-extern struct sys_time sys_current_time;
-
-extern struct sys_time sys_setting_time;
+// extern struct sys_time sys_current_time; 
+// extern struct sys_time sys_setting_time; 
 
 extern u8 temp_year[4];
 extern u8 temp_month[2];
@@ -634,38 +651,272 @@ extern u8 set_countdown_close_min[8][2];
 extern u8 set_countdown_close_sec[8][2];
 
 
-u8 BT_CONNECT_STATE = 0;
+// u8 BT_CONNECT_STATE = 0;
+
+// lcd显示年份
+void lcd_update_year(const u16 year)
+{
+	u8 bit_0 = 0; // lcd显示时间部分的第0位数据，范围：0~9
+	u8 bit_1 = 0;
+	u8 bit_2 = 0;
+	u8 bit_3 = 0;
+
+	// u16 tmp = year;
+	bit_0 = (u8)((u16)year / 1000);
+	bit_1 = (u8)((u16)year / 100 % 10);
+	bit_2 = (u8)((u16)year / 10 % 10);
+	bit_3 = (u8)((u16)year % 10);
+
+	make_num(4, bit_0);
+	make_num(5, bit_1);
+	make_num(6, bit_2);
+	make_num(7, bit_3);
+}
+
+// lcd不显示年份
+void lcd_clear_year(void)
+{
+	clean_num(4);
+	clean_num(5);
+	clean_num(6);
+	clean_num(7);
+}
+
+void lcd_update_month(const u8 month)
+{
+	u8 bit_0 = 0; // lcd显示时间部分的第0位数据，范围：0~9
+	u8 bit_1 = 0;
+
+	bit_0 = month / 10;
+	bit_1 = month % 10;
+
+	make_num(4, bit_0);
+	make_num(5, bit_1);
+}
+
+void lcd_clear_month(void)
+{
+	clean_num(4);
+	clean_num(5);
+}
+
+void lcd_update_day(const u8 day)
+{
+	u8 bit_0 = 0; // lcd显示时间部分的第0位数据，范围：0~9
+	u8 bit_1 = 0;
+
+	bit_0 = day / 10;
+	bit_1 = day % 10;
+
+	make_num(6, bit_0);
+	make_num(7, bit_1);
+}
+
+void lcd_clear_day(void)
+{
+	clean_num(6);
+	clean_num(7);
+}
+
+void lcd_update_hour(const u8 hour)
+{
+	u8 bit_0 = 0; // lcd显示时间部分的第0位数据，范围：0~9
+	u8 bit_1 = 0;
+
+	bit_0 = hour / 10;
+	bit_1 = hour % 10;
+
+	make_num(4, bit_0);
+	make_num(5, bit_1);
+}
+
+void lcd_clear_hour(void)
+{
+	clean_num(4);
+	clean_num(5);
+}
+
+void lcd_update_min(const u8 min)
+{
+	u8 bit_0 = 0; // lcd显示时间部分的第0位数据，范围：0~9
+	u8 bit_1 = 0;
+
+	bit_0 = min / 10;
+	bit_1 = min % 10;
+
+	make_num(6, bit_0);
+	make_num(7, bit_1);
+}
+
+void lcd_clear_min(void)
+{
+	clean_num(6);
+	clean_num(7);
+}
+
+
+
+// 定义在设置系统时间期间，lcd动画使用到的各个变量
+typedef struct
+{
+	user_sys_time_t cur_setting_sys_time; // 当前正在设置的系统时间
+	time_unit_t cur_setting_time_unit; // 当前正在设置的时间单位
+	u16 blink_cnt; // 闪烁时间的计数值，控制每个一段时间闪烁一次要显示的、正在设置的系统时间
+	u8 blink_dir; // 闪烁方向，0：常亮，1：熄灭（不显示） 
+} lcd_setting_sys_time_t;
+
+volatile lcd_setting_sys_time_t lcd_setting_sys_time = { 0 };
+
+static volatile u16 lcd_setting_sys_time_blink_cnt = 0;
+static volatile u8 lcd_setting_sys_time_blink_dir = 0;
+static volatile u8 lcd_setting_sys_time_unit = TIME_UNIT_YEAR; // 存放正在设置的时间单位  
+
+void lcd_setting_sys_time_unit_change(time_unit_t time_unit)
+{
+	lcd_setting_sys_time_unit = time_unit;
+}
+
+void lcd_setting_sys_time_unit_get(time_unit_t* time_unit)
+{
+	*time_unit = lcd_setting_sys_time_unit;
+}
+
+// lcd显示系统时间动画，会不让时间闪烁，固定显示一段时间
+void lcd_setting_sys_time_animation_fix(void)
+{
+	// lcd_setting_sys_time.blink_cnt = 0;
+	// lcd_setting_sys_time.blink_dir = 0;
+
+	lcd_setting_sys_time_blink_cnt = 0;
+	lcd_setting_sys_time_blink_dir = 0;
+
+	// if (TIME_UNIT_YEAR == lcd_setting_sys_time_unit)
+	// {
+	// 	lcd_update_year(cur_setting_sys_time.year);
+	// }
+	// else if (TIME_UNIT_MONTH == lcd_setting_sys_time_unit ||
+	// 	TIME_UNIT_DAY == lcd_setting_sys_time_unit)
+	// {
+	// 	lcd_update_month(cur_setting_sys_time.month);
+	// 	lcd_update_day(cur_setting_sys_time.day);
+	// }
+	// else if (TIME_UNIT_HOUR == lcd_setting_sys_time_unit ||
+	// 	TIME_UNIT_MIN == lcd_setting_sys_time_unit)
+	// {
+	// 	lcd_update_hour(cur_setting_sys_time.hour);
+	// 	lcd_update_min(cur_setting_sys_time.min);
+	// }
+}
+
+void lcd_setting_sys_time_animation(void)
+{
+	// 如果正在设置系统时间
+	// 让正在设置的时间闪烁，1 ： 年 ，2：月-日，3：时：分
+
+	lcd_setting_sys_time_blink_cnt++;
+	// if (lcd_setting_sys_time_blink_cnt <= 50) // 调用时间10ms，那么这里的时间单位就是10ms
+	// {
+	// 	return;
+	// }
+
+	// lcd_setting_sys_time_blink_cnt = 0;
+	// lcd_setting_sys_time_blink_dir = !lcd_setting_sys_time_blink_dir;
+
+	if (lcd_setting_sys_time_blink_cnt >= 50)// 调用时间10ms，那么这里的时间单位就是10ms
+	{
+		lcd_setting_sys_time_blink_cnt = 0;
+		lcd_setting_sys_time_blink_dir = !lcd_setting_sys_time_blink_dir;
+	}
+
+
+	if (TIME_UNIT_YEAR == lcd_setting_sys_time_unit)
+	{
+		if (0 == lcd_setting_sys_time_blink_dir)
+		{
+			lcd_clear_year(); // 需要先清除再写入数据，否则会有数据残留
+			lcd_update_year(cur_setting_sys_time.year);
+		}
+		else
+		{
+			lcd_clear_year();
+		}
+	}
+	else if (TIME_UNIT_MONTH == lcd_setting_sys_time_unit)
+	{
+		if (0 == lcd_setting_sys_time_blink_dir)
+		{
+			lcd_clear_month();
+			lcd_update_month(cur_setting_sys_time.month);
+		}
+		else
+		{
+			lcd_clear_month();
+		}
+
+		// 月份闪烁，但是日期保持不变
+		lcd_clear_day();
+		lcd_update_day(cur_setting_sys_time.day);
+	}
+	else if (TIME_UNIT_DAY == lcd_setting_sys_time_unit)
+	{
+		if (0 == lcd_setting_sys_time_blink_dir)
+		{
+			lcd_clear_day();
+			lcd_update_day(cur_setting_sys_time.day);
+		}
+		else
+		{
+			lcd_clear_day();
+		}
+
+		// 日期闪烁，但是月份保持不变
+		lcd_clear_month();
+		lcd_update_month(cur_setting_sys_time.month);
+	}
+	else if (TIME_UNIT_HOUR == lcd_setting_sys_time_unit)
+	{
+		if (0 == lcd_setting_sys_time_blink_dir)
+		{
+			lcd_clear_hour();
+			lcd_update_hour(cur_setting_sys_time.hour);
+		}
+		else
+		{
+			lcd_clear_hour();
+		}
+
+		// 小时闪烁，但是分钟保持不变
+		lcd_clear_min();
+		lcd_update_min(cur_setting_sys_time.min);
+	}
+	else if (TIME_UNIT_MIN == lcd_setting_sys_time_unit)
+	{
+		if (0 == lcd_setting_sys_time_blink_dir)
+		{
+			lcd_clear_min();
+			lcd_update_min(cur_setting_sys_time.min);
+		}
+		else
+		{
+			lcd_clear_min();
+		}
+
+		// 分钟闪烁，但是小时保持不变
+		lcd_clear_hour();
+		lcd_update_hour(cur_setting_sys_time.hour);
+	}
+	else if (TIME_UNIT_SEC == lcd_setting_sys_time_unit)
+	{
+
+	}
+}
 
 //  LCD屏显示处理  10ms执行一次
-void  lcdseg_handle(void)
+void lcdseg_handle(void)
 {
-#if 1
-
-	// if (flag_is_lcd_screen_on)
-	// {
-	// 	// 屏幕开启，刷新对应的继电器状态
-
-	// 	u8 i = 0;
-	// 	for (i = 0; i < RELAYS_MAX; i++)
-	// 	{
-	// 		// lcd1621_icon_update();
-	// 		if (temp_on_off[i] == DEVICE_ON)
-	// 		{
-	// 			lcd_show_relay_icon(i);
-	// 		}
-	// 		else
-	// 		{
-	// 			lcd_clear_relay_icon(i);
-	// 		}
-	// 	}
-	// }
-	// else
-	// {
-	// 	// 屏幕未开启，关闭屏幕
-	// }
+#if 0
 
 	if (sequencers.on_ff == DEVICE_ON)
-		// if (flag_is_lcd_screen_on)
 	{
 
 		blink_cnt++;
@@ -677,39 +928,9 @@ void  lcdseg_handle(void)
 			blink_cnt = 0;
 			blink_f = !blink_f;
 		}
-
-		// printf("lcd_now_state = %d\n", lcd_now_state); 
-
-		// 显示
-		// if (lcd_now_state == show_power)
-		// {
-
-
-		// 	if (update_cnt >= 1000) //1s
-		// 	{
-		// 		update_cnt = 0;
-		// 		clean_num(1);clean_num(2);clean_num(3);   //清
-		// 		clean_num(4);clean_num(5);clean_num(6); clean_num(7);  // 清屏
-		// 		clean_dis(clrbit(SEG_S3));clean_dis(clrbit(SEG_S4)); // 请 ' " 
-
-		// 		clean_dis(clrbit(SEG_S6)); // 关闭"W""
-
-		// 		//电压
-		// 		make_num(1, voltage_array[0]);
-		// 		make_num(2, voltage_array[1]);
-		// 		make_num(3, voltage_array[2]);
-		// 		// //功率
-		// 		// make_num(4,power_array[0]);
-		// 		// make_num(5,power_array[1]);
-		// 		// make_num(6,power_array[2]);
-		// 		// make_num(7,power_array[3]);
-		// 	}
-
-		// }
-		// 设置开机延时
 		else if (lcd_now_state == open_dev_time)
 		{
-
+			// 设置开机延时
 			// if (blink_f)
 			// {
 			// 	make_num(4, split_open_time[chose_relays_num][0]);
@@ -1158,25 +1379,59 @@ void  lcdseg_handle(void)
 
 #endif
 
-#if 0
-	// lcd_open_frame(); // 测试用 -- 打开背光，显示边框
-	// check_lcd_display(); // 测试用 
-	// lcd1621_write_data(dis_data, 16);
+#if 0 // 测试显示屏的功能是否正常
+	lcd_open_frame(); // 测试用 -- 打开背光，显示边框
+	check_lcd_display(); // 测试用 
+	lcd1621_write_data(dis_data, 16);
 	// printf("test \n");
 #endif
 
 #if 1
-	// 上电期间，一直显示LCD，显示交流电电压：
-	clean_num(1);clean_num(2);clean_num(3);   //清
-	clean_num(4);clean_num(5);clean_num(6); clean_num(7);  // 清屏
-	clean_dis(clrbit(SEG_S3));clean_dis(clrbit(SEG_S4)); // 不显示： ' " 
-	clean_dis(clrbit(SEG_S6)); // 关闭"W"
-	// 交流电电压：
-	make_num(1, voltage_array[0]);
-	make_num(2, voltage_array[1]);
-	make_num(3, voltage_array[2]);
+	if (sequencer_status == SEQUENCER_STATUS_NONE)
+	{
+		// 上电期间，一直显示LCD，显示交流电电压：
+		clean_num(1);clean_num(2);clean_num(3);   // 清显示数字的bit1 ~ bit3 
+		clean_num(4);clean_num(5);clean_num(6); clean_num(7);  // 清屏
+		clean_dis(clrbit(SEG_S3));clean_dis(clrbit(SEG_S4)); // 不显示： ' " 
+		clean_dis(clrbit(SEG_S6)); // 关闭"W"
+		// 交流电电压：
+		make_num(1, voltage_array[0]);
+		make_num(2, voltage_array[1]);
+		make_num(3, voltage_array[2]);
 
-	lcd1621_write_data(dis_data, 16);
+		// USER_TO_DO 后面需要显示年份xx时间，再切换到显示月日xx时间，最后切换到显示时分
+		user_sys_time_t user_sys_time;
+		user_sys_time_get(&user_sys_time);
+		lcd_update_year(user_sys_time.year);
+	}
+	else if (sequencer_status == SEQUENCER_STATUS_SETTING_SYS_TIME)
+	{
+		// clean_num(5);clean_num(6); clean_num(7);  // 清屏
+		lcd_setting_sys_time_animation();
+	}
+
+#if 0
+	{
+		static u16 cnt = 0;
+		cnt++;
+
+		if (cnt < 100)
+		{
+			lcd_update_year(2014);
+		}
+		else if (cnt < 200)
+		{
+			lcd_clear_year();
+		}
+		else
+		{
+			cnt = 0;
+		}
+	}
+#endif
+
+	lcd1621_write_data(dis_data, 16); // 将lcd显示缓冲区的数据发送给屏幕驱动ic
+	// lcd_1621_refresh();
 
 #endif
 }

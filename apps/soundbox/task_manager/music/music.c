@@ -578,7 +578,7 @@ void music_player_err_deal(int err)
 // extern void adkey_master_on_off(void);
 // extern void ad_key_event_handle(int keyevent);
 
-extern u8 lcd_now_state;
+// extern u8 lcd_now_state;
 
 
 //*----------------------------------------------------------------------------*/
@@ -674,21 +674,21 @@ static int music_key_event_opr(struct sys_event* event)
         ///播放执行类消息
         // case  KEY_MUSIC_PP: 
     case  KEY9_AD_CLICK:    // 暂停/播放
-        if (lcd_now_state == show_power)
-        {
+        // if (lcd_now_state == show_power)
+        // {
 
-            log_i("KEY_MUSIC_PP\n");
-            err = music_player_pp();
-            if (music_player_get_play_status() == FILE_DEC_STATUS_PLAY) {
-                app_status_handler(APP_STATUS_MUSIC_PLAY);
-                ui_update_status(STATUS_MUSIC_PLAY);
-            }
-            else {
-                app_status_handler(APP_STATUS_MUSIC_PP);
-                ui_update_status(STATUS_MUSIC_PAUSE);
-            }
-            printf("=============================================%d\n", music_player_get_play_status());
-        }
+        //     log_i("KEY_MUSIC_PP\n");
+        //     err = music_player_pp();
+        //     if (music_player_get_play_status() == FILE_DEC_STATUS_PLAY) {
+        //         app_status_handler(APP_STATUS_MUSIC_PLAY);
+        //         ui_update_status(STATUS_MUSIC_PLAY);
+        //     }
+        //     else {
+        //         app_status_handler(APP_STATUS_MUSIC_PP);
+        //         ui_update_status(STATUS_MUSIC_PAUSE);
+        //     }
+        //     printf("=============================================%d\n", music_player_get_play_status());
+        // }
         break;
     case KEY_MUSIC_PLAYER_AUTO_NEXT:
         log_i("KEY_MUSIC_PLAYER_AUTO_NEXT\n");
@@ -700,23 +700,23 @@ static int music_key_event_opr(struct sys_event* event)
         break;
         // case  KEY_MUSIC_PREV:               //上一曲
     case  KEY8_AD_CLICK:
-        if (lcd_now_state == show_power)
-        {
-            log_i("KEY_MUSIC_PREV\n");
-            app_status_handler(APP_STATUS_MUSIC_FFR);
-            __this->file_play_direct = 1;
-            err = music_player_play_prev();
-        }
+        // if (lcd_now_state == show_power)
+        // {
+        //     log_i("KEY_MUSIC_PREV\n");
+        //     app_status_handler(APP_STATUS_MUSIC_FFR);
+        //     __this->file_play_direct = 1;
+        //     err = music_player_play_prev();
+        // }
         break;
         // case  KEY_MUSIC_NEXT:     // 下一曲
     case  KEY10_AD_CLICK:
-        if (lcd_now_state == show_power)
-        {
-            log_i("KEY_MUSIC_NEXT\n");
-            app_status_handler(APP_STATUS_MUSIC_FFR);
-            __this->file_play_direct = 0;
-            err = music_player_play_next();
-        }
+        // if (lcd_now_state == show_power)
+        // {
+        //     log_i("KEY_MUSIC_NEXT\n");
+        //     app_status_handler(APP_STATUS_MUSIC_FFR);
+        //     __this->file_play_direct = 0;
+        //     err = music_player_play_next();
+        // }
         break;
     case KEY_MUSIC_PLAYE_PREV_FOLDER:
         log_i("KEY_MUSIC_PLAYE_PREV_FOLDER\n");

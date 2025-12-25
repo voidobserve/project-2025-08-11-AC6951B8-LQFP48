@@ -228,7 +228,7 @@ static void app_init()
 
     extern void  lcdseg_handle(void); 
     // extern void relay_timer_handle(void);
-    sys_timer_add(NULL, lcdseg_handle, 10);  // LCD屏显示处理
+    sys_timer_add(NULL, lcdseg_handle, 10);  // LCD屏显示处理 
 
     sys_hi_timer_add(NULL, ac_detection_update, 2); // 采集交流电检测脚上的ad值
     sys_hi_timer_add(NULL, ac_voltage_update, 1500); // 计算、更新交流电电压值

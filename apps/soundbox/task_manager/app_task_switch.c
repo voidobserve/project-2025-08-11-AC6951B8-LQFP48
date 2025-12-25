@@ -57,13 +57,13 @@ int app_key_event_remap(struct sys_event *e)
     case KEY_DRIVER_TYPE_IO: // 时序器的总开关按键
 #if TCFG_IOKEY_ENABLE
         msg = iokey_event_to_msg(app_curr_task, key);
-        printf("iokey_event_to_msg msg = %d", msg);
+        // printf("iokey_event_to_msg msg = %d", msg);
 #endif
         break;
     case KEY_DRIVER_TYPE_AD:   //耀祥时序器时序器第一组AD按键
 #if TCFG_ADKEY_ENABLE
         msg = adkey_event_to_msg(app_curr_task, key);   
-        printf("adkey_event_to_msg msg = %d", msg);   
+        // printf("adkey_event_to_msg msg = %d", msg);   
 #endif
         break;
 

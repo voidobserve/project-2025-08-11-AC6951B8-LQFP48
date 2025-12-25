@@ -3,10 +3,9 @@
 
 #include "../../user_app/flash_handle/flash_handle.h" // flash读写接口
 
-volatile u8 flag_is_lcd_screen_on = 0; // 标志位，lcd屏幕状态，0--未点亮，1--点亮
-
-volatile ON_OFF_FLAG temp_on_off[16];  //继电器的开关
-
+// volatile u8 flag_is_lcd_screen_on = 0; // 标志位，lcd屏幕状态，0--未点亮，1--点亮
+ 
+volatile u8 sequencer_status = SEQUENCER_STATUS_NONE;
 volatile SEQUENCER_T  sequencers;
 
 /**

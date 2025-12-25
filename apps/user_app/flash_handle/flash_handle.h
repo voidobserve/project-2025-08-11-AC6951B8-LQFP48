@@ -3,12 +3,16 @@
 
 #include "includes.h"
 #include "../../../apps/user_app/sequencer/sequencer.h"
+#include "user_schedule.h"
+
 
 #pragma pack (1)
 typedef struct
 {
     unsigned char header;           //头部 判断数据是否第一次写入  
     SEQUENCER_T seq_save; 
+
+    weekly_schedule_t weekly_schedule;
 }save_flash_t;
 
 #pragma pack ()

@@ -2,24 +2,24 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Release" />
+	<File name="apps\soundbox\app_main.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="0" topLine="9" />
+		</Cursor>
+	</File>
+	<File name="cpu\br23\uart_test.c" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="55780" topLine="1883" />
+		</Cursor>
+	</File>
 	<File name="include_lib\system\os\FreeRTOS\pi32v2\portmacro.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="4506" topLine="89" />
 		</Cursor>
 	</File>
-	<File name="apps\soundbox\board\br23\board_ac695x_demo\board_ac695x_demo.c" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="include_lib\system\init.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="498" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="apps\user_app\user_schedule\user_schedule.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="666" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="include_lib\system\generic\atomic.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="224" topLine="2" />
+			<Cursor1 position="205" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="apps\soundbox\common\init.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -27,9 +27,74 @@
 			<Cursor1 position="3436" topLine="136" />
 		</Cursor>
 	</File>
+	<File name="apps\user_app\user_driver\user_sys_time.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="0" topLine="34" />
+		</Cursor>
+	</File>
+	<File name="apps\user_app\instruction_handle\instruction_handler_func.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="420" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="include_lib\media\media_develop\media\cpu\br23\asm\dac.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2482" topLine="67" />
+		</Cursor>
+	</File>
+	<File name="apps\user_app\user_config.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="221" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="apps\user_app\user_driver\relay_handle.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1193" topLine="34" />
+		</Cursor>
+	</File>
+	<File name="include_lib\system\timer.h" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="9800" topLine="283" />
+		</Cursor>
+	</File>
+	<File name="apps\soundbox\board\br23\board_ac695x_demo\board_ac695x_demo.c" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="498" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="cpu\br23\audio_config.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="113" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="apps\user_app\sequencer\sequencer.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1510" topLine="44" />
+		</Cursor>
+	</File>
+	<File name="apps\user_app\ad_key\user_ad_key.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="17" topLine="36" />
+		</Cursor>
+	</File>
+	<File name="apps\user_app\user_main_task.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="247" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="apps\soundbox\task_manager\rtc\alarm_api.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="24529" topLine="916" />
+		</Cursor>
+	</File>
+	<File name="apps\soundbox\board\br23\board_ac695x_demo\board_ac695x_demo_cfg.h" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="50188" topLine="988" />
+		</Cursor>
+	</File>
 	<File name="apps\user_app\lcd\lcd1621.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="184" topLine="0" />
+			<Cursor1 position="4184" topLine="158" />
 		</Cursor>
 	</File>
 	<File name="apps\soundbox\include\app_config.h" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -42,19 +107,9 @@
 			<Cursor1 position="1153" topLine="90" />
 		</Cursor>
 	</File>
-	<File name="apps\soundbox\task_manager\rtc\alarm_api.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="24529" topLine="916" />
-		</Cursor>
-	</File>
 	<File name="include_lib\system\device\adkey.h" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="922" topLine="38" />
-		</Cursor>
-	</File>
-	<File name="include_lib\media\media_develop\media\cpu\br23\asm\dac.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="2482" topLine="67" />
 		</Cursor>
 	</File>
 	<File name="apps\soundbox\include\common\app_common.h" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -62,14 +117,9 @@
 			<Cursor1 position="190" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="apps\user_app\flash_handle\flash_handle.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="include_lib\system\sys_time.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="175" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="apps\user_app\user_main_task.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="247" topLine="0" />
+			<Cursor1 position="208" topLine="2" />
 		</Cursor>
 	</File>
 	<File name="apps\common\config\include\bt_profile_cfg.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -77,24 +127,14 @@
 			<Cursor1 position="1353" topLine="40" />
 		</Cursor>
 	</File>
-	<File name="include_lib\system\timer.h" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="apps\user_app\lcd\lcd1621.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="9800" topLine="283" />
+			<Cursor1 position="15392" topLine="598" />
 		</Cursor>
 	</File>
-	<File name="apps\user_app\user_config.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="include_lib\system\generic\atomic.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="221" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="include_lib\system\wait.h" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="57" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="apps\soundbox\board\br23\board_ac695x_demo\board_ac695x_demo_cfg.h" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="48672" topLine="972" />
+			<Cursor1 position="224" topLine="2" />
 		</Cursor>
 	</File>
 	<File name="include_lib\driver\cpu\br23\asm\uart_dev.h" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -102,54 +142,19 @@
 			<Cursor1 position="629" topLine="3" />
 		</Cursor>
 	</File>
-	<File name="cpu\br23\uart_test.c" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="apps\user_app\user_schedule\user_schedule.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="55780" topLine="1883" />
+			<Cursor1 position="666" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="apps\soundbox\app_main.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="include_lib\system\wait.h" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="0" topLine="9" />
+			<Cursor1 position="57" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="apps\user_app\user_driver\user_sys_time.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="apps\user_app\flash_handle\flash_handle.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="0" topLine="34" />
-		</Cursor>
-	</File>
-	<File name="cpu\br23\audio_config.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="113" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="apps\user_app\instruction_handle\instruction_handler_func.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="420" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="include_lib\system\init.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="205" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="apps\user_app\sequencer\sequencer.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1510" topLine="44" />
-		</Cursor>
-	</File>
-	<File name="include_lib\system\sys_time.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="208" topLine="2" />
-		</Cursor>
-	</File>
-	<File name="apps\user_app\lcd\lcd1621.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="15392" topLine="598" />
-		</Cursor>
-	</File>
-	<File name="apps\user_app\user_driver\relay_handle.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1193" topLine="34" />
+			<Cursor1 position="175" topLine="0" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>

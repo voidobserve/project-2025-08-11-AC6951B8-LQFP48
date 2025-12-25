@@ -1,6 +1,12 @@
 #include "user_sys_time.h"
 #include "alarm.h" 
 
+/*
+	存放当前要设置的系统时间，
+	进入设置系统时间前，要先获得当前时间，作为 cur_setting_sys_time 的值
+*/
+volatile user_sys_time_t cur_setting_sys_time = {0};
+
 /**
  * @brief 判断传入的时间是否合法（没有超出时间范围）
  *      注意：判断的时间不包括星期值

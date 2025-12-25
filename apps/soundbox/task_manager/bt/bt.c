@@ -474,7 +474,7 @@ void bt_function_select_init()
 #endif
 }
 
-extern u8 BT_CONNECT_STATE;
+// extern u8 BT_CONNECT_STATE;
 /*----------------------------------------------------------------------------*/
 /**@brief    蓝牙模式协议栈对应状态处理函数
    @param    bt:事件
@@ -518,13 +518,13 @@ static int bt_connction_status_event_handler(struct bt_event* bt)
     case BT_STATUS_FIRST_CONNECTED:
         log_info("BT_STATUS_CONNECTED\n");
         bt_status_connect(bt);
-        BT_CONNECT_STATE = 1;
+        // BT_CONNECT_STATE = 1;
         break;
     case BT_STATUS_FIRST_DISCONNECT:
     case BT_STATUS_SECOND_DISCONNECT:
         log_info(" BT_STATUS_SECOND_DISCONNECT\n");
         bt_status_disconnect(bt);
-        BT_CONNECT_STATE = 0;
+        // BT_CONNECT_STATE = 0;
         break;
     case BT_STATUS_PHONE_INCOME:
         log_info("BT_STATUS_PHONE_INCOME\n");
@@ -892,7 +892,7 @@ int bt_background_event_handler(struct sys_event* event)
 // #include "lcd1621.h"
 #include "../../../../apps/user_app/user_config.h"
 // #include "../../../../apps/user_app/sequencer/sequencer.h" 
-extern u8 lcd_now_state;
+// extern u8 lcd_now_state;
 // extern void adkey_master_on_off(void);
 // extern void ad_key_event_handle(int keyevent);
 extern void adkey_16way_long(int keyevent);
@@ -929,28 +929,28 @@ int bt_key_event_handler(struct sys_event* event)
 
         // case  KEY_MUSIC_PP:
     case  KEY9_AD_CLICK:
-        if (lcd_now_state == show_power)
-        {
-            log_info("   KEY_MUSIC_PP  \n");
-            bt_key_music_pp();
-        }
+        // if (lcd_now_state == show_power)
+        // {
+        //     log_info("   KEY_MUSIC_PP  \n");
+        //     bt_key_music_pp();
+        // }
 
         break;
         // case  KEY_MUSIC_PREV:
     case  KEY8_AD_CLICK:
-        if (lcd_now_state == show_power)
-        {
-            log_info("    KEY_MUSIC_PREV \n");
-            bt_key_music_prev();
-        }
+        // if (lcd_now_state == show_power)
+        // {
+        //     log_info("    KEY_MUSIC_PREV \n");
+        //     bt_key_music_prev();
+        // }
         break;
         // case  KEY_MUSIC_NEXT:
     case  KEY10_AD_CLICK:
-        if (lcd_now_state == show_power)
-        {
-            log_info("    KEY_MUSIC_NEXT \n");
-            bt_key_music_next();
-        }
+        // if (lcd_now_state == show_power)
+        // {
+        //     log_info("    KEY_MUSIC_NEXT \n");
+        //     bt_key_music_next();
+        // }
         break;
         //-----------------------------------------------------------------------------------
 

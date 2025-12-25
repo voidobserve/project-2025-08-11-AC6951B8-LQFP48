@@ -25,6 +25,9 @@
 #include "adkey.h"
 
 #include "../../../../apps/user_app/sequencer/sequencer.h"
+#include "user_io_key.h"
+#include "user_ad_key.h"
+
 #if TCFG_APP_SLEEP_EN
 
 extern void app_status_handler(enum APP_STATUS status);
@@ -47,12 +50,9 @@ static int sleep_key_event_opr(struct sys_event* event)
 
     // log_i("key_event:%d \n", key_event);
 
-    printf("%s\n", __func__);
+    // printf("%s\n", __func__);
 
-
-    // if (key_event_type == KEY_DRIVER_TYPE_IO && // 是io按键事件
-    //     ((key_event == KEW_PROW_IO && sequencers.timeing_flag == 1) || // 总开关短按，并且此时没有在开关机的计时
-    //         (key_event == KEY_PROW_IO_LONG && sequencers.timeing_flag == 1))) // 总开关触发LONG事件，并且此时没有在开关机的计时
+#if 0
     if (key_event_type == KEY_DRIVER_TYPE_IO && // 是io按键事件
         (0 == is_sequencer_in_delay() &&   // 没有在开关机的计时
             (KEW_PROW_IO == key_event || KEY_PROW_IO_LONG == key_event))  // 总开关短按或长按事件触发，并且此时没有在开关机的计时
@@ -61,17 +61,31 @@ static int sleep_key_event_opr(struct sys_event* event)
         extern void iokey_master_on_off(void);
         iokey_master_on_off();
     }
+    else if (key_event == KEY_PROW_IO_LONG)
+    {
+
+    }
+#endif
+
+    if (key_event_type == KEY_DRIVER_TYPE_IO)
+    {
+        io_key_event_handle(key_event);
+    }
 
     // 如果是ad按键事件
     if (key_event_type == KEY_DRIVER_TYPE_AD)
     {
-        // if (sequencers.on_ff == DEVICE_ON && sequencers.timeing_flag == 1)
+#if 0
         if (DEVICE_ON == sequencers.on_ff && 0 == is_sequencer_in_delay())
-        { // 单击ad按键  开机状态且计时完成
-
+        { // 单击ad按键  开机状态且计时完成 
             extern void ad_key_event_handle(int keyevent);
             ad_key_event_handle(key_event);
         }
+#endif
+
+        // USER_TO_DO 需要在按键单机事件内部判断是否在开关机计时中，设备是否开机
+        printf("ad key event == %d\n", key_event);
+        ad_key_event_handle(key_event);
     }
 
     if (key_event_type == KEY_DRIVER_TYPE_IR)
@@ -188,7 +202,7 @@ void app_sleep_task()
 
     while (1) {
         //while循环一次会阻塞在这里等待msg
-        printf("sleep");
+        // printf("sleep task circle\n");
 
         // gpio_direction_output(pwoer_light, 1); //电源指示灯
         // check_relay_start();
