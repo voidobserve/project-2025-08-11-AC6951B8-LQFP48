@@ -25,17 +25,24 @@ typedef struct
     u8 sec;
     u8 weekday; // 星期：0 ~ 6；  0：星期日，1：星期一
 } user_sys_time_t;
+ 
 
-extern volatile user_sys_time_t cur_setting_sys_time;
+int is_leap_year(u16 year);
+// u8 is_user_time_valid(user_sys_time_t time);
+// u8 is_user_hour_valid(user_sys_time_t time);
+// u8 is_user_min_valid(user_sys_time_t time);
+// u8 is_user_sec_valid(user_sys_time_t time);
 
-u8 is_user_time_valid(user_sys_time_t time);
-u8 is_user_hour_valid(user_sys_time_t time);
-u8 is_user_min_valid(user_sys_time_t time);
-u8 is_user_sec_valid(user_sys_time_t time);
+int user_time_is_valid(user_sys_time_t time);
 
 int user_sys_time_get(user_sys_time_t* time);
 void user_sys_time_set(user_sys_time_t* time);
 
 void user_sys_time_init(void);
+
+void user_setting_time_param_add(void);
+void user_setting_time_param_sub(void);
+void user_setting_time_get(user_sys_time_t* time);
+void user_setting_time_set(user_sys_time_t* time);
 
 #endif

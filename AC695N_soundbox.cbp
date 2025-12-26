@@ -1760,9 +1760,6 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="apps/user_app/lcd/lcd1621.h" />
-		<Unit filename="apps/user_app/lcd/lcd_user_driver.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="apps/user_app/lcd/lcd_user_driver.h" />
 		<Unit filename="apps/user_app/sequencer/sequencer.c">
 			<Option compilerVar="CC" />

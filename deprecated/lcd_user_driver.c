@@ -10,6 +10,7 @@
 #include "lcd_user_driver.h"
 // #include "../../../../apps/soundbox/module/rgb_module.h"
 
+#if 0
 #if USER_UI_LCDSEG_ENABLE
 
 #define LCDSEG_DEBUG_ENABLE
@@ -1411,6 +1412,7 @@ void ui_show_animation(u8 task)
 
     __ui_show_animation();
 }
+#endif
 #endif
 
 #endif

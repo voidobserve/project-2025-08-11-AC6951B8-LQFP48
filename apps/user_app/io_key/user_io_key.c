@@ -41,40 +41,33 @@ void io_key_event_handle(int key_event)
             // 如果正在开关机的延时中，不处理该事件
 #if USER_DEBUG_ENABLE
             // USER_PRINTF_LINE();
-#endif
-
+#endif 
             return;
         }
 
-        //         if (sequencer_status != SEQUENCER_STATUS_NONE)
-        //         {
-        // #if USER_DEBUG_ENABLE
-        //             // USER_PRINTF_LINE();
-        // #endif
-        //             return;
-        //         }
-
-#if USER_DEBUG_ENABLE
-        // USER_PRINTF_LINE();
-#endif
-
-        printf("key event long\n");
+        // printf("io key event long\n");
 
         if (sequencer_status == SEQUENCER_STATUS_SETTING_SYS_TIME)
         {
             // 如果正在设置系统时间，则退出设置
             sequencer_status = SEQUENCER_STATUS_NONE;
 
-            // 退出之前，设置当前系统时间
-            user_sys_time_set(&cur_setting_sys_time);
-
+            // 保存设置的时间
+            user_sys_time_t user_sys_time;
+            user_setting_time_get(&user_sys_time);
+            user_sys_time_set(&user_sys_time); 
             printf("setting sys time exit\n");
         }
         else if (sequencer_status == SEQUENCER_STATUS_NONE)
             // else
         {
+            // 进入设置系统时间的模式
+
             sequencer_status = SEQUENCER_STATUS_SETTING_SYS_TIME;
-            user_sys_time_get(&cur_setting_sys_time);
+
+            user_sys_time_t user_sys_time;
+            user_sys_time_get(&user_sys_time);
+            user_setting_time_set(&user_sys_time);
             lcd_setting_sys_time_unit_change(TIME_UNIT_YEAR);
 
             printf("setting sys time begin\n");

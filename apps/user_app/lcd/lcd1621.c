@@ -7,6 +7,7 @@
 #if 1  // USER_UI_1621LCD_ENABLE
 
 #include "lcd1621.h"
+#include "adkey.h"
 
 #include "../../../apps/user_app/user_config.h"
 #include "user_sys_time.h"
@@ -56,8 +57,124 @@
 // u8 lcd1621_sendbuf[16] = { 0 };   ///2020-12-10 lcd1621传输中转
 
 
+// 定义SEG的脚位，从左到右数字顺序分别是1、2、3...6
+// 最多7个byte，不足7个byte的以0xFF结束
+u16 const num1[10][7] =
+{
+	{SEG_1A, SEG_1B, SEG_1C, SEG_1D, SEG_1E, SEG_1F, 0xFFFF}, //0
+	{SEG_1B, SEG_1C, 0xFFFF}, //1
+	{SEG_1A, SEG_1B,SEG_1E,SEG_1D,SEG_1G, 0xFFFF },
+	{SEG_1A, SEG_1B,SEG_1C,SEG_1D,SEG_1G, 0xFFFF },
+	{SEG_1B, SEG_1C,SEG_1F,SEG_1G, 0xFFFF },
+	{SEG_1A, SEG_1F,SEG_1C,SEG_1D,SEG_1G , 0xFFFF},
+	{SEG_1A, SEG_1F,SEG_1E,SEG_1D,SEG_1C,SEG_1G, 0xFFFF },
+	{SEG_1A, SEG_1B,SEG_1C, 0xFFFF},
+	{SEG_1A, SEG_1B,SEG_1C,SEG_1D,SEG_1E,SEG_1F,SEG_1G },
+	{SEG_1A, SEG_1B,SEG_1C,SEG_1D,SEG_1F,SEG_1G , 0xFFFF},//9
+};
 
-// volatile u8 cur_setting_time_unit = 
+u16 const num2[10][7] =
+{
+	{SEG_2A, SEG_2B, SEG_2C, SEG_2D, SEG_2E, SEG_2F,0xFFFF}, //0
+	{SEG_2B, SEG_2C, 0xFFFF}, //2
+	{SEG_2A, SEG_2B,SEG_2E,SEG_2D,SEG_2G , 0xFFFF},
+	{SEG_2A, SEG_2B,SEG_2C,SEG_2D,SEG_2G , 0xFFFF},
+	{SEG_2B, SEG_2C,SEG_2F,SEG_2G , 0xFFFF},
+	{SEG_2A, SEG_2F,SEG_2C,SEG_2D,SEG_2G , 0xFFFF},
+	{SEG_2A, SEG_2F,SEG_2E,SEG_2D,SEG_2C,SEG_2G, 0xFFFF },
+	{SEG_2A, SEG_2B,SEG_2C, 0xFFFF},
+	{SEG_2A, SEG_2B,SEG_2C,SEG_2D,SEG_2E,SEG_2F,SEG_2G },//8
+	{SEG_2A, SEG_2B,SEG_2C,SEG_2D,SEG_2F,SEG_2G, 0xFFFF },//9
+};
+
+u16 const num3[10][7] =
+{
+	{SEG_3A, SEG_3B, SEG_3C, SEG_3D, SEG_3E, SEG_3F,0xFFFF}, //0
+	{SEG_3B, SEG_3C, 0xFFFF}, //3
+	{SEG_3A, SEG_3B,SEG_3E,SEG_3D,SEG_3G, 0xFFFF },
+	{SEG_3A, SEG_3B,SEG_3C,SEG_3D,SEG_3G , 0xFFFF},
+	{SEG_3B, SEG_3C,SEG_3F,SEG_3G , 0xFFFF},
+	{SEG_3A, SEG_3F,SEG_3C,SEG_3D,SEG_3G , 0xFFFF},
+	{SEG_3A, SEG_3F,SEG_3E,SEG_3D,SEG_3C,SEG_3G, 0xFFFF },
+	{SEG_3A, SEG_3B,SEG_3C, 0xFFFF},
+	{SEG_3A, SEG_3B,SEG_3C,SEG_3D,SEG_3E,SEG_3F,SEG_3G },
+	{SEG_3A, SEG_3B,SEG_3C,SEG_3D,SEG_3F,SEG_3G, 0xFFFF },//9
+};
+
+u16 const num4[10][7] =
+{
+	{SEG_4A, SEG_4B, SEG_4C, SEG_4D, SEG_4E, SEG_4F,0xFFFF}, //0
+	{SEG_4B, SEG_4C, 0xFFFF},                                //1
+	{SEG_4A, SEG_4B,SEG_4E,SEG_4D,SEG_4G, 0xFFFF },          //2
+	{SEG_4A, SEG_4B,SEG_4C,SEG_4D,SEG_4G , 0xFFFF},
+	{SEG_4B, SEG_4C,SEG_4F,SEG_4G, 0xFFFF },
+	{SEG_4A, SEG_4F,SEG_4C,SEG_4D,SEG_4G , 0xFFFF},
+	{SEG_4A, SEG_4F,SEG_4E,SEG_4D,SEG_4C,SEG_4G , 0xFFFF},   //6
+	{SEG_4A, SEG_4B,SEG_4C, 0xFFFF},                         //7
+	{SEG_4A, SEG_4B,SEG_4C,SEG_4D,SEG_4E,SEG_4F,SEG_4G }, //8
+	{SEG_4A, SEG_4B,SEG_4C,SEG_4D,SEG_4F,SEG_4G , 0xFFFF},  //9
+};
+
+u16 const num5[10][7] =
+{
+	{SEG_5A, SEG_5B, SEG_5C, SEG_5D, SEG_5E, SEG_5F,0xFFFF}, //0
+	{SEG_5B, SEG_5C, 0xFFFF}, //5
+	{SEG_5A, SEG_5B,SEG_5E,SEG_5D,SEG_5G, 0xFFFF },
+	{SEG_5A, SEG_5B,SEG_5C,SEG_5D,SEG_5G, 0xFFFF },
+	{SEG_5B, SEG_5C,SEG_5F,SEG_5G, 0xFFFF },
+	{SEG_5A, SEG_5F,SEG_5C,SEG_5D,SEG_5G, 0xFFFF },
+	{SEG_5A, SEG_5F,SEG_5E,SEG_5D,SEG_5C,SEG_5G, 0xFFFF },
+	{SEG_5A, SEG_5B,SEG_5C, 0xFFFF},
+	{SEG_5A, SEG_5B,SEG_5C,SEG_5D,SEG_5E,SEG_5F,SEG_5G },
+	{SEG_5A, SEG_5B,SEG_5C,SEG_5D,SEG_5F,SEG_5G , 0xFFFF},//9
+};
+
+u16 const num6[10][7] =
+{
+	{SEG_6A, SEG_6B, SEG_6C, SEG_6D, SEG_6E, SEG_6F,0xFFFF}, //0
+	{SEG_6B, SEG_6C, 0xFFFF}, //6
+	{SEG_6A, SEG_6B, SEG_6E, SEG_6D, SEG_6G, 0xFFFF },
+	{SEG_6A, SEG_6B, SEG_6C, SEG_6D, SEG_6G, 0xFFFF},
+	{SEG_6B, SEG_6C, SEG_6F, SEG_6G, 0xFFFF},
+	{SEG_6A, SEG_6F, SEG_6C, SEG_6D, SEG_6G, 0xFFFF},
+	{SEG_6A, SEG_6F, SEG_6E, SEG_6D, SEG_6C,SEG_6G , 0xFFFF},
+	{SEG_6A, SEG_6B, SEG_6C, 0xFFFF},
+	{SEG_6A, SEG_6B, SEG_6C, SEG_6D, SEG_6E,SEG_6F,SEG_6G },
+	{SEG_6A, SEG_6B, SEG_6C, SEG_6D, SEG_6F,SEG_6G , 0xFFFF},//9
+};
+
+u16 const num7[10][7] =
+{
+	{SEG_7A, SEG_7B, SEG_7C, SEG_7D, SEG_7E, SEG_7F,0xFFFF}, //0
+	{SEG_7B, SEG_7C, 0xFFFF}, //6
+	{SEG_7A, SEG_7B, SEG_7E, SEG_7D, SEG_7G, 0xFFFF },
+	{SEG_7A, SEG_7B, SEG_7C, SEG_7D, SEG_7G, 0xFFFF},
+	{SEG_7B, SEG_7C, SEG_7F, SEG_7G, 0xFFFF},
+	{SEG_7A, SEG_7F, SEG_7C, SEG_7D, SEG_7G, 0xFFFF},
+	{SEG_7A, SEG_7F, SEG_7E, SEG_7D, SEG_7C,SEG_7G , 0xFFFF},
+	{SEG_7A, SEG_7B, SEG_7C, 0xFFFF},
+	{SEG_7A, SEG_7B, SEG_7C, SEG_7D, SEG_7E,SEG_7F,SEG_7G },
+	{SEG_7A, SEG_7B, SEG_7C, SEG_7D, SEG_7F,SEG_7G , 0xFFFF},//9
+};
+
+/*
+	存放第一位数码管显示对应符号的表格
+	顺序：第一位数码管 第二位数码管 第三位数码管
+		第四位 第五位 第六位 第七位
+
+	设置继电器的定时计划时，
+	第一位数码管需要显示的字符：
+*/
+const u16 seg1_show_relay_schedule_table[][7] =
+{
+	{SEG_1A, SEG_1B, SEG_1E, SEG_1F, SEG_1G }, // 数码管显示 大写P/小写p
+	{SEG_1A, SEG_1E, SEG_1F, SEG_1G }, // 数码管显示 大写F
+};
+
+
+volatile unsigned char  voltage_array[3] = { 0 }; // 存放要显示的电压
+volatile unsigned char dis_data[32]; // 显存
+
 
 void delay_lcd(u8 n)
 {
@@ -172,24 +289,24 @@ void lcd1621_value_set(u8* buff, u8 len)
 
 }
 
-/**
- * @brief 立即刷新lcd显示，把缓冲区的数据都发送给lcd驱动ic
- *		注意，不能在外部调用强制刷新，会导致数据冲突，lcd任务是定时器调用
- *
- */
-void lcd_1621_refresh(void)
-{
-	if (sequencer_status == SEQUENCER_STATUS_SETTING_SYS_TIME)
-	{
-		lcd_setting_sys_time_animation();
-	}
+// /**
+//  * @brief 立即刷新lcd显示，把缓冲区的数据都发送给lcd驱动ic
+//  *		注意，不能在外部调用强制刷新，会导致数据冲突，lcd任务是定时器调用
+//  *
+//  */
+// void lcd_1621_refresh(void)
+// {
+// 	if (sequencer_status == SEQUENCER_STATUS_SETTING_SYS_TIME)
+// 	{
+// 		lcd_setting_sys_time_animation();
+// 	}
 
-	lcd1621_write_data(dis_data, 16); // 将lcd显示缓冲区的数据发送给屏幕驱动ic
-}
+// 	lcd1621_write_data(dis_data, 16); // 将lcd显示缓冲区的数据发送给屏幕驱动ic
+// }
 
 
 // u8 display_data[16] = { 0 };
-#include "adkey.h"
+
 void lcd1621_init(void)
 {
 	// LCD1621_IO_INIT();
@@ -205,116 +322,30 @@ void lcd1621_init(void)
 	// gpio_direction_output(lcd_light, 1); // 打开背光 -- 测试时使用
 }
 
-volatile unsigned char dis_data[32];
-// 定义SEG的脚位，从左到右数字顺序分别是1、2、3...6
-// 最多7个byte，不足7个byte的以0xFF结束
-u16 const num1[10][7] =
-{
-	{SEG_1A, SEG_1B, SEG_1C, SEG_1D, SEG_1E, SEG_1F, 0xFFFF}, //0
-	{SEG_1B, SEG_1C, 0xFFFF}, //1
-	{SEG_1A, SEG_1B,SEG_1E,SEG_1D,SEG_1G, 0xFFFF },
-	{SEG_1A, SEG_1B,SEG_1C,SEG_1D,SEG_1G, 0xFFFF },
-	{SEG_1B, SEG_1C,SEG_1F,SEG_1G, 0xFFFF },
-	{SEG_1A, SEG_1F,SEG_1C,SEG_1D,SEG_1G , 0xFFFF},
-	{SEG_1A, SEG_1F,SEG_1E,SEG_1D,SEG_1C,SEG_1G, 0xFFFF },
-	{SEG_1A, SEG_1B,SEG_1C, 0xFFFF},
-	{SEG_1A, SEG_1B,SEG_1C,SEG_1D,SEG_1E,SEG_1F,SEG_1G },
-	{SEG_1A, SEG_1B,SEG_1C,SEG_1D,SEG_1F,SEG_1G , 0xFFFF},//9
-};
-
-u16 const num2[10][7] =
-{
-	{SEG_2A, SEG_2B, SEG_2C, SEG_2D, SEG_2E, SEG_2F,0xFFFF}, //0
-	{SEG_2B, SEG_2C, 0xFFFF}, //2
-	{SEG_2A, SEG_2B,SEG_2E,SEG_2D,SEG_2G , 0xFFFF},
-	{SEG_2A, SEG_2B,SEG_2C,SEG_2D,SEG_2G , 0xFFFF},
-	{SEG_2B, SEG_2C,SEG_2F,SEG_2G , 0xFFFF},
-	{SEG_2A, SEG_2F,SEG_2C,SEG_2D,SEG_2G , 0xFFFF},
-	{SEG_2A, SEG_2F,SEG_2E,SEG_2D,SEG_2C,SEG_2G, 0xFFFF },
-	{SEG_2A, SEG_2B,SEG_2C, 0xFFFF},
-	{SEG_2A, SEG_2B,SEG_2C,SEG_2D,SEG_2E,SEG_2F,SEG_2G },//8
-	{SEG_2A, SEG_2B,SEG_2C,SEG_2D,SEG_2F,SEG_2G, 0xFFFF },//9
-};
-
-u16 const num3[10][7] =
-{
-	{SEG_3A, SEG_3B, SEG_3C, SEG_3D, SEG_3E, SEG_3F,0xFFFF}, //0
-	{SEG_3B, SEG_3C, 0xFFFF}, //3
-	{SEG_3A, SEG_3B,SEG_3E,SEG_3D,SEG_3G, 0xFFFF },
-	{SEG_3A, SEG_3B,SEG_3C,SEG_3D,SEG_3G , 0xFFFF},
-	{SEG_3B, SEG_3C,SEG_3F,SEG_3G , 0xFFFF},
-	{SEG_3A, SEG_3F,SEG_3C,SEG_3D,SEG_3G , 0xFFFF},
-	{SEG_3A, SEG_3F,SEG_3E,SEG_3D,SEG_3C,SEG_3G, 0xFFFF },
-	{SEG_3A, SEG_3B,SEG_3C, 0xFFFF},
-	{SEG_3A, SEG_3B,SEG_3C,SEG_3D,SEG_3E,SEG_3F,SEG_3G },
-	{SEG_3A, SEG_3B,SEG_3C,SEG_3D,SEG_3F,SEG_3G, 0xFFFF },//9
-};
-
-u16 const num4[10][7] =
-{
-	{SEG_4A, SEG_4B, SEG_4C, SEG_4D, SEG_4E, SEG_4F,0xFFFF}, //0
-	{SEG_4B, SEG_4C, 0xFFFF},                                //1
-	{SEG_4A, SEG_4B,SEG_4E,SEG_4D,SEG_4G, 0xFFFF },          //2
-	{SEG_4A, SEG_4B,SEG_4C,SEG_4D,SEG_4G , 0xFFFF},
-	{SEG_4B, SEG_4C,SEG_4F,SEG_4G, 0xFFFF },
-	{SEG_4A, SEG_4F,SEG_4C,SEG_4D,SEG_4G , 0xFFFF},
-	{SEG_4A, SEG_4F,SEG_4E,SEG_4D,SEG_4C,SEG_4G , 0xFFFF},   //6
-	{SEG_4A, SEG_4B,SEG_4C, 0xFFFF},                         //7
-	{SEG_4A, SEG_4B,SEG_4C,SEG_4D,SEG_4E,SEG_4F,SEG_4G }, //8
-	{SEG_4A, SEG_4B,SEG_4C,SEG_4D,SEG_4F,SEG_4G , 0xFFFF},  //9
-};
-
-u16 const num5[10][7] =
-{
-	{SEG_5A, SEG_5B, SEG_5C, SEG_5D, SEG_5E, SEG_5F,0xFFFF}, //0
-	{SEG_5B, SEG_5C, 0xFFFF}, //5
-	{SEG_5A, SEG_5B,SEG_5E,SEG_5D,SEG_5G, 0xFFFF },
-	{SEG_5A, SEG_5B,SEG_5C,SEG_5D,SEG_5G, 0xFFFF },
-	{SEG_5B, SEG_5C,SEG_5F,SEG_5G, 0xFFFF },
-	{SEG_5A, SEG_5F,SEG_5C,SEG_5D,SEG_5G, 0xFFFF },
-	{SEG_5A, SEG_5F,SEG_5E,SEG_5D,SEG_5C,SEG_5G, 0xFFFF },
-	{SEG_5A, SEG_5B,SEG_5C, 0xFFFF},
-	{SEG_5A, SEG_5B,SEG_5C,SEG_5D,SEG_5E,SEG_5F,SEG_5G },
-	{SEG_5A, SEG_5B,SEG_5C,SEG_5D,SEG_5F,SEG_5G , 0xFFFF},//9
-};
-
-u16 const num6[10][7] =
-{
-	{SEG_6A, SEG_6B, SEG_6C, SEG_6D, SEG_6E, SEG_6F,0xFFFF}, //0
-	{SEG_6B, SEG_6C, 0xFFFF}, //6
-	{SEG_6A, SEG_6B, SEG_6E, SEG_6D, SEG_6G, 0xFFFF },
-	{SEG_6A, SEG_6B, SEG_6C, SEG_6D, SEG_6G, 0xFFFF},
-	{SEG_6B, SEG_6C, SEG_6F, SEG_6G, 0xFFFF},
-	{SEG_6A, SEG_6F, SEG_6C, SEG_6D, SEG_6G, 0xFFFF},
-	{SEG_6A, SEG_6F, SEG_6E, SEG_6D, SEG_6C,SEG_6G , 0xFFFF},
-	{SEG_6A, SEG_6B, SEG_6C, 0xFFFF},
-	{SEG_6A, SEG_6B, SEG_6C, SEG_6D, SEG_6E,SEG_6F,SEG_6G },
-	{SEG_6A, SEG_6B, SEG_6C, SEG_6D, SEG_6F,SEG_6G , 0xFFFF},//9
-};
-
-u16 const num7[10][7] =
-{
-	{SEG_7A, SEG_7B, SEG_7C, SEG_7D, SEG_7E, SEG_7F,0xFFFF}, //0
-	{SEG_7B, SEG_7C, 0xFFFF}, //6
-	{SEG_7A, SEG_7B, SEG_7E, SEG_7D, SEG_7G, 0xFFFF },
-	{SEG_7A, SEG_7B, SEG_7C, SEG_7D, SEG_7G, 0xFFFF},
-	{SEG_7B, SEG_7C, SEG_7F, SEG_7G, 0xFFFF},
-	{SEG_7A, SEG_7F, SEG_7C, SEG_7D, SEG_7G, 0xFFFF},
-	{SEG_7A, SEG_7F, SEG_7E, SEG_7D, SEG_7C,SEG_7G , 0xFFFF},
-	{SEG_7A, SEG_7B, SEG_7C, 0xFFFF},
-	{SEG_7A, SEG_7B, SEG_7C, SEG_7D, SEG_7E,SEG_7F,SEG_7G },
-	{SEG_7A, SEG_7B, SEG_7C, SEG_7D, SEG_7F,SEG_7G , 0xFFFF},//9
-};
 
 
+/*
+	存放第一位数码管显示对应符号的表示
 
-// 构造显存数据,d符合SEG_SET的规则
+	设置系统时间时，
+	第一位数码管需要显示的字符：
+*/
+// const u16 seg1_show_sys_time_table[][7] =
+// {
+// 	{SEG_1B, SEG_1C, SEG_1D, SEG_1F, SEG_1G, 0xFFFF}, // 数码管显示 小写y ，表示当前正在设置 年份
+// 	{SEG_1A, SEG_1B, SEG_1C, SEG_1D, SEG_1E, SEG_1F, 0xFFFF}, // 数码管显示 O ，表示当前正在设置 月份
+// 	{SEG_1B, SEG_1C, SEG_1D, SEG_1E, SEG_1G, 0xFFFF }, // 数码管显示 小写d ，表示当前正在设置 日期	
+// 	{SEG_1B, SEG_1C, SEG_1E, SEG_1F, SEG_1G, 0xFFFF},// 数码管显示 大写H ，表示当前正在设置 小时
+// 	{},// 数码管显示 小写t ，表示当前正在设置 分钟
+// }
+
+
+// 构造显存数据,d符合 SEG_SET 的规则
 void make_dis(u16 d)
 {
 	// printf("%04x",d);
 		//     第几个seg           第几个com
 	dis_data[d & SEG_MASK] |= ((d & COM_MASK) >> 4);
-
 }
 
 void clean_dis(u16 d)
@@ -331,12 +362,13 @@ void lcd1621_dispbuff_clr(void)
 		dis_data[i] = 0;
 	}
 }
+
 // num 第几个数字
 // dec显示的数字
 void make_num(unsigned char num, unsigned char dec)
 {
 	unsigned char i;
-	for (i = 0; i < 7; i++)
+	for (i = 0; i < 7; i++) // 七段数码管
 	{
 		if (num == 1)
 		{
@@ -379,28 +411,21 @@ void make_num(unsigned char num, unsigned char dec)
 			make_dis(num7[dec][i]);
 		}
 	}
-
 }
 
-
-
-u16 const alphabet_1[10][7] =
+/**
+ * @brief lcd 在 第一位 数码管显示字母
+ *
+ * @param alphabet_index 字母在表格 seg1_show_relay_schedule_table 中的索引
+ */
+void lcd_show_alphabet_in_seg_1(u8 alphabet_index)
 {
-	{SEG_1A, SEG_1B,SEG_1E,SEG_1F,SEG_1G, 0xFFFF }, //P
-	{SEG_1A, SEG_1D,SEG_1E,SEG_1F, 0xFFFF },        //C
-	{SEG_1A, SEG_1D,SEG_1E,SEG_1F,SEG_1G, 0xFFFF }, //E
-	{SEG_1A, SEG_1G,SEG_1E,SEG_1F, 0xFFFF },        //F 
-};
-
-void make_alphabet(u8 p)
-{
-	unsigned char i;
-	for (i = 0; i < 7; i++)
+	for (u8 i = 0; i < 7; i++)
 	{
-		make_dis(alphabet_1[p][i]);
+		make_dis(seg1_show_relay_schedule_table[alphabet_index][i]);
 	}
 }
-
+ 
 
 //开机时，显示轮廓
 void lcd_open_frame(void)
@@ -420,9 +445,9 @@ void lcd_open_frame(void)
 	// make_dis(SEG_X2);  // 锁符号的下半部分
 	// make_dis(SEG_X3); // 锁符号的上半部分
 
-	// 数字
-	make_num(1, 8); // 第一位数字，显示8
-	make_num(2, 8); // 第二位数字，显示8
+	// 数码管：
+	make_num(1, 8); // 第一位数码管，显示8
+	make_num(2, 8); // 第二位数码管，显示8
 	make_num(3, 8);
 	// make_num(4, 8); 
 	// make_num(5, 8); 
@@ -475,7 +500,6 @@ void lcd_show_relay_icon(u8 relay_index)
 	case 5:make_dis(SEG_6);break;
 	case 6:make_dis(SEG_7);break;
 	case 7:make_dis(SEG_8);break;
-
 	}
 }
 
@@ -573,7 +597,7 @@ void clean_num(unsigned char num)
 {
 	unsigned char i;
 
-	for (i = 0; i < 7; i++)
+	for (i = 0; i < 7; i++)// 七段数码管
 	{
 		if (num == 1)
 		{
@@ -603,55 +627,27 @@ void clean_num(unsigned char num)
 		{
 			clean_dis(clrbit(num7[8][i]));
 		}
-
 	}
-
 }
 
 
 
+void lcd_update_ac_voltage(void)
+{
+	// 交流电电压：
+	make_num(1, voltage_array[0]);
+	make_num(2, voltage_array[1]);
+	make_num(3, voltage_array[2]);
+}
 
-// u8 blink_f = 0; // 控制闪烁时间间隔的标志位
-// u16 blink_cnt = 0;
-// u8 lcd_now_state = set_sys_time;  // 上电默认设置系统时间
-// u8 lcd_now_state = show_power;  // 上电默认显示交流电电压
-extern u8 time_unit;
-extern u8 sys_time_unit;
-extern u8 split_open_time[8][4];
-extern u8 split_close_time[8][4];
-extern u8 chose_relays_num;
+void lcd_clear_ac_voltage(void)
+{
+	// 清除第一位~第三位数码管显示的内容
+	clean_num(1);
+	clean_num(2);
+	clean_num(3);
+}
 
-unsigned char voltage_array[3] = { 0 }; // 存放要显示的电压
-unsigned char  power_array[4] = { 0 }; // 存放要显示的功率
-
-u16 update_cnt = 0;
-
-// extern struct sys_time sys_current_time; 
-// extern struct sys_time sys_setting_time; 
-
-extern u8 temp_year[4];
-extern u8 temp_month[2];
-extern u8 temp_day[2];
-extern u8 temp_hour[2];
-extern u8 temp_min[2];
-extern u8 temp_sec[2];
-
-extern u8 set_countdown_open_year[8][4];
-extern u8 set_countdown_open_month[8][2];
-extern u8 set_countdown_open_day[8][2];
-extern u8 set_countdown_open_hour[8][2];
-extern u8 set_countdown_open_min[8][2];
-extern u8 set_countdown_open_sec[8][2];
-
-extern u8 set_countdown_close_year[8][4];
-extern u8 set_countdown_close_month[8][2];
-extern u8 set_countdown_close_day[8][2];
-extern u8 set_countdown_close_hour[8][2];
-extern u8 set_countdown_close_min[8][2];
-extern u8 set_countdown_close_sec[8][2];
-
-
-// u8 BT_CONNECT_STATE = 0;
 
 // lcd显示年份
 void lcd_update_year(const u16 year)
@@ -756,685 +752,10 @@ void lcd_clear_min(void)
 
 
 
-// 定义在设置系统时间期间，lcd动画使用到的各个变量
-typedef struct
-{
-	user_sys_time_t cur_setting_sys_time; // 当前正在设置的系统时间
-	time_unit_t cur_setting_time_unit; // 当前正在设置的时间单位
-	u16 blink_cnt; // 闪烁时间的计数值，控制每个一段时间闪烁一次要显示的、正在设置的系统时间
-	u8 blink_dir; // 闪烁方向，0：常亮，1：熄灭（不显示） 
-} lcd_setting_sys_time_t;
 
-volatile lcd_setting_sys_time_t lcd_setting_sys_time = { 0 };
 
-static volatile u16 lcd_setting_sys_time_blink_cnt = 0;
-static volatile u8 lcd_setting_sys_time_blink_dir = 0;
-static volatile u8 lcd_setting_sys_time_unit = TIME_UNIT_YEAR; // 存放正在设置的时间单位  
 
-void lcd_setting_sys_time_unit_change(time_unit_t time_unit)
-{
-	lcd_setting_sys_time_unit = time_unit;
-}
 
-void lcd_setting_sys_time_unit_get(time_unit_t* time_unit)
-{
-	*time_unit = lcd_setting_sys_time_unit;
-}
-
-// lcd显示系统时间动画，会不让时间闪烁，固定显示一段时间
-void lcd_setting_sys_time_animation_fix(void)
-{
-	// lcd_setting_sys_time.blink_cnt = 0;
-	// lcd_setting_sys_time.blink_dir = 0;
-
-	lcd_setting_sys_time_blink_cnt = 0;
-	lcd_setting_sys_time_blink_dir = 0;
-
-	// if (TIME_UNIT_YEAR == lcd_setting_sys_time_unit)
-	// {
-	// 	lcd_update_year(cur_setting_sys_time.year);
-	// }
-	// else if (TIME_UNIT_MONTH == lcd_setting_sys_time_unit ||
-	// 	TIME_UNIT_DAY == lcd_setting_sys_time_unit)
-	// {
-	// 	lcd_update_month(cur_setting_sys_time.month);
-	// 	lcd_update_day(cur_setting_sys_time.day);
-	// }
-	// else if (TIME_UNIT_HOUR == lcd_setting_sys_time_unit ||
-	// 	TIME_UNIT_MIN == lcd_setting_sys_time_unit)
-	// {
-	// 	lcd_update_hour(cur_setting_sys_time.hour);
-	// 	lcd_update_min(cur_setting_sys_time.min);
-	// }
-}
-
-void lcd_setting_sys_time_animation(void)
-{
-	// 如果正在设置系统时间
-	// 让正在设置的时间闪烁，1 ： 年 ，2：月-日，3：时：分
-
-	lcd_setting_sys_time_blink_cnt++;
-	// if (lcd_setting_sys_time_blink_cnt <= 50) // 调用时间10ms，那么这里的时间单位就是10ms
-	// {
-	// 	return;
-	// }
-
-	// lcd_setting_sys_time_blink_cnt = 0;
-	// lcd_setting_sys_time_blink_dir = !lcd_setting_sys_time_blink_dir;
-
-	if (lcd_setting_sys_time_blink_cnt >= 50)// 调用时间10ms，那么这里的时间单位就是10ms
-	{
-		lcd_setting_sys_time_blink_cnt = 0;
-		lcd_setting_sys_time_blink_dir = !lcd_setting_sys_time_blink_dir;
-	}
-
-
-	if (TIME_UNIT_YEAR == lcd_setting_sys_time_unit)
-	{
-		if (0 == lcd_setting_sys_time_blink_dir)
-		{
-			lcd_clear_year(); // 需要先清除再写入数据，否则会有数据残留
-			lcd_update_year(cur_setting_sys_time.year);
-		}
-		else
-		{
-			lcd_clear_year();
-		}
-	}
-	else if (TIME_UNIT_MONTH == lcd_setting_sys_time_unit)
-	{
-		if (0 == lcd_setting_sys_time_blink_dir)
-		{
-			lcd_clear_month();
-			lcd_update_month(cur_setting_sys_time.month);
-		}
-		else
-		{
-			lcd_clear_month();
-		}
-
-		// 月份闪烁，但是日期保持不变
-		lcd_clear_day();
-		lcd_update_day(cur_setting_sys_time.day);
-	}
-	else if (TIME_UNIT_DAY == lcd_setting_sys_time_unit)
-	{
-		if (0 == lcd_setting_sys_time_blink_dir)
-		{
-			lcd_clear_day();
-			lcd_update_day(cur_setting_sys_time.day);
-		}
-		else
-		{
-			lcd_clear_day();
-		}
-
-		// 日期闪烁，但是月份保持不变
-		lcd_clear_month();
-		lcd_update_month(cur_setting_sys_time.month);
-	}
-	else if (TIME_UNIT_HOUR == lcd_setting_sys_time_unit)
-	{
-		if (0 == lcd_setting_sys_time_blink_dir)
-		{
-			lcd_clear_hour();
-			lcd_update_hour(cur_setting_sys_time.hour);
-		}
-		else
-		{
-			lcd_clear_hour();
-		}
-
-		// 小时闪烁，但是分钟保持不变
-		lcd_clear_min();
-		lcd_update_min(cur_setting_sys_time.min);
-	}
-	else if (TIME_UNIT_MIN == lcd_setting_sys_time_unit)
-	{
-		if (0 == lcd_setting_sys_time_blink_dir)
-		{
-			lcd_clear_min();
-			lcd_update_min(cur_setting_sys_time.min);
-		}
-		else
-		{
-			lcd_clear_min();
-		}
-
-		// 分钟闪烁，但是小时保持不变
-		lcd_clear_hour();
-		lcd_update_hour(cur_setting_sys_time.hour);
-	}
-	else if (TIME_UNIT_SEC == lcd_setting_sys_time_unit)
-	{
-
-	}
-}
-
-//  LCD屏显示处理  10ms执行一次
-void lcdseg_handle(void)
-{
-#if 0
-
-	if (sequencers.on_ff == DEVICE_ON)
-	{
-
-		blink_cnt++;
-
-		update_cnt += 10;   //更新电压，功率显示 10ms
-
-		if (blink_cnt == 30)  // 注意，这个变量在按键的单击处理也有使用的，修改==的条件，按键也需要修改
-		{
-			blink_cnt = 0;
-			blink_f = !blink_f;
-		}
-		else if (lcd_now_state == open_dev_time)
-		{
-			// 设置开机延时
-			// if (blink_f)
-			// {
-			// 	make_num(4, split_open_time[chose_relays_num][0]);
-			// 	make_num(5, split_open_time[chose_relays_num][1]);
-			// 	make_num(6, split_open_time[chose_relays_num][2]);
-			// 	make_num(7, split_open_time[chose_relays_num][3]);
-
-			// }
-			// else
-			// {
-			// 	if (time_unit == 0)   // 分 十位
-			// 	{
-			// 		clean_num(4);
-
-			// 	}
-			// 	else if (time_unit == 1)  // 分 个位
-			// 	{
-			// 		clean_num(5);
-
-			// 	}
-			// 	else if (time_unit == 2) // 秒 十位
-			// 	{
-			// 		clean_num(6);
-
-			// 	}
-			// 	else if (time_unit == 3)  // 秒 个位
-			// 	{
-			// 		clean_num(7);
-
-			// 	}
-			// }
-
-		}
-		// 设置关机延时
-		else if (lcd_now_state == close_dev_time)
-		{
-			// if (blink_f)
-			// {
-			// 	make_num(4, split_close_time[chose_relays_num][0]);
-			// 	make_num(5, split_close_time[chose_relays_num][1]);
-			// 	make_num(6, split_close_time[chose_relays_num][2]);
-			// 	make_num(7, split_close_time[chose_relays_num][3]);
-
-			// }
-			// else
-			// {
-			// 	if (time_unit == 0)   // 分 十位
-			// 	{
-			// 		clean_num(4);
-
-			// 	}
-			// 	else if (time_unit == 1)  // 分 个位
-			// 	{
-			// 		clean_num(5);
-
-			// 	}
-			// 	else if (time_unit == 2) // 秒 十位
-			// 	{
-			// 		clean_num(6);
-
-			// 	}
-			// 	else if (time_unit == 3)  // 秒 个位
-			// 	{
-			// 		clean_num(7);
-
-			// 	}
-			// }
-		}
-
-		/* 调系统时间 */
-		else if (lcd_now_state == set_sys_time)
-		{
-			if (blink_f)
-			{
-				clean_num(1);clean_num(2);clean_num(3);   //清
-				clean_num(4);clean_num(5);clean_num(6); clean_num(7); // 清屏
-				clean_dis(clrbit(SEG_S5)); clean_dis(clrbit(SEG_S6)); // 关闭 “V” "W" 
-
-#if 0
-				//显示年份
-				if (sys_time_unit < 4)
-				{
-					clean_dis(clrbit(SEG_S3));clean_dis(clrbit(SEG_S4)); // 请 ' " 
-					make_num(4, temp_year[0]);
-					make_num(5, temp_year[1]);
-					make_num(6, temp_year[2]);
-					make_num(7, temp_year[3]);
-				}
-				else if (sys_time_unit >= 4 && sys_time_unit < 8)
-				{
-					//月
-					make_num(4, temp_month[0]);
-					make_num(5, temp_month[1]);
-					//日
-					make_num(6, temp_day[0]);
-					make_num(7, temp_day[1]);
-
-				}
-				else
-				{
-
-					make_dis(SEG_S3);make_dis(SEG_S4);  // 显示 “ " ”  “ ' ”
-					// 时
-					make_num(2, temp_hour[0]);
-					make_num(3, temp_hour[1]);
-					// 分
-					make_num(4, temp_min[0]);
-					make_num(5, temp_min[1]);
-					// 秒
-					make_num(6, temp_sec[0]);
-					make_num(7, temp_sec[1]);
-
-				}
-#endif
-
-			}
-			else
-			{
-#if 0
-				if (sys_time_unit == 0)
-				{
-					clean_num(4);
-				}
-				else if (sys_time_unit == 1)
-				{
-					clean_num(5);
-
-				}
-				else if (sys_time_unit == 2)
-				{
-					clean_num(6);
-
-				}
-				else if (sys_time_unit == 3)
-				{
-					clean_num(7);
-
-				}
-				else if (sys_time_unit == 4)
-				{
-					clean_num(4);
-
-				}
-				else if (sys_time_unit == 5)
-				{
-					clean_num(5);
-
-				}
-				else if (sys_time_unit == 6)
-				{
-					clean_num(6);
-
-				}
-				else if (sys_time_unit == 7)
-				{
-					clean_num(7);
-
-				}
-				else if (sys_time_unit == 8)
-				{
-					clean_num(2);
-
-				}
-				else if (sys_time_unit == 9)
-				{
-					clean_num(3);
-
-				}
-				else if (sys_time_unit == 10)
-				{
-					clean_num(4);
-
-				}
-				else if (sys_time_unit == 11)
-				{
-					clean_num(5);
-
-				}
-				else if (sys_time_unit == 12)
-				{
-					clean_num(6);
-
-				}
-				else if (sys_time_unit == 13)
-				{
-					clean_num(7);
-
-				}
-#endif
-
-			}
-
-
-		}
-		/* 调定时开继电器  */
-		else if (lcd_now_state == timing_relay_open)
-		{
-			if (blink_f)
-			{
-
-				clean_num(4);clean_num(5);clean_num(6); clean_num(7);  // 清屏
-				clean_dis(clrbit(SEG_S5)); clean_dis(clrbit(SEG_S6)); // 关闭“V”"W""
-				// //显示年份
-				// if (time_unit < 4)
-				// {
-				// 	clean_dis(clrbit(SEG_S3));clean_dis(clrbit(SEG_S4)); // 请 ' " 
-				// 	make_num(4, set_countdown_open_year[chose_relays_num][0]);
-				// 	make_num(5, set_countdown_open_year[chose_relays_num][1]);
-				// 	make_num(6, set_countdown_open_year[chose_relays_num][2]);
-				// 	make_num(7, set_countdown_open_year[chose_relays_num][3]);
-				// }
-				// else if (time_unit >= 4 && time_unit < 8)
-				// {
-				// 	//月
-				// 	make_num(4, set_countdown_open_month[chose_relays_num][0]);
-				// 	make_num(5, set_countdown_open_month[chose_relays_num][1]);
-				// 	//日
-				// 	make_num(6, set_countdown_open_day[chose_relays_num][0]);
-				// 	make_num(7, set_countdown_open_day[chose_relays_num][1]);
-
-				// }
-				// else
-				// {
-
-				// 	make_dis(SEG_S3);make_dis(SEG_S4);  // 显示 “ " ”  “ ' ”
-				// 	// 时
-				// 	make_num(2, set_countdown_open_hour[chose_relays_num][0]);
-				// 	make_num(3, set_countdown_open_hour[chose_relays_num][1]);
-				// 	// 分
-				// 	make_num(4, set_countdown_open_min[chose_relays_num][0]);
-				// 	make_num(5, set_countdown_open_min[chose_relays_num][1]);
-				// 	// 秒
-				// 	make_num(6, set_countdown_open_sec[chose_relays_num][0]);
-				// 	make_num(7, set_countdown_open_sec[chose_relays_num][1]);
-
-				// }
-
-			}
-			else
-			{
-				// if (time_unit == 0)
-				// {
-				// 	clean_num(4);
-				// }
-				// else if (time_unit == 1)
-				// {
-				// 	clean_num(5);
-
-				// }
-				// else if (time_unit == 2)
-				// {
-				// 	clean_num(6);
-
-				// }
-				// else if (time_unit == 3)
-				// {
-				// 	clean_num(7);
-
-				// }
-				// else if (time_unit == 4)
-				// {
-				// 	clean_num(4);
-
-				// }
-				// else if (time_unit == 5)
-				// {
-				// 	clean_num(5);
-
-				// }
-				// else if (time_unit == 6)
-				// {
-				// 	clean_num(6);
-
-				// }
-				// else if (time_unit == 7)
-				// {
-				// 	clean_num(7);
-
-				// }
-				// else if (time_unit == 8)
-				// {
-				// 	clean_num(2);
-
-				// }
-				// else if (time_unit == 9)
-				// {
-				// 	clean_num(3);
-
-				// }
-				// else if (time_unit == 10)
-				// {
-				// 	clean_num(4);
-
-				// }
-				// else if (time_unit == 11)
-				// {
-				// 	clean_num(5);
-
-				// }
-				// else if (time_unit == 12)
-				// {
-				// 	clean_num(6);
-
-				// }
-				// else if (time_unit == 13)
-				// {
-				// 	clean_num(7);
-
-				// }
-
-			}
-
-		}
-		/* 调定时关继电器 */
-		else if (lcd_now_state == timing_relay_close)
-		{
-
-			// if (blink_f)
-			// {
-
-			// 	clean_num(4);clean_num(5);clean_num(6); clean_num(7);  // 清屏
-			// 	clean_dis(clrbit(SEG_S5)); clean_dis(clrbit(SEG_S6)); // 关闭“V”"W""
-			// 	//显示年份
-			// 	if (time_unit < 4)
-			// 	{
-			// 		clean_dis(clrbit(SEG_S3));clean_dis(clrbit(SEG_S4)); // 请 ' " 
-			// 		make_num(4, set_countdown_close_year[chose_relays_num][0]);
-			// 		make_num(5, set_countdown_close_year[chose_relays_num][1]);
-			// 		make_num(6, set_countdown_close_year[chose_relays_num][2]);
-			// 		make_num(7, set_countdown_close_year[chose_relays_num][3]);
-			// 	}
-			// 	else if (time_unit >= 4 && time_unit < 8)
-			// 	{
-			// 		//月
-			// 		make_num(4, set_countdown_close_month[chose_relays_num][0]);
-			// 		make_num(5, set_countdown_close_month[chose_relays_num][1]);
-			// 		//日
-			// 		make_num(6, set_countdown_close_day[chose_relays_num][0]);
-			// 		make_num(7, set_countdown_close_day[chose_relays_num][1]);
-
-			// 	}
-			// 	else
-			// 	{
-
-			// 		make_dis(SEG_S3);make_dis(SEG_S4);  // 显示 “ " ”  “ ' ”
-			// 		// 时
-			// 		make_num(2, set_countdown_close_hour[chose_relays_num][0]);
-			// 		make_num(3, set_countdown_close_hour[chose_relays_num][1]);
-			// 		// 分
-			// 		make_num(4, set_countdown_close_min[chose_relays_num][0]);
-			// 		make_num(5, set_countdown_close_min[chose_relays_num][1]);
-			// 		// 秒
-			// 		make_num(6, set_countdown_close_sec[chose_relays_num][0]);
-			// 		make_num(7, set_countdown_close_sec[chose_relays_num][1]);
-
-			// 	}
-
-			// }
-			// else
-			// {
-			// 	if (time_unit == 0)
-			// 	{
-			// 		clean_num(4);
-			// 	}
-			// 	else if (time_unit == 1)
-			// 	{
-			// 		clean_num(5);
-
-			// 	}
-			// 	else if (time_unit == 2)
-			// 	{
-			// 		clean_num(6);
-
-			// 	}
-			// 	else if (time_unit == 3)
-			// 	{
-			// 		clean_num(7);
-
-			// 	}
-			// 	else if (time_unit == 4)
-			// 	{
-			// 		clean_num(4);
-
-			// 	}
-			// 	else if (time_unit == 5)
-			// 	{
-			// 		clean_num(5);
-
-			// 	}
-			// 	else if (time_unit == 6)
-			// 	{
-			// 		clean_num(6);
-
-			// 	}
-			// 	else if (time_unit == 7)
-			// 	{
-			// 		clean_num(7);
-
-			// 	}
-			// 	else if (time_unit == 8)
-			// 	{
-			// 		clean_num(2);
-
-			// 	}
-			// 	else if (time_unit == 9)
-			// 	{
-			// 		clean_num(3);
-
-			// 	}
-			// 	else if (time_unit == 10)
-			// 	{
-			// 		clean_num(4);
-
-			// 	}
-			// 	else if (time_unit == 11)
-			// 	{
-			// 		clean_num(5);
-
-			// 	}
-			// 	else if (time_unit == 12)
-			// 	{
-			// 		clean_num(6);
-
-			// 	}
-			// 	else if (time_unit == 13)
-			// 	{
-			// 		clean_num(7);
-
-			// 	}
-
-			// }
-		}
-
-
-
-	}
-
-	// if (BT_CONNECT_STATE)
-	// {
-	// 	make_dis(SEG_S1); // "IR"
-	// }
-	// else
-	// {
-	// 	clean_dis(clrbit(SEG_S1));
-	// }
-
-#endif
-
-#if 0 // 测试显示屏的功能是否正常
-	lcd_open_frame(); // 测试用 -- 打开背光，显示边框
-	check_lcd_display(); // 测试用 
-	lcd1621_write_data(dis_data, 16);
-	// printf("test \n");
-#endif
-
-#if 1
-	if (sequencer_status == SEQUENCER_STATUS_NONE)
-	{
-		// 上电期间，一直显示LCD，显示交流电电压：
-		clean_num(1);clean_num(2);clean_num(3);   // 清显示数字的bit1 ~ bit3 
-		clean_num(4);clean_num(5);clean_num(6); clean_num(7);  // 清屏
-		clean_dis(clrbit(SEG_S3));clean_dis(clrbit(SEG_S4)); // 不显示： ' " 
-		clean_dis(clrbit(SEG_S6)); // 关闭"W"
-		// 交流电电压：
-		make_num(1, voltage_array[0]);
-		make_num(2, voltage_array[1]);
-		make_num(3, voltage_array[2]);
-
-		// USER_TO_DO 后面需要显示年份xx时间，再切换到显示月日xx时间，最后切换到显示时分
-		user_sys_time_t user_sys_time;
-		user_sys_time_get(&user_sys_time);
-		lcd_update_year(user_sys_time.year);
-	}
-	else if (sequencer_status == SEQUENCER_STATUS_SETTING_SYS_TIME)
-	{
-		// clean_num(5);clean_num(6); clean_num(7);  // 清屏
-		lcd_setting_sys_time_animation();
-	}
-
-#if 0
-	{
-		static u16 cnt = 0;
-		cnt++;
-
-		if (cnt < 100)
-		{
-			lcd_update_year(2014);
-		}
-		else if (cnt < 200)
-		{
-			lcd_clear_year();
-		}
-		else
-		{
-			cnt = 0;
-		}
-	}
-#endif
-
-	lcd1621_write_data(dis_data, 16); // 将lcd显示缓冲区的数据发送给屏幕驱动ic
-	// lcd_1621_refresh();
-
-#endif
-}
 
 
 

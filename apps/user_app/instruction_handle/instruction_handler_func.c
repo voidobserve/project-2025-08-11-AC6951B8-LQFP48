@@ -207,7 +207,7 @@ int handle_set_sys_time(u8 sequencer_addr, user_sys_time_t time)
     }
 
     // 判断时间是否合法
-    if (!is_user_time_valid(time))
+    if (!user_time_is_valid(time))
     {
 #if USER_DEBUG_ENABLE
         printf("time invalid \n");

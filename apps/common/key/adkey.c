@@ -15,7 +15,7 @@ u8 ad_get_key2_value(void);
 //按键驱动扫描参数列表
 #define AD_KEY_SCAN_TIMES 10 // 按键扫描频率, 单位: ms
 #define AD_KEY_SCAN_LONG_TIMES (u32)1500 // ad 按键长按判定时间
-#define AD_KEY_SCAN_HOLD_TIMES (u32)150 // ad 按键HOLD判定时间
+#define AD_KEY_SCAN_HOLD_TIMES (u32)150 // ad 按键HOLD判定时间  
 struct key_driver_para adkey_scan_para = {
     .scan_time 	  	  = AD_KEY_SCAN_TIMES,				//按键扫描频率, 单位: ms
     .last_key 		  = NO_KEY,  		//上一次get_value按键值, 初始化为NO_KEY;

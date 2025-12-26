@@ -10,58 +10,58 @@
  ***********************************************************/
 #if TCFG_APP_BT_EN
 const u16 bt_key_ad_table[KEY_AD_NUM_MAX][KEY_EVENT_MAX] = {
-     //单击              //长按              //hold             //抬起           //双击             //三击
-    [0] = {    //键值0
-        KEY0_AD_CLICK,	    KEY0_AD_LONG,		KEY_POWER_ON_HOLD,	KEY_NULL,   	KEY_NULL,			KEY_NULL
-    },
-    [1] = {
-        KEY1_AD_CLICK,		KEY1_AD_LONG,			KEY_NULL,			KEY_NULL,   	KEY_NULL,           KEY_NULL
-    },
-    [2] = {
-        KEY2_AD_CLICK,		KEY2_AD_LONG,			KEY_NULL,			KEY_NULL,   	KEY_NULL,           KEY_NULL
-    },
-    [3] = {
-        KEY3_AD_CLICK,		KEY3_AD_LONG,			KEY_NULL,			KEY_NULL,   	KEY_NULL,			KEY_NULL
-    },
-    [4] = {
-        KEY4_AD_CLICK,		KEY4_AD_LONG,			KEY_NULL,			KEY_NULL,   	KEY_NULL,			KEY_NULL
-    },
-    [5] = {
-        KEY5_AD_CLICK,		KEY5_AD_LONG,			KEY_NULL,			KEY_NULL,	    KEY_NULL,			KEY_NULL
-    },
-    [6] = {
-        KEY6_AD_CLICK,		KEY6_AD_LONG,		    KEY_NULL,			KEY_NULL,		KEY_NULL,	        KEY_NULL
-    },
-    [7] = {
-        KEY7_AD_CLICK,		KEY7_AD_LONG,			KEY_NULL,			KEY_NULL,		KEY_NULL,			KEY_NULL
-    },
-    [8] = {
-        KEY8_AD_CLICK,		KEY8_AD_LONG,			KEY_NULL,			KEY_NULL,		KEY_NULL,			KEY_NULL
-    },
-    [9] = {
-        KEY9_AD_CLICK,		KEY9_AD_LONG,			KEY_NULL,			KEY_NULL,		KEY_NULL,			KEY_NULL
-    },
-    [10] = {
-        KEY10_AD_CLICK,		KEY10_AD_LONG,			KEY_NULL,			KEY_NULL,		KEY_NULL,			KEY_NULL
-    },
-    [11] = {
-        KEY11_AD_CLICK,		KEY_NULL,			KEY_NULL,			KEY_NULL,		KEY_NULL,			KEY_NULL
-    },
-    [12] = {
-        KEY12_AD_CLICK,		KEY_NULL,			KEY_NULL,			KEY_NULL,		KEY_NULL,			KEY_NULL
-    },
-    [13] = {
-        KEY13_AD_CLICK,		KEY_NULL,			KEY_NULL,			KEY_NULL,		KEY_NULL,			KEY_NULL
-    },
-    [14] = {
-        KEY14_AD_CLICK,		KEY_NULL,			KEY_NULL,			KEY_NULL,		KEY_NULL,			KEY_NULL
-    },
-    [15] = {
-        KEY15_AD_CLICK,		KEY_NULL,			KEY_NULL,			KEY_NULL,		KEY_NULL,			KEY_NULL
-    },
-    [16] = {
-        KEY16_AD_CLICK,		KEY_NULL,			KEY_NULL,			KEY_NULL,		KEY_NULL,			KEY_NULL
-    },
+    //单击              //长按              //hold             //抬起           //双击             //三击
+   [0] = {    //键值0
+       KEY0_AD_CLICK,	    KEY0_AD_LONG,		KEY_POWER_ON_HOLD,	KEY_NULL,   	KEY_NULL,			KEY_NULL
+   },
+   [1] = {
+       KEY1_AD_CLICK,		KEY1_AD_LONG,			KEY_NULL,			KEY_NULL,   	KEY_NULL,           KEY_NULL
+   },
+   [2] = {
+       KEY2_AD_CLICK,		KEY2_AD_LONG,			KEY_NULL,			KEY_NULL,   	KEY_NULL,           KEY_NULL
+   },
+   [3] = {
+       KEY3_AD_CLICK,		KEY3_AD_LONG,			KEY_NULL,			KEY_NULL,   	KEY_NULL,			KEY_NULL
+   },
+   [4] = {
+       KEY4_AD_CLICK,		KEY4_AD_LONG,			KEY_NULL,			KEY_NULL,   	KEY_NULL,			KEY_NULL
+   },
+   [5] = {
+       KEY5_AD_CLICK,		KEY5_AD_LONG,			KEY_NULL,			KEY_NULL,	    KEY_NULL,			KEY_NULL
+   },
+   [6] = {
+       KEY6_AD_CLICK,		KEY6_AD_LONG,		    KEY_NULL,			KEY_NULL,		KEY_NULL,	        KEY_NULL
+   },
+   [7] = {
+       KEY7_AD_CLICK,		KEY7_AD_LONG,			KEY_NULL,			KEY_NULL,		KEY_NULL,			KEY_NULL
+   },
+   [8] = {
+       KEY8_AD_CLICK,		KEY8_AD_LONG,			KEY_NULL,			KEY_NULL,		KEY_NULL,			KEY_NULL
+   },
+   [9] = {
+       KEY9_AD_CLICK,		KEY9_AD_LONG,			KEY_NULL,			KEY_NULL,		KEY_NULL,			KEY_NULL
+   },
+   [10] = {
+       KEY10_AD_CLICK,		KEY10_AD_LONG,			KEY_NULL,			KEY_NULL,		KEY_NULL,			KEY_NULL
+   },
+   [11] = {
+       KEY11_AD_CLICK,		KEY_NULL,			KEY_NULL,			KEY_NULL,		KEY_NULL,			KEY_NULL
+   },
+   [12] = {
+       KEY12_AD_CLICK,		KEY_NULL,			KEY_NULL,			KEY_NULL,		KEY_NULL,			KEY_NULL
+   },
+   [13] = {
+       KEY13_AD_CLICK,		KEY_NULL,			KEY_NULL,			KEY_NULL,		KEY_NULL,			KEY_NULL
+   },
+   [14] = {
+       KEY14_AD_CLICK,		KEY_NULL,			KEY_NULL,			KEY_NULL,		KEY_NULL,			KEY_NULL
+   },
+   [15] = {
+       KEY15_AD_CLICK,		KEY_NULL,			KEY_NULL,			KEY_NULL,		KEY_NULL,			KEY_NULL
+   },
+   [16] = {
+       KEY16_AD_CLICK,		KEY_NULL,			KEY_NULL,			KEY_NULL,		KEY_NULL,			KEY_NULL
+   },
 };
 #endif
 
@@ -403,28 +403,28 @@ const u16 spdif_key_ad_table[KEY_AD_NUM_MAX][KEY_EVENT_MAX] = {
 const u16 idle_key_ad_table[KEY_AD_NUM_MAX][KEY_EVENT_MAX] = {
     //单击              //长按              //hold             //抬起           //双击             //三击
     [0] = {    //键值0
-        KEY0_AD_CLICK,	    KEY0_AD_LONG,		KEY_POWER_ON_HOLD,	KEY_NULL,   	KEY_NULL,			KEY_NULL
+        KEY0_AD_CLICK,	    KEY0_AD_LONG,		KEY_0_AD_HOLD,	KEY_NULL,   	KEY_NULL,			KEY_NULL
     },
     [1] = {
-        KEY1_AD_CLICK,		KEY1_AD_LONG,			KEY_NULL,			KEY_NULL,   	KEY_NULL,           KEY_NULL
+        KEY1_AD_CLICK,		KEY1_AD_LONG,			KEY_1_AD_HOLD,			KEY_NULL,   	KEY_NULL,           KEY_NULL
     },
     [2] = {
-        KEY2_AD_CLICK,		KEY2_AD_LONG,			KEY_NULL,			KEY_NULL,   	KEY_NULL,           KEY_NULL
+        KEY2_AD_CLICK,		KEY2_AD_LONG,			KEY_2_AD_HOLD,			KEY_NULL,   	KEY_NULL,           KEY_NULL
     },
     [3] = {
-        KEY3_AD_CLICK,		KEY3_AD_LONG,			KEY_NULL,			KEY_NULL,   	KEY_NULL,			KEY_NULL
+        KEY3_AD_CLICK,		KEY3_AD_LONG,			KEY_3_AD_HOLD,			KEY_NULL,   	KEY_NULL,			KEY_NULL
     },
     [4] = {
-        KEY4_AD_CLICK,		KEY4_AD_LONG,			KEY_NULL,			KEY_NULL,   	KEY_NULL,			KEY_NULL
+        KEY4_AD_CLICK,		KEY4_AD_LONG,			KEY_4_AD_HOLD,			KEY_NULL,   	KEY_NULL,			KEY_NULL
     },
     [5] = {
-        KEY5_AD_CLICK,		KEY5_AD_LONG,			KEY_NULL,			KEY_NULL,	    KEY_NULL,			KEY_NULL
+        KEY5_AD_CLICK,		KEY5_AD_LONG,			KEY_5_AD_HOLD,			KEY_NULL,	    KEY_NULL,			KEY_NULL
     },
     [6] = {
-        KEY6_AD_CLICK,		KEY6_AD_LONG,		    KEY_NULL,			KEY_NULL,		KEY_NULL,	        KEY_NULL
+        KEY6_AD_CLICK,		KEY6_AD_LONG,		    KEY_6_AD_HOLD,			KEY_NULL,		KEY_NULL,	        KEY_NULL
     },
     [7] = {
-        KEY7_AD_CLICK,		KEY7_AD_LONG,			KEY_NULL,			KEY_NULL,		KEY_NULL,			KEY_NULL
+        KEY7_AD_CLICK,		KEY7_AD_LONG,			KEY_7_AD_HOLD,			KEY_NULL,		KEY_NULL,			KEY_NULL
     },
     [8] = {
         KEY8_AD_CLICK,		KEY8_AD_CLICK,			KEY_NULL,			KEY_NULL,		KEY_NULL,			KEY_NULL

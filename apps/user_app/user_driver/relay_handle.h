@@ -25,7 +25,7 @@ typedef unsigned int relay_pin_index_t;  // u32 -- relay_pin_index_t
 */
 typedef enum 
 {
-    RELAY_INDEX_0 = 0,
+    RELAY_INDEX_0 = 0, 
     RELAY_INDEX_1,
     RELAY_INDEX_2,
     RELAY_INDEX_3,

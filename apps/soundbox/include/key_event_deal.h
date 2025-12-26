@@ -215,9 +215,15 @@ enum {
     KEY9_AD_LONG,
     KEY10_AD_LONG,
 
-
-//耀祥的红外遥控
-
+    KEY_0_AD_HOLD, 
+    KEY_1_AD_HOLD,
+    KEY_2_AD_HOLD,
+    KEY_3_AD_HOLD,
+    KEY_4_AD_HOLD,
+    KEY_5_AD_HOLD,
+    KEY_6_AD_HOLD,
+    KEY_7_AD_HOLD, 
+  
     KEY1_IR_CLICK,
     KEY2_IR_CLICK,
     KEY3_IR_CLICK,
@@ -240,7 +246,8 @@ enum {
     KEY20_IR_CLICK,
     KEY21_IR_CLICK,
 
- //-------------------------------------博朗,耀祥 END
+    // KEY1_IR_LONG,
+ //-------------------------------------  END
 
     KEY_HID_MODE_SWITCH,
     KEY_HID_TAKE_PICTURE,

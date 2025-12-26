@@ -217,10 +217,10 @@ static void app_init()
 
     // power_light_gpio_init();
     // mp3key_light_gpio_init();
-    User_rtc_load_save(1); // 初始化系统时间 
-    read_sys_current_time();
-
-    // extern void set_open_machine_flag(void);
+    // User_rtc_load_save(1); // 初始化系统时间 
+    // read_sys_current_time();
+    user_sys_time_init(); // 初始化系统时间  
+    
     save_user_data_init(); // 读取flash信息，初始化相应变量
 
     extern void lcd1621_init(void);

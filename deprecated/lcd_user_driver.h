@@ -1,6 +1,8 @@
 #ifndef _LCD_USER_DRIVER_H_
 #define _LCD_USER_DRIVER_H_
 
+#if 0
+
 #define SEG_A           BIT(0)
 #define SEG_B           BIT(1)
 #define SEG_C           BIT(2)
@@ -201,5 +203,6 @@ enum{
 #define LCDSEG_LOUD     29      //29: LOUD图标
 
 #define LCDSEG_ICON_MAX 30
+#endif
 
 #endif

@@ -153,29 +153,32 @@ typedef enum
 
 
 extern volatile unsigned char dis_data[32];
+extern const u16 seg1_show_relay_schedule_table[2][7];
 
 
 
 u16 clrbit(u16 x);
+void clean_dis(u16 d);
+void clean_num(unsigned char num);
 
+void lcd_show_alphabet_in_seg_1(u8 alphabet_index);
 
 void lcd1621_value_set(u8* buff, u8 len);
 void lcd1621_init(void);
 
-void lcd_1621_refresh(void);
+// void lcd_1621_refresh(void);
 
 
 void lcd_show_relay_icon(u8 relay_index);
-void lcd_clear_relay_icon(u8 relay_number); 
- 
+void lcd_clear_relay_icon(u8 relay_number);
+
 
 void lcd_relay_icon_show(relay_index_t relay_index); // lcd 显示 对应的继电器图标
 void lcd_relay_icon_unshow(relay_index_t relay_index); // lcd 不显示 对应的继电器图标
 
-void lcd_setting_sys_time_animation_fix(void);
-void lcd_setting_sys_time_animation(void);
-void lcd_setting_sys_time_unit_change(time_unit_t time_unit);
-void lcd_setting_sys_time_unit_get(time_unit_t *time_unit);
+void lcd_update_ac_voltage(void);
+void lcd_clear_ac_voltage(void);
+
 
 
 
