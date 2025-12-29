@@ -155,7 +155,9 @@ typedef enum
 extern volatile unsigned char dis_data[32];
 extern const u16 seg1_show_relay_schedule_table[2][7];
 
-
+// num 第几个七段数码管
+// dec显示的数字
+void make_num(unsigned char num, unsigned char dec);
 
 u16 clrbit(u16 x);
 void clean_dis(u16 d);
@@ -179,7 +181,17 @@ void lcd_relay_icon_unshow(relay_index_t relay_index); // lcd 不显示 对应�
 void lcd_update_ac_voltage(void);
 void lcd_clear_ac_voltage(void);
 
+void lcd_update_year(const u16 year);
+void lcd_clear_year(void);
+void lcd_update_month(const u8 month);
+void lcd_clear_month(void);
+void lcd_update_day(const u8 day);
+void lcd_clear_day(void);
+void lcd_update_hour(const u8 hour);
+void lcd_clear_hour(void);
+void lcd_update_min(const u8 min);
+void lcd_clear_min(void);
 
-
+void lcd_show_alphabet_in_seg_1(u8 alphabet_index);
 
 #endif

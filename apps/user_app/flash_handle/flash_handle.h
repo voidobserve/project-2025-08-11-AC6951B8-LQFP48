@@ -10,9 +10,12 @@
 typedef struct
 {
     unsigned char header;           //头部 判断数据是否第一次写入  
-    SEQUENCER_T seq_save; 
+    SEQUENCER_T seq_save;
 
-    weekly_schedule_t weekly_schedule;
+    weekly_schedule_t weekly_schedule; // 存放时序器的定时开关机时间
+
+    user_sys_time_t sys_time; // 存放 系统时间
+    weekly_schedule_t weekly_schedule_relay[8]; // 存放 继电器的定时开关机时间
 }save_flash_t;
 
 #pragma pack ()

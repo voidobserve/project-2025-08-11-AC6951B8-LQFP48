@@ -363,7 +363,7 @@ void lcd1621_dispbuff_clr(void)
 	}
 }
 
-// num 第几个数字
+// num 第几个七段数码管
 // dec显示的数字
 void make_num(unsigned char num, unsigned char dec)
 {

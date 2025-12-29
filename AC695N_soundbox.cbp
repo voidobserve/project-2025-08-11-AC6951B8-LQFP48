@@ -1760,7 +1760,15 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="apps/user_app/lcd/lcd1621.h" />
+		<Unit filename="apps/user_app/lcd/lcd_setting_relay_schedule.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="apps/user_app/lcd/lcd_setting_relay_schedule.h" />
 		<Unit filename="apps/user_app/lcd/lcd_user_driver.h" />
+		<Unit filename="apps/user_app/lcd/user_lcd_handle.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="apps/user_app/lcd/user_lcd_handle.h" />
 		<Unit filename="apps/user_app/sequencer/sequencer.c">
 			<Option compilerVar="CC" />
 		</Unit>

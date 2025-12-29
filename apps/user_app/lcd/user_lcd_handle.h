@@ -35,4 +35,6 @@ void lcd_setting_sys_time_unit_switch_to_next(void);
 void lcd_setting_sys_time_unit_switch_to_prev(void);
 void lcd_setting_sys_time_animation(void);
 
+void lcdseg_handle(void);
+
 #endif

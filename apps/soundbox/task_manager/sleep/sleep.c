@@ -69,6 +69,7 @@ static int sleep_key_event_opr(struct sys_event* event)
 
     if (key_event_type == KEY_DRIVER_TYPE_IO)
     {
+        // 需要在按键事件内部判断是否在开关机计时中，设备是否开机
         io_key_event_handle(key_event);
     }
 
@@ -83,8 +84,8 @@ static int sleep_key_event_opr(struct sys_event* event)
         }
 #endif
 
-        // USER_TO_DO 需要在按键单机事件内部判断是否在开关机计时中，设备是否开机
-        printf("ad key event == %d\n", key_event);
+        // 需要在按键事件内部判断是否在开关机计时中，设备是否开机
+        // printf("ad key event == %d\n", key_event);
         ad_key_event_handle(key_event);
     }
 

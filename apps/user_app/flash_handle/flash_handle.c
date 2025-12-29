@@ -30,18 +30,36 @@ void save_user_data_init(void)
     memset((u8*)&save_flash3, 0, sizeof(save_flash_t));
 
     res = syscfg_read(CFG_USER_CLOSE_SEQUENCER_DATA, (u8*)(&save_flash3), sizeof(save_flash_t));
-    if (save_flash3.header != FLASH_CRC_DATA)  //第一次上电
+    if (save_flash3.header != FLASH_CRC_DATA)
     {
-        sequencers_data_init();
+        //第一次上电
 
-#if 1 
-        extern volatile weekly_schedule_t weekly_schedule;
-        memcpy(&weekly_schedule, &save_flash3.weekly_schedule, sizeof(weekly_schedule_t));
-#endif
+        sequencers_data_init();
+        // USER_TO_DO 这里需要初始化额外的数据
+
+
     }
     else
     {
         memcpy((u8*)(&sequencers), (u8*)(&save_flash3.seq_save), sizeof(SEQUENCER_T));
+
+#if 1 
+        extern volatile weekly_schedule_t weekly_schedule; // 设备每周定时开关机的计划时间表
+        memcpy(&weekly_schedule, &save_flash3.weekly_schedule, sizeof(weekly_schedule_t));
+#endif
+
+#if 1
+        extern volatile weekly_schedule_t weekly_schedule_relay[8]; // 8个继电器、独立的每天激活、停用计划时间表
+        memcpy(&weekly_schedule_relay, &save_flash3.weekly_schedule_relay, sizeof(weekly_schedule_t) * 8);
+#endif
+
+#if 0
+        user_sys_time_t sys_time = { 0 };
+        memcpy(&sys_time, &save_flash3.sys_time, sizeof(user_sys_time_t));
+        // 
+        user_sys_time_set(&sys_time);
+#endif
+
         printf("read sequencers data\n");
     }
 

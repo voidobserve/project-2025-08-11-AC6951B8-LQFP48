@@ -33,6 +33,8 @@ typedef enum
     RELAY_INDEX_5,
     RELAY_INDEX_6,
     RELAY_INDEX_7,
+
+    RELAY_INDEX_INVALID = 0xFF,
 }  relay_index_t;
 
 // 定义继电器 激活和不激活时对应引脚的电平

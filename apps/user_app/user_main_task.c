@@ -9,8 +9,7 @@ void user_main_task(void* p)
     // volatile user_sys_time_t time = { 2000, 01, 01 , 00 , 01 };
     // user_sys_time_set(&time);
     volatile user_sys_time_t time;
-    
-    // sequencer_status = SEQUENCER_STATUS_SETTING_RELAY_POWER_ON_SCHEDULE; // USER_TO_DO 测试时使用
+ 
     while (1)
     {
 #if 1
@@ -23,6 +22,7 @@ void user_main_task(void* p)
             {
                 cnt = 0;
                 weekly_schedule_info_handle(); // 可能需要每200ms扫描一次 
+                weekly_schedule_relay_info_handle(); 
             }
         }
 
@@ -32,13 +32,15 @@ void user_main_task(void* p)
             if (cnt >= 500)
             {
                 cnt = 0;
+
+#if 0
                 user_sys_time_get(&time);
                 printf("Current time: %d-%02d-%02d %02d:%02d:%02d\n",
                     time.year, time.month, time.day,
                     time.hour, time.min, time.sec);
                 time.weekday = rtc_calculate_week_val(&time);
                 printf("cur weekday: %d\n", time.weekday);
-
+#endif
 
                 // printf("\n=============================================\n");
                 // printf("is sequencer in delay: %u\n", (u16)is_sequencer_in_delay());

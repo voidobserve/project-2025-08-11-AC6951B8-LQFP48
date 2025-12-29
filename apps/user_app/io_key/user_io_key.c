@@ -38,10 +38,7 @@ void io_key_event_handle(int key_event)
     {
         if (is_sequencer_in_delay())
         {
-            // 如果正在开关机的延时中，不处理该事件
-#if USER_DEBUG_ENABLE
-            // USER_PRINTF_LINE();
-#endif 
+            // 如果正在开关机的延时中，不处理该事件 
             return;
         }
 
@@ -55,7 +52,7 @@ void io_key_event_handle(int key_event)
             // 保存设置的时间
             user_sys_time_t user_sys_time;
             user_setting_time_get(&user_sys_time);
-            user_sys_time_set(&user_sys_time); 
+            user_sys_time_set(&user_sys_time);
             printf("setting sys time exit\n");
         }
         else if (sequencer_status == SEQUENCER_STATUS_NONE)

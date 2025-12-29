@@ -1,5 +1,6 @@
 #include "user_sys_time.h"
 #include "alarm.h" 
+#include "user_lcd_handle.h"
 
 // 注意：RTC的时间掉电会丢失
 

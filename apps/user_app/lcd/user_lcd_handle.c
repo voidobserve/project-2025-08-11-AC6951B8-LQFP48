@@ -156,15 +156,8 @@ void lcd_setting_sys_time_animation(void)
 	// 让正在设置的时间闪烁，1 ： 年 ，2：月-日，3：时：分
 
 	user_sys_time_t cur_setting_sys_time = { 0 };
-    // 在进入该模式之前，这里的 setting_time 应该在进入前获取一次系统时间
-	user_setting_time_get(&cur_setting_sys_time); 
-
-	// lcd_setting_sys_time_blink_cnt++;  
-	// if (lcd_setting_sys_time_blink_cnt >= 100) // 调用时间10ms，那么这里的时间单位就是10ms
-	// {
-	// 	lcd_setting_sys_time_blink_cnt = 0;
-	// 	lcd_setting_sys_time_blink_dir = !lcd_setting_sys_time_blink_dir;
-	// }
+	// 在进入该模式之前，这里的 setting_time 应该在进入前获取一次系统时间
+	user_setting_time_get(&cur_setting_sys_time);
 
 	lcd_setting_sys_time.blink_cnt++;
 	if (lcd_setting_sys_time.blink_cnt >= 100) // 调用时间10ms，那么这里的时间单位就是10ms
@@ -293,6 +286,7 @@ void lcdseg_handle(void)
 		clean_dis(clrbit(SEG_S6)); // 关闭"W"
 		// // 交流电电压： 
 		lcd_update_ac_voltage();
+		make_dis(SEG_S5); // lcd显示符号：V		
 
 		// 后面需要显示年份xx时间，再切换到显示月日xx时间，最后切换到显示时分 
 		{
@@ -338,9 +332,10 @@ void lcdseg_handle(void)
 	}
 	else if (sequencer_status == SEQUENCER_STATUS_SETTING_SYS_TIME)
 	{
-		lcd_clear_ac_voltage();
+		lcd_clear_ac_voltage(); // 清除数码管显示的交流电压数据
 		lcd_update_ac_voltage();
 		lcd_setting_sys_time_animation();
+		make_dis(SEG_S5); // lcd显示符号：V		
 
 		lcd_setting_sys_time_timeout_add_10ms();
 		if (lcd_setting_sys_time_is_timeout())
@@ -355,7 +350,7 @@ void lcdseg_handle(void)
 			user_sys_time_set(&user_sys_time);
 		}
 	}
-	else if (sequencer_status == SEQUENCER_STATUS_SETTING_RELAY_POWER_ON_SCHEDULE)
+	else if (sequencer_status == SEQUENCER_STATUS_SETTING_RELAY_ACTIVE_SCHEDULE)
 	{
 		// 如果是设置单个继电器的激活时间计划
 		clean_dis(clrbit(SEG_S5)); // 不显示符号：V
@@ -368,12 +363,24 @@ void lcdseg_handle(void)
 		clean_num(7);
 
 		lcd_show_alphabet_in_seg_1(0); // 第一位数码管显示 P ，表示当前正在设置继电器的定时激活时间
-		
+
+		lcd_setting_relay_active_schedule_animation();
 	}
-	else if (sequencer_status == SEQUENCER_STATUS_SETTING_RELAY_POWER_OFF_SCHEDULE)
+	else if (sequencer_status == SEQUENCER_STATUS_SETTING_RELAY_DEACTIVE_SCHEDULE)
 	{
+		// 如果是设置单个继电器的 禁用时间 计划
+		clean_dis(clrbit(SEG_S5)); // 不显示符号：V
+		clean_num(1); // 清除第1位数码管显示的数据
+		clean_num(2);
+		clean_num(3);
+		clean_num(4);
+		clean_num(5);
+		clean_num(6);
+		clean_num(7);
 
 		lcd_show_alphabet_in_seg_1(1); // 第一位数码管显示 F ，表示当前正在设置继电器的定时停用时间
+
+		lcd_setting_relay_deactive_schedule_animation();
 	}
 
 	lcd1621_write_data(dis_data, 16); // 将lcd显示缓冲区的数据发送给屏幕驱动ic 
