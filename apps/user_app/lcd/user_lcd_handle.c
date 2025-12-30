@@ -40,7 +40,7 @@ void lcd_setting_sys_time_timeout_reset(void)
 //
 u8 lcd_setting_sys_time_is_timeout(void)
 {
-	// 如果超时时间计数是10ms计数一次，超时时间 == timeout_cnt * 10ms，依次类推
+	// 如果超时时间计数是10ms计数一次，超时时间 == timeout_cnt * 10ms，以此类推
 	if (lcd_setting_sys_time.timeout_cnt >= 1000)
 	{
 		lcd_setting_sys_time.flag_is_timeout = 1;
@@ -292,7 +292,7 @@ void lcdseg_handle(void)
 		{
 			static u8 cnt = 0;
 			static u8 dir = 0; // 控制当前要显示的时间单位，0：年，1：月-日，2：时：分
-			static volatile user_sys_time_t user_sys_time;
+			static volatile user_sys_time_t user_sys_time = {0};
 
 			cnt++;
 			if (cnt >= 200)
@@ -340,14 +340,16 @@ void lcdseg_handle(void)
 		lcd_setting_sys_time_timeout_add_10ms();
 		if (lcd_setting_sys_time_is_timeout())
 		{
-			// 如果设置时间超时，返回普通模式
+			// 如果 设置系统时间 超时，返回普通模式
 			sequencer_status = SEQUENCER_STATUS_NONE;
 			lcd_setting_sys_time_timeout_reset();
 
 			// 保存设置的时间
-			user_sys_time_t user_sys_time;
+			user_sys_time_t user_sys_time = { 0 };
 			user_setting_time_get(&user_sys_time);
 			user_sys_time_set(&user_sys_time);
+			// 保存用户数据
+			os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO);
 		}
 	}
 	else if (sequencer_status == SEQUENCER_STATUS_SETTING_RELAY_ACTIVE_SCHEDULE)
@@ -365,6 +367,21 @@ void lcdseg_handle(void)
 		lcd_show_alphabet_in_seg_1(0); // 第一位数码管显示 P ，表示当前正在设置继电器的定时激活时间
 
 		lcd_setting_relay_active_schedule_animation();
+		lcd_setting_relay_shcedule_timeout_add_10ms();
+		if (lcd_setting_relay_schedule_is_timeout())
+		{
+			// 如果设置 继电器的定时激活时间 超时
+			relay_index_t relay_index = RELAY_INDEX_INVALID; // 存放继电器的索引
+			user_sys_time_t active_time = { 0 }; // 存放定时激活时间
+			user_sys_time_t deactive_time = { 0 }; // 存放定时停用时间
+			lcd_setting_relay_schedule_get_index(&relay_index); // 获取当前正在设置的继电器索引
+			lcd_setting_relay_time_get(&active_time, &deactive_time);
+			weekly_schedule_relay_set(relay_index, active_time, deactive_time);
+
+			sequencer_status = SEQUENCER_STATUS_NONE;
+			// 保存用户数据
+			os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO);
+		}
 	}
 	else if (sequencer_status == SEQUENCER_STATUS_SETTING_RELAY_DEACTIVE_SCHEDULE)
 	{
@@ -381,6 +398,21 @@ void lcdseg_handle(void)
 		lcd_show_alphabet_in_seg_1(1); // 第一位数码管显示 F ，表示当前正在设置继电器的定时停用时间
 
 		lcd_setting_relay_deactive_schedule_animation();
+		lcd_setting_relay_shcedule_timeout_add_10ms();
+		if (lcd_setting_relay_schedule_is_timeout())
+		{
+			// 如果设置 继电器的定时禁用时间 超时 
+			relay_index_t relay_index = RELAY_INDEX_INVALID; // 存放继电器的索引
+			user_sys_time_t active_time = { 0 }; // 存放定时激活时间
+			user_sys_time_t deactive_time = { 0 }; // 存放定时停用时间
+			lcd_setting_relay_schedule_get_index(&relay_index); // 获取当前正在设置的继电器索引
+			lcd_setting_relay_time_get(&active_time, &deactive_time);
+			weekly_schedule_relay_set(relay_index, active_time, deactive_time);
+
+			sequencer_status = SEQUENCER_STATUS_NONE;
+			// 保存用户数据
+			os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO);
+		}
 	}
 
 	lcd1621_write_data(dis_data, 16); // 将lcd显示缓冲区的数据发送给屏幕驱动ic 

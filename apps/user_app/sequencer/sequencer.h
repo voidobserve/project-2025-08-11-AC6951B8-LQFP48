@@ -88,7 +88,7 @@ void sequencer_relay_status_setting_dly(relay_index_t relay_index, relay_status_
 
 void sequencers_data_init(void);
 
-void user_msg_handle_task(void* p);
+
 
 
 #endif

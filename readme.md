@@ -1,2 +1,2 @@
 - lcd显示的接口最好只在对应的任务内调用，如果在其他任务调用，会导致显存的数据冲突
-- 查看`./docs/`下的内容
+- 修改了`/standard/isd_config.ini` 文件，添加了用户自定义的flash区域。添加了对应的操作接口，在 `/flash_handle/flash_driver.c` 文件中

@@ -50,10 +50,13 @@ void io_key_event_handle(int key_event)
             sequencer_status = SEQUENCER_STATUS_NONE;
 
             // 保存设置的时间
-            user_sys_time_t user_sys_time;
+            user_sys_time_t user_sys_time = {0};
             user_setting_time_get(&user_sys_time);
             user_sys_time_set(&user_sys_time);
             printf("setting sys time exit\n");
+
+            // 退出设置之后，保存相关的用户数据
+            os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO);
         }
         else if (sequencer_status == SEQUENCER_STATUS_NONE)
             // else
@@ -62,7 +65,7 @@ void io_key_event_handle(int key_event)
 
             sequencer_status = SEQUENCER_STATUS_SETTING_SYS_TIME;
 
-            user_sys_time_t user_sys_time;
+            user_sys_time_t user_sys_time = {0};
             user_sys_time_get(&user_sys_time);
             user_setting_time_set(&user_sys_time);
             lcd_setting_sys_time_unit_change(TIME_UNIT_YEAR);

@@ -662,7 +662,7 @@ const u16 spdif_key_ir_table[KEY_IR_NUM_MAX][KEY_EVENT_MAX] = {
  *				idle 模式的 irkey table
  ***********************************************************/
 const u16 idle_key_ir_table[KEY_IR_NUM_MAX][KEY_EVENT_MAX] = {
-    [69] = {
+    [0x45] = {
         KEY1_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
     },
     [70] = {

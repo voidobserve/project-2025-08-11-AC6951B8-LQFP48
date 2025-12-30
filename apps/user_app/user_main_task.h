@@ -8,7 +8,7 @@
 
 
 void user_main_task(void *p);
-
+void user_msg_handle_task(void* p);
 
 
 #endif

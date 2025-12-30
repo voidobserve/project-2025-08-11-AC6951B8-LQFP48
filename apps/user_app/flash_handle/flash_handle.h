@@ -7,16 +7,21 @@
 
 
 #pragma pack (1)
+
+// @attention 保存数据结构体中，单个结构体变量的大小不能大于255字节，否则保存和读取会失败
+// USER_TO_DO 这里的数据加起来已经超过了 512 字节，需要换成其他的接口
 typedef struct
 {
     unsigned char header;           //头部 判断数据是否第一次写入  
     SEQUENCER_T seq_save;
 
-    weekly_schedule_t weekly_schedule; // 存放时序器的定时开关机时间
+    user_sys_time_t sys_time; // 存放 系统时间 
 
-    user_sys_time_t sys_time; // 存放 系统时间
+    weekly_schedule_t weekly_schedule; // 存放时序器的定时开关机时间 
     weekly_schedule_t weekly_schedule_relay[8]; // 存放 继电器的定时开关机时间
+    
 }save_flash_t;
+
 
 #pragma pack ()
 

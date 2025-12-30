@@ -58,10 +58,12 @@ void weekly_schedule_relay_set(
         {
             // 如果传入的时间全为0，不使能该定时计划
             weekly_schedule_relay[relay_index].schedule[i].enable = 0;
+            printf("[relay_index == %u]weekly schedule of relay is invalid\n", (u16)relay_index);
         }
         else
         {
             weekly_schedule_relay[relay_index].schedule[i].enable = 1;
+            printf("[relay_index == %u]weekly schedule of relay is valid\n", (u16)relay_index);
         }
     }
 }
@@ -86,7 +88,7 @@ void weekly_schedule_relay_info_handle(void)
     }
 
     for (u8 i = 0; i < 7; i++) // 遍历8个继电器
-    {  
+    {
         if (weekly_schedule_relay[i].schedule[0].enable == 0)
         {
             // 如果当前继电器没有定时计划，跳过当前循环
@@ -101,21 +103,26 @@ void weekly_schedule_relay_info_handle(void)
         {
             // 如果到了对应的激活时间，并且继电器没有激活
             // 如果调用该函数的周期小于1s，那么时间到来的1s内会进入多次 
-            
+
             sequencer_relay_status_setting(i, RELAY_STATUS_ACTIVE);
+
+            //
+            printf("time to active relay %u\n", (u16)i);
         }
 
         if (weekly_schedule_relay[i].schedule[current_time.weekday].off_hour == current_time.hour &&
             weekly_schedule_relay[i].schedule[current_time.weekday].off_minute == current_time.min &&
             weekly_schedule_relay[i].schedule[current_time.weekday].off_second == current_time.sec &&
-            sequencers.relay[i].cur_status_on_off == DEVICE_ON) 
+            sequencers.relay[i].cur_status_on_off == DEVICE_ON)
         {
             // 如果到了对应的停用时间，并且继电器没有停用
             // 如果调用该函数的周期小于1s，那么时间到来的1s内会进入多次 
 
             sequencer_relay_status_setting(i, RELAY_STATUS_DEACTIVE);
+
+            printf("time to deactive relay %u\n", (u16)i);
         }
-    } 
+    }
 }
 
 /**

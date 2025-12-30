@@ -38,6 +38,9 @@ void lcd_setting_relay_schedule_get_index(relay_index_t * relay_index); //
  
 void lcd_setting_relay_schedule_animation_fix(void);
 void lcd_setting_relay_schedule_timeout_reset(void);
+void lcd_setting_relay_shcedule_timeout_add_10ms(void);
+u8 lcd_setting_relay_schedule_is_timeout(void);
+
 void lcd_setting_relay_active_schedule_animation(void); 
 void lcd_setting_relay_deactive_schedule_animation(void);
 

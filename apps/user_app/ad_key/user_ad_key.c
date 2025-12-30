@@ -150,6 +150,8 @@ void ad_key_event_handle_in_normal_mode(int key_event)
     }
     break;
     }// switch (keyevent)
+
+    os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO);
 }
 
 void ad_key_event_handle_in_setting_sys_time_mode(int key_event)
@@ -198,9 +200,7 @@ void ad_key_event_handle_in_setting_sys_time_mode(int key_event)
     }
     break;
 
-    } // switch (keyevent)
-
-    os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO);
+    } // switch (keyevent) 
 }
 
 void ad_key_event_handle_in_setting_relay_schedule_mode(int key_event)

@@ -417,7 +417,7 @@ void user_setting_time_get(user_sys_time_t* time)
     time->day = cur_setting_sys_time.day;
     time->hour = cur_setting_sys_time.hour;
     time->min = cur_setting_sys_time.min;
-    time->sec = cur_setting_sys_time.sec;
+    // time->sec = cur_setting_sys_time.sec; // 当前设置的没有秒这一单位
 }
 
 void user_setting_time_set(user_sys_time_t* time)

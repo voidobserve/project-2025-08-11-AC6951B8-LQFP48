@@ -219,7 +219,7 @@ static void app_init()
     // mp3key_light_gpio_init();
     // User_rtc_load_save(1); // 初始化系统时间 
     // read_sys_current_time();
-    user_sys_time_init(); // 初始化系统时间  
+    // user_sys_time_init(); // 初始化系统时间  
     
     save_user_data_init(); // 读取flash信息，初始化相应变量
 

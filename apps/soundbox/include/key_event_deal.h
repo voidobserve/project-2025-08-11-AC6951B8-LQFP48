@@ -246,6 +246,9 @@ enum {
     KEY20_IR_CLICK,
     KEY21_IR_CLICK,
 
+    KEY_IR_R1C1_CLICK,
+    
+
     // KEY1_IR_LONG,
  //-------------------------------------  END
 

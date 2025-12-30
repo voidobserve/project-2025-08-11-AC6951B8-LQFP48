@@ -7,7 +7,7 @@
 static volatile lcd_setting_relay_schedule_t* __this = NULL;
 volatile lcd_setting_relay_schedule_t lcd_setting_relay_schedule = { 0 };
 
-// 构造函数
+// 构造函数（进入调节继电器每天的定时激活、定时停用之前，调用）
 void lcd_setting_relay_active_constructor(relay_index_t relay_index)
 {
     lcd_setting_relay_schedule.relay_index = relay_index;
@@ -69,13 +69,31 @@ void lcd_setting_relay_schedule_timeout_reset(void)
  * @brief 在设置定时时间时，如果没有操作，累加超时时间
  *
  */
-void lcd_setting_relay_active_shcedule_timeout_add_10ms(void)
+void lcd_setting_relay_shcedule_timeout_add_10ms(void)
 {
     if (__this->timeout_cnt < 65535)
     {
         // 防止越界
         __this->timeout_cnt++;
     }
+}
+
+u8 lcd_setting_relay_schedule_is_timeout(void)
+{
+    /*
+        如果超时时间计数是10ms计数一次，超时时间 == timeout_cnt * 10ms，以此类推
+    */
+    if (__this->timeout_cnt >= 1000)
+    {
+        __this->flag_is_timeout = 1;
+    }
+    else
+    {
+        // 如果未超时
+        __this->flag_is_timeout = 0;
+    }
+
+    return __this->flag_is_timeout;
 }
 
 void lcd_setting_relay_time_hour_add(void)

@@ -2,6 +2,7 @@
 #include "syscfg_id.h"
 #include "sequencer.h"
 #include "user_schedule.h"
+#include "flash_driver.h"
 
 /*
     使用说明：
@@ -24,6 +25,7 @@ static volatile u8 flag_is_enable_to_save = 0; // 标志位，是否使能了保
 
 void save_user_data_init(void)
 {
+#if 0 // 使用vm区域的读写接口
     u8 res;
     save_flash_t save_flash3;
 
@@ -41,16 +43,17 @@ void save_user_data_init(void)
     }
     else
     {
+        // 如果不是第一次上电
         memcpy((u8*)(&sequencers), (u8*)(&save_flash3.seq_save), sizeof(SEQUENCER_T));
 
-#if 1 
+#if 1 //  读取设备每周定时开关机计划时间表
         extern volatile weekly_schedule_t weekly_schedule; // 设备每周定时开关机的计划时间表
-        memcpy(&weekly_schedule, &save_flash3.weekly_schedule, sizeof(weekly_schedule_t));
+        // memcpy(&weekly_schedule, &save_flash3.weekly_schedule, sizeof(weekly_schedule_t));
 #endif
 
-#if 1
+#if 1 //  读取继电器的每天定时激活、定时停用计划时间表
         extern volatile weekly_schedule_t weekly_schedule_relay[8]; // 8个继电器、独立的每天激活、停用计划时间表
-        memcpy(&weekly_schedule_relay, &save_flash3.weekly_schedule_relay, sizeof(weekly_schedule_t) * 8);
+        // memcpy(&weekly_schedule_relay, &save_flash3.weekly_schedule_relay, sizeof(weekly_schedule_t) * 8);
 #endif
 
 #if 0
@@ -62,25 +65,87 @@ void save_user_data_init(void)
 
         printf("read sequencers data\n");
     }
+#endif
+
+#if 1
+    int ret;
+    save_flash_t save_data = { 0 };
+    ret = flash_area_read_4K((u8*)&save_data, sizeof(save_flash_t));
+    // printf("read 4K ret == %d\n", ret);
+
+    if ((ret != 0) || (save_data.header != FLASH_CRC_DATA))
+    {
+        // 如果读取出错，或者是读出来的格式头数据不一致，则初始化数据
+        printf("is first power on\n");
+
+        sequencers_data_init();
+        user_sys_time_init(); // 
+        extern volatile weekly_schedule_t weekly_schedule; // 设备每周定时开关机的计划时间表
+        memset(&weekly_schedule, 0, sizeof(weekly_schedule_t)); // 初始化设备每周定时开关机的计划时间表
+        extern volatile weekly_schedule_t weekly_schedule_relay[8]; // 8个继电器、独立的每天激活、停用计划时间表
+        memset(&weekly_schedule_relay, 0, sizeof(weekly_schedule_relay));
+    }
+    else
+    {
+        // 如果不是第一次上电
+        printf("not first power on\n");
+
+        memcpy((u8*)(&sequencers), (u8*)(&save_data.seq_save), sizeof(SEQUENCER_T));
+
+        // 根据存放的时间，初始化系统时间
+        user_sys_time_t user_sys_time = { 0 };
+        memcpy((u8*)&user_sys_time, (u8*)(&save_data.sys_time), sizeof(user_sys_time_t));
+        user_sys_time_set(&user_sys_time);
+
+        // 读取存放的、设备的每周定时开关机的计划时间表
+        extern volatile weekly_schedule_t weekly_schedule; // 设备每周定时开关机的计划时间表
+        memcpy((u8*)&weekly_schedule, (u8*)(&save_data.weekly_schedule), sizeof(weekly_schedule_t));
+
+        // 读取存放的、8个继电器的每天激活、停用计划时间表
+        extern volatile weekly_schedule_t weekly_schedule_relay[8]; // 8个继电器、独立的每天激活、停用计划时间表
+        memcpy((u8*)&weekly_schedule_relay, (u8*)(&save_data.weekly_schedule_relay), sizeof(weekly_schedule_relay));
+    }
+
+#endif
 
     printf("__FUN__ %s\n", __func__);
-
     printf("sequencers.on_ff = %u\n", (u16)sequencers.on_ff);
 }
 
 void save_user_data_area3(void)
 {
+#if 0 // 使用vm区域的读写接口
     save_flash_t save_data;
     save_data.header = FLASH_CRC_DATA;
     memcpy((u8*)(&save_data.seq_save), (u8*)(&sequencers), sizeof(SEQUENCER_T));
 
-#if 1  
     extern volatile weekly_schedule_t weekly_schedule;
     memcpy(&save_data.weekly_schedule, &weekly_schedule, sizeof(weekly_schedule_t));
-#endif
+
 
     os_time_dly(1); // 先让出cpu，处理其他任务，防止看门狗复位
     syscfg_write(CFG_USER_CLOSE_SEQUENCER_DATA, (u8*)(&save_data), sizeof(save_flash_t));
+#endif
+
+#if 1 
+    int ret = 0;
+    save_flash_t save_data = { 0 };
+    user_sys_time_t  user_sys_time = { 0 };
+
+    save_data.header = FLASH_CRC_DATA;
+    memcpy((u8*)(&save_data.seq_save), (u8*)(&sequencers), sizeof(SEQUENCER_T));
+    user_sys_time_get(&user_sys_time);
+    memcpy((u8*)(&save_data.sys_time), (u8*)(&user_sys_time), sizeof(user_sys_time_t));
+    extern volatile weekly_schedule_t weekly_schedule;
+    memcpy((u8*)(&save_data.weekly_schedule), (u8*)(&weekly_schedule), sizeof(weekly_schedule_t));
+    extern volatile weekly_schedule_t weekly_schedule_relay[8]; // 8个继电器、独立的每天激活、停用计划时间表
+    memcpy((u8*)(&save_data.weekly_schedule_relay), (u8*)(&weekly_schedule_relay), sizeof(weekly_schedule_relay));
+
+    os_time_dly(1);
+    ret = flash_area_write_4K((u8*)&save_data, sizeof(save_flash_t));
+    // printf("write 4K ret == %d\n", ret);
+
+#endif 
 
     flag_is_enable_to_save = 0;
     printf("user data save\n");
@@ -120,6 +185,7 @@ void save_user_data_time_count_down(void)
 // 使能保存数据的倒计时，使能保存数据的操作
 void save_user_data_enable(void)
 {
+    flag_is_enable_to_save = 0;
     flag_is_enable_count_down = 0;
     time_count_down = DELAY_SAVE_FLASH_TIMES / 10; // DELAY_SAVE_FLASH_TIMES / 10 ms计时，实现 DELAY_SAVE_FLASH_TIMES ms延时
     flag_is_enable_count_down = 1;
