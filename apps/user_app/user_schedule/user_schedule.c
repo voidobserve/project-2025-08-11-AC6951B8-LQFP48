@@ -12,27 +12,12 @@ volatile weekly_schedule_t weekly_schedule; // 存放定时开关机的计划
 // 存放继电器定时激活/停用的计划
 volatile weekly_schedule_t weekly_schedule_relay[8] = { 0 }; // 存放8个继电器的定时激活/定时停用计划
 
-// void weekly_schedule_info_save(void)
-// {
-
-// }
-
-// void weekly_schedule_info_read(void)
-// {
-
-// }
-
-
-// void weekly_schedule_info_init(void)
-// {
-
-// }
-
 /**
  * @brief 根据传入的参数，设置继电器的定时激活和定时停用时间
  *          目前是根据传参设置每一天的定时计划
  * @attention 注意：如果传参都为0，取消该继电器每一天的定时计划
  *
+ * @param relay_index
  * @param active_time
  * @param deactive_time
  * @return * void
@@ -52,20 +37,93 @@ void weekly_schedule_relay_set(
 
         if (active_time.hour == 0 &&
             active_time.min == 0 &&
+            active_time.sec == 0 &&
             deactive_time.hour == 0 &&
-            deactive_time.min == 0
-            )
+            deactive_time.min == 0 &&
+            deactive_time.sec == 0)
         {
             // 如果传入的时间全为0，不使能该定时计划
             weekly_schedule_relay[relay_index].schedule[i].enable = 0;
+#if USER_DEBUG_ENABLE
             printf("[relay_index == %u]weekly schedule of relay is invalid\n", (u16)relay_index);
+#endif
         }
         else
         {
             weekly_schedule_relay[relay_index].schedule[i].enable = 1;
+#if USER_DEBUG_ENABLE
             printf("[relay_index == %u]weekly schedule of relay is valid\n", (u16)relay_index);
+#endif
         }
     }
+}
+
+/**
+ * @brief 根据传入的参数，设置继电器的定时激活和定时停用时间
+ * @attention 注意：如果传参都为0，取消该继电器每一天的定时计划
+ * @attention 函数内没有参数安全性检测，调用该函数前，需要注意参数安全性
+ *
+ * @param relay_index 继电器索引
+ * @param weekday 星期值
+ * @param active_time 定时激活时间
+ * @param deactive_time 定时停用时间
+ * @return * void
+ */
+void week_schedule_relay_set_by_weekday(
+    relay_index_t relay_index,
+    u8 weekday,
+    const user_sys_time_t active_time,
+    const user_sys_time_t deactive_time)
+{
+    // weekly_schedule_relay[relay_index].schedule[weekday].enable = 1;
+
+    weekly_schedule_relay[relay_index].schedule[weekday].on_hour = active_time.hour;
+    weekly_schedule_relay[relay_index].schedule[weekday].on_minute = active_time.min;
+    weekly_schedule_relay[relay_index].schedule[weekday].on_second = active_time.sec;
+
+    weekly_schedule_relay[relay_index].schedule[weekday].off_hour = deactive_time.hour;
+    weekly_schedule_relay[relay_index].schedule[weekday].off_minute = deactive_time.min;
+    weekly_schedule_relay[relay_index].schedule[weekday].off_second = deactive_time.sec;
+
+    if (active_time.hour == 0 &&
+        active_time.min == 0 &&
+        active_time.sec == 0 &&
+        deactive_time.hour == 0 &&
+        deactive_time.min == 0 &&
+        deactive_time.sec == 0)
+    {
+        // 如果传入的时间全为0，不使能该定时计划
+        weekly_schedule_relay[relay_index].schedule[weekday].enable = 0;
+#if USER_DEBUG_ENABLE
+        printf("[relay_index == %u]weekly schedule of relay is invalid\n", (u16)relay_index);
+#endif
+    }
+    else
+    {
+        weekly_schedule_relay[relay_index].schedule[weekday].enable = 1;
+#if USER_DEBUG_ENABLE
+        printf("[relay_index == %u]weekly schedule of relay is valid\n", (u16)relay_index);
+#endif
+    }
+}
+
+/**
+ * @brief 根据传入的参数，取消继电器指定星期值对应的定时激活和定时停用计划
+ * 
+ * @param relay_index 继电器索引
+ * @param weekday 星期值
+ */
+void weekly_schedule_relay_cancel_by_weekday(relay_index_t relay_index, u8 weekday)
+{
+    weekly_schedule_relay[relay_index].schedule[weekday].on_hour = 0;
+    weekly_schedule_relay[relay_index].schedule[weekday].on_minute = 0;
+    weekly_schedule_relay[relay_index].schedule[weekday].on_second = 0;
+    
+    weekly_schedule_relay[relay_index].schedule[weekday].off_hour = 0;
+    weekly_schedule_relay[relay_index].schedule[weekday].off_minute = 0;
+    weekly_schedule_relay[relay_index].schedule[weekday].off_second = 0;
+
+    weekly_schedule_relay[relay_index].schedule[weekday].enable = 0;
 }
 
 // 根据存放好的继电器定时激活、停用计划，执行对应的激活、停用操作
@@ -106,8 +164,9 @@ void weekly_schedule_relay_info_handle(void)
 
             sequencer_relay_status_setting(i, RELAY_STATUS_ACTIVE);
 
-            //
+#if USER_DEBUG_ENABLE
             printf("time to active relay %u\n", (u16)i);
+#endif
         }
 
         if (weekly_schedule_relay[i].schedule[current_time.weekday].off_hour == current_time.hour &&
@@ -120,7 +179,9 @@ void weekly_schedule_relay_info_handle(void)
 
             sequencer_relay_status_setting(i, RELAY_STATUS_DEACTIVE);
 
+#if USER_DEBUG_ENABLE
             printf("time to deactive relay %u\n", (u16)i);
+#endif
         }
     }
 }

@@ -90,8 +90,8 @@ void user_main_task(void* p)
         }
 #endif
 
-        instruction_scan();
-        instruction_handle(); // 从串口缓冲区中取出数据，分析是否有指令，并进行处理
+        instruction_scan(); // 从串口缓冲区中取出数据，分析是否有指令 
+        instruction_handle(); // 从指令缓冲区中取出指令，并进行处理 
 
 
 

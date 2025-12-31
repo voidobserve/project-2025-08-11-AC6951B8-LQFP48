@@ -40,7 +40,7 @@ void ad_key_event_handle_in_normal_mode(int key_event)
     // ===================================================================
     case KEY0_AD_LONG:
     {
-        // 长按事件，进入或退出 独立的定时激活、定时停用计划
+        // 长按事件，进入 独立的定时激活、定时停用计划
         sequencer_status = SEQUENCER_STATUS_SETTING_RELAY_ACTIVE_SCHEDULE;
         lcd_setting_relay_active_constructor(RELAY_INDEX_0);
     }
@@ -54,7 +54,7 @@ void ad_key_event_handle_in_normal_mode(int key_event)
     // ===================================================================
     case KEY1_AD_LONG:
     {
-        // 长按事件，进入或退出 独立的定时激活、定时停用计划
+        // 长按事件，进入 独立的定时激活、定时停用计划
         sequencer_status = SEQUENCER_STATUS_SETTING_RELAY_ACTIVE_SCHEDULE;
         lcd_setting_relay_active_constructor(RELAY_INDEX_1);
     }
@@ -68,7 +68,7 @@ void ad_key_event_handle_in_normal_mode(int key_event)
     // ===================================================================
     case KEY2_AD_LONG:
     {
-        // 长按事件，进入或退出 独立的定时激活、定时停用计划
+        // 长按事件，进入 独立的定时激活、定时停用计划
         sequencer_status = SEQUENCER_STATUS_SETTING_RELAY_ACTIVE_SCHEDULE;
         lcd_setting_relay_active_constructor(RELAY_INDEX_2);
     }
@@ -82,7 +82,7 @@ void ad_key_event_handle_in_normal_mode(int key_event)
     // =================================================================== 
     case KEY3_AD_LONG:
     {
-        // 长按事件，进入或退出 独立的定时激活、定时停用计划
+        // 长按事件，进入 独立的定时激活、定时停用计划
         sequencer_status = SEQUENCER_STATUS_SETTING_RELAY_ACTIVE_SCHEDULE;
         lcd_setting_relay_active_constructor(RELAY_INDEX_3);
     }
@@ -96,7 +96,7 @@ void ad_key_event_handle_in_normal_mode(int key_event)
     // ===================================================================
     case KEY4_AD_LONG:
     {
-        // 长按事件，进入或退出 独立的定时激活、定时停用计划
+        // 长按事件，进入 独立的定时激活、定时停用计划
         sequencer_status = SEQUENCER_STATUS_SETTING_RELAY_ACTIVE_SCHEDULE;
         lcd_setting_relay_active_constructor(RELAY_INDEX_4);
     }
@@ -110,7 +110,7 @@ void ad_key_event_handle_in_normal_mode(int key_event)
     // ===================================================================
     case KEY5_AD_LONG:
     {
-        // 长按事件，进入或退出 独立的定时激活、定时停用计划
+        // 长按事件，进入 独立的定时激活、定时停用计划
         sequencer_status = SEQUENCER_STATUS_SETTING_RELAY_ACTIVE_SCHEDULE;
         lcd_setting_relay_active_constructor(RELAY_INDEX_5);
     }
@@ -124,7 +124,7 @@ void ad_key_event_handle_in_normal_mode(int key_event)
     // =====================================================================
     case KEY6_AD_LONG:
     {
-        // 长按事件，进入或退出 独立的定时激活、定时停用计划
+        // 长按事件，进入 独立的定时激活、定时停用计划
         sequencer_status = SEQUENCER_STATUS_SETTING_RELAY_ACTIVE_SCHEDULE;
         lcd_setting_relay_active_constructor(RELAY_INDEX_6);
     }
@@ -138,7 +138,7 @@ void ad_key_event_handle_in_normal_mode(int key_event)
     // ===================================================================
     case KEY7_AD_LONG:
     {
-        // 长按事件，进入或退出 独立的定时激活、定时停用计划
+        // 长按事件，进入 独立的定时激活、定时停用计划
         sequencer_status = SEQUENCER_STATUS_SETTING_RELAY_ACTIVE_SCHEDULE;
         lcd_setting_relay_active_constructor(RELAY_INDEX_7);
     }

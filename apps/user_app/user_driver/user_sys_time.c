@@ -25,60 +25,11 @@ int is_leap_year(u16 year)
 }
 
 /**
- * @brief 判断传入的时间是否合法（没有超出时间范围）
- *      注意：判断的时间不包括星期值
- *
- * @param time
- * @return u8 1：合法，0：不合法
+ * @brief 判断传入的时间是否合法
+ * 
+ * @param time 
+ * @return * int 
  */
- // u8 is_user_time_valid(user_sys_time_t time)
- // {
- //     // 判断时间是否合法
- //     if (time.year < 2000 || time.year > 2099 || // 超出了 2000 ~ 2099 的范围
- //         time.month < 1 || time.month > 12 || // 超出了 1 ~ 12 的范围
- //         time.day < 1 || time.day > 31 || // 超出了 1 ~ 31 的范围
- //         time.hour > 23 || // 超出了 0 ~ 23 的范围
- //         time.min > 59 || // 超出了 0 ~ 59 的范围
- //         time.sec > 59 // 超出了 0 ~ 59 的范围
- //         )
- //     {
- //         return 0;
- //     }
-
- //     return 1;
- // }
-
- // u8 is_user_hour_valid(user_sys_time_t time)
- // {
- //     if (time.hour > 23)
- //     {
- //         return 0;
- //     }
-
- //     return 1;
- // }
-
- // u8 is_user_min_valid(user_sys_time_t time)
- // {
- //     if (time.min > 59)
- //     {
- //         return 0;
- //     }
-
- //     return 1;
- // }
-
- // u8 is_user_sec_valid(user_sys_time_t time)
- // {
- //     if (time.sec > 59)
- //     {
- //         return 0;
- //     }
-
- //     return 1;
- // }
-
-
 int user_time_is_valid(user_sys_time_t time)
 {
     // 判断年份是否为闰年
@@ -428,7 +379,7 @@ void user_setting_time_set(user_sys_time_t* time)
 
     cur_setting_sys_time.hour = time->hour;
     cur_setting_sys_time.min = time->min;
-    cur_setting_sys_time.sec = time->sec;
+    // cur_setting_sys_time.sec = time->sec; // 当前设置的没有秒这一单位
 }
 
 /**

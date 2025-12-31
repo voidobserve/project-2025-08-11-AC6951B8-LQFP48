@@ -50,7 +50,7 @@ void io_key_event_handle(int key_event)
             sequencer_status = SEQUENCER_STATUS_NONE;
 
             // 保存设置的时间
-            user_sys_time_t user_sys_time = {0};
+            user_sys_time_t user_sys_time = { 0 };
             user_setting_time_get(&user_sys_time);
             user_sys_time_set(&user_sys_time);
             printf("setting sys time exit\n");
@@ -62,14 +62,15 @@ void io_key_event_handle(int key_event)
             // else
         {
             // 进入设置系统时间的模式
-
-            sequencer_status = SEQUENCER_STATUS_SETTING_SYS_TIME;
-
-            user_sys_time_t user_sys_time = {0};
+            user_sys_time_t user_sys_time = { 0 };
             user_sys_time_get(&user_sys_time);
+
+            // 由于当前通过按键设置的系统时间，没有秒这一单位，所以将秒的值清零
+            user_sys_time.sec = 0;
             user_setting_time_set(&user_sys_time);
             lcd_setting_sys_time_unit_change(TIME_UNIT_YEAR);
 
+            sequencer_status = SEQUENCER_STATUS_SETTING_SYS_TIME;
             printf("setting sys time begin\n");
         }
     }

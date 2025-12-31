@@ -117,7 +117,7 @@ int handle_relay_status_setting(u8 sequencer_addr, u8 relay_index, u8 relay_stat
  *
  * @param sequencer_addr
  * @param relay_index
- * @param active_time
+ * @param active_time 单位：秒
  */
 int handle_relay_active_time(u8 sequencer_addr, u8 relay_index, u16 active_time)
 {
@@ -154,7 +154,7 @@ int handle_relay_active_time(u8 sequencer_addr, u8 relay_index, u16 active_time)
  *
  * @param sequencer_addr
  * @param relay_index
- * @param deactive_time
+ * @param deactive_time 单位：秒
  */
 int handle_relay_deactive_time(u8 sequencer_addr, u8 relay_index, u16 deactive_time)
 {
@@ -346,6 +346,95 @@ int handle_init_all_device_addr(u8 sequencer_addr)
     return 0;
 }
 
+int handle_set_relay_weekly_schedule(
+    u8 sequencer_addr,
+    relay_index_t relay_index,
+    u8 weekday,
+    user_sys_time_t active_time,
+    user_sys_time_t deactive_time)
+{
+    if (sequencer_addr != 0xFF && sequencer_addr != sequencers.addr)
+    {
+        // 如果地址不一样，直接退出
+        return 1;
+    }
+
+    if (is_sequencer_in_delay())
+    {
+        // 如果设备正在开关机的延时中，不进行设置
+        return 2;
+    }
+
+    if (weekday >= 7)
+    {
+        // 如果星期值超界，直接退出
+#if USER_DEBUG_ENABLE
+        USER_PRINTF_FUNC();
+        printf("weekday invalid \n");
+#endif 
+        return 3;
+    }
+
+    if (relay_index == 0 || relay_index > 8)
+    {
+        // 如果继电器索引值超出了范围，直接退出
+        return 4;
+    }
+
+    if (active_time.hour > 23 ||
+        active_time.min > 59 ||
+        active_time.sec > 59 ||
+
+        deactive_time.hour > 23 ||
+        deactive_time.min > 59 ||
+        deactive_time.sec > 59)
+    {
+        // 如果时间不合法，直接退出
+        return 5;
+    }
+
+    // 指令传入的 relay_index 范围是 1~8，而程序内部的 relay_index 范围是 0~7，这里要减去1
+    week_schedule_relay_set_by_weekday(relay_index - 1, weekday, active_time, deactive_time);
+
+    return 0;
+}
+
+int handle_cancel_relay_weekly_schedule(u8 sequencer_addr, u8 relay_index, u8 weekday)
+{
+    if (sequencer_addr != 0xFF && sequencer_addr != sequencers.addr)
+    {
+        // 如果地址不一样，直接退出
+        return 1;
+    }
+
+    if (is_sequencer_in_delay())
+    {
+        // 如果设备正在开关机的延时中，不进行设置
+        return 2;
+    }
+
+    if (weekday >= 7)
+    {
+        // 如果星期值超界，直接退出 
+        return 3;
+    }
+
+    if (relay_index == 0 || relay_index > 8)
+    {
+        // 如果继电器索引值超出了范围，直接退出
+        return 4;
+    }
+
+    // 指令传入的 relay_index 范围是 1~8，而程序内部的 relay_index 范围是 0~7，这里要减去1
+    weekly_schedule_relay_cancel_by_weekday(relay_index - 1, weekday);
+
+#if USER_DEBUG_ENABLE
+    printf("cancel relay schedule ok \n");
+#endif
+
+    return 0;
+}
+
 /**
  * @brief 收到对应的串口指令后，复位时序器设备为出厂设置
  *
@@ -405,6 +494,11 @@ int handle_reset_to_factory_setting(u8 sequencer_addr)
     }
 
     user_sys_time_init(); // 初始化系统时间
+    // 清空定时开关机计划；清空继电器的定时计划；这里跟第一次上电时，初始化的内容一致
+    // 初始化设备每周定时开关机的计划时间表
+    memset(&weekly_schedule, 0, sizeof(weekly_schedule_t)); 
+    // 8个继电器、独立的每天激活、停用计划时间表
+    memset(&weekly_schedule_relay, 0, sizeof(weekly_schedule_relay));
 
     return 0;
 }

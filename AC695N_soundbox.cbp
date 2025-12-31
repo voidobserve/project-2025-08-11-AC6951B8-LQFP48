@@ -1724,6 +1724,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="apps/user_app/ad_key/user_ad_key.h" />
+		<Unit filename="apps/user_app/flash_handle/flash_driver.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="apps/user_app/flash_handle/flash_driver.h" />
 		<Unit filename="apps/user_app/flash_handle/flash_handle.c">
 			<Option compilerVar="CC" />
 		</Unit>

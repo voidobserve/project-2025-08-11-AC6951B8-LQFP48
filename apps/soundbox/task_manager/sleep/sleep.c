@@ -91,13 +91,9 @@ static int sleep_key_event_opr(struct sys_event* event)
 
     if (key_event_type == KEY_DRIVER_TYPE_IR)
     {
-        // 如果是红外按键事件
-
-        if (0 == is_sequencer_in_delay()) // 没有在开关机的计时
-        {
-            extern void ir_key_event_handle(int keyevent);
-            ir_key_event_handle(key_event);
-        }
+        // 如果是红外按键事件 
+        extern void ir_key_event_handle(int key_event);
+        ir_key_event_handle(key_event);
     }
 
 

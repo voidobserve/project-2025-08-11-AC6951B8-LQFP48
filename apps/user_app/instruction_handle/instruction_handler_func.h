@@ -3,6 +3,7 @@
 
 #include "includes.h"
 #include "user_sys_time.h"
+#include "relay_handle.h"
 
 int handle_device_on_off(u8 sequencer_addr, u8 cmd);
 int handle_relay_status_setting(u8 sequencer_addr, u8 relay_index, u8 relay_status);
@@ -12,6 +13,8 @@ int handle_set_sys_time(u8 sequencer_addr, user_sys_time_t time); // 收到对�
 int handle_set_weekly_schedule(u8 sequencer_addr, u8 weekday, user_sys_time_t power_on_time, user_sys_time_t power_off_time);
 int handle_cancel_weekly_schedule(u8 sequencer_addr, u8 weekday);
 int handle_init_all_device_addr(u8 sequencer_addr);
+int handle_set_relay_weekly_schedule(u8 sequencer_addr, relay_index_t relay_index, u8 weekday, user_sys_time_t active_time, user_sys_time_t deactive_time);
+int handle_cancel_relay_weekly_schedule(u8 sequencer_addr, u8 relay_index, u8 weekday);
 
 int handle_reset_to_factory_setting(u8 sequencer_addr);
 

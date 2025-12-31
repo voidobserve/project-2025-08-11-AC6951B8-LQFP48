@@ -348,6 +348,7 @@ void lcdseg_handle(void)
 			user_sys_time_t user_sys_time = { 0 };
 			user_setting_time_get(&user_sys_time);
 			user_sys_time_set(&user_sys_time);
+			printf("setting sys time exit\n");
 			// 保存用户数据
 			os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO);
 		}

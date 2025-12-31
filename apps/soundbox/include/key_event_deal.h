@@ -142,7 +142,7 @@ enum {
     KEY_SOUNDCARD_MAKE_NOISE9,
     KEY_SOUNDCARD_MAKE_NOISE10,
     KEY_SOUNDCARD_MAKE_NOISE11,
-///旋钮按键
+    ///旋钮按键
     KEY_SOUNDCARD_SLIDE_MIC,
     KEY_SOUNDCARD_SLIDE_WET_GAIN,
     KEY_SOUNDCARD_SLIDE_HIGH_SOUND,
@@ -176,7 +176,7 @@ enum {
 
     //在这里增加元素
     //
-//耀祥時序器兩組AD按鍵
+    // 耀祥時序器兩組AD按鍵
     KEY0_AD_CLICK,      //273  8个继电器
     KEY1_AD_CLICK,
     KEY2_AD_CLICK,
@@ -194,7 +194,7 @@ enum {
     KEY14_AD_CLICK,
     KEY15_AD_CLICK,
     KEY16_AD_CLICK,
-    APP_CMD,   
+    APP_CMD,
 
     // 总开关的按键事件
     KEW_PROW_IO,  // 总开关短按
@@ -202,7 +202,7 @@ enum {
     KEY_PROW_IO_HOLD, // 总开关按住不放
     KEY_PROW_IO_LOOSE, // 总开关长按松开
 
-//耀祥时序器的长按
+    // 耀祥时序器的长按
     KEY0_AD_LONG,      //
     KEY1_AD_LONG,
     KEY2_AD_LONG,
@@ -215,15 +215,16 @@ enum {
     KEY9_AD_LONG,
     KEY10_AD_LONG,
 
-    KEY_0_AD_HOLD, 
+    KEY_0_AD_HOLD,
     KEY_1_AD_HOLD,
     KEY_2_AD_HOLD,
     KEY_3_AD_HOLD,
     KEY_4_AD_HOLD,
     KEY_5_AD_HOLD,
     KEY_6_AD_HOLD,
-    KEY_7_AD_HOLD, 
-  
+    KEY_7_AD_HOLD,
+
+#if 0
     KEY1_IR_CLICK,
     KEY2_IR_CLICK,
     KEY3_IR_CLICK,
@@ -245,12 +246,25 @@ enum {
     KEY19_IR_CLICK,
     KEY20_IR_CLICK,
     KEY21_IR_CLICK,
+#endif
 
-    KEY_IR_R1C1_CLICK,
-    
-
-    // KEY1_IR_LONG,
- //-------------------------------------  END
+    KEY_IR_R1C1_CLICK, // 红外遥控器，第一行第一列
+    KEY_IR_R1C3_CLICK,
+    KEY_IR_R2C3_CLICK,
+    KEY_IR_R3C1_CLICK,
+    KEY_IR_R3C2_CLICK,
+    KEY_IR_R4C1_CLICK,
+    KEY_IR_R4C2_CLICK,
+    KEY_IR_R5C1_CLICK, // 
+    KEY_IR_R5C2_CLICK,
+    KEY_IR_R5C3_CLICK,
+    KEY_IR_R6C1_CLICK, // 
+    KEY_IR_R6C2_CLICK,
+    KEY_IR_R6C3_CLICK,
+    KEY_IR_R7C1_CLICK, // 
+    KEY_IR_R7C2_CLICK,
+    KEY_IR_R7C3_CLICK,
+    //-------------------------------------  END
 
     KEY_HID_MODE_SWITCH,
     KEY_HID_TAKE_PICTURE,

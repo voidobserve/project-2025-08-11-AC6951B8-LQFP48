@@ -243,7 +243,7 @@ void ir_detect_isr(void)     //该API，不动，如识别解释不到键值，�
 				ir_key.ir_addr = ir_data_temp & 0xffff;
 				ir_key.ir_code = (ir_data_temp >> 16) & 0xff;
 				ir_key.ir_flag = 1;
-				printf("code = %x\n", ir_key.ir_code);
+				printf("ir key_val == %x\n", ir_key.ir_code); // 打印接收到的红外按键键值
 				// printf("%X ",ir_key.ir_addr);
 			}
 		}

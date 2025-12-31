@@ -23,6 +23,7 @@ static volatile instruction_buffer_info_t instruction_buffer_info;
 static volatile u8 cur_recv_instruction_status = INSTRUCTION_STATUS_NONE;
 static volatile u8 cur_recv_instruction_index = 0; // 存放当前正在接收的数据的索引
 static volatile u8 dest_recv_instruction_len = 0; // 记录当前要接收的数据指令长度
+static volatile u16 instruction_buffer_timeout = 0; // 指令接收超时计数值
 
 // 存放当前接收到的一条指令：
 volatile u8 recv_instruction_buff[20] = { 0 };
@@ -76,6 +77,39 @@ void instruction_buffer_put(u8 byte)
     // printf("count %u\n", (u16)instruction_buffer_info.count);
 }
 
+// 累计指令接收超时的时间
+void instruction_buffer_timeout_add(void)
+{
+    if (instruction_buffer_timeout < 65535)
+    {
+        // 防止计数溢出
+        instruction_buffer_timeout++;
+    }
+}
+
+// 清除指令接收超时的时间
+void instruction_buffer_timeout_reset(void)
+{
+    instruction_buffer_timeout = 0;
+}
+
+int instruction_buffer_is_timeout(void)
+{
+    // 注意，这里的超时时间应该比串口接收超时时间还要长一些
+    /*
+        instruction_buffer_timeout 的时间单位由
+        调用函数 instruction_buffer_timeout_add() 的时间周期决定
+    */
+    if (instruction_buffer_timeout > 20)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
 // 往存放指令的缓冲区中存放数据，最后存放当前接收的一条指令
 static void __recv_instruction_update__(u8 byte)
 {
@@ -88,12 +122,28 @@ void instruction_scan(void)
 {
     u8 recv_byte = 0;
 
+    if (cur_recv_instruction_status != INSTRUCTION_STATUS_NONE)
+    {
+        // 当前并不处于 等待接收完整的一帧指令的状态，累计接收超时时间
+        instruction_buffer_timeout_add();
+        if (instruction_buffer_is_timeout())
+        {
+            // 累计的接收超时时间超过一定值，则认为接收指令超时
+            instruction_buffer_timeout_reset();
+            cur_recv_instruction_status = INSTRUCTION_STATUS_NONE; // 给状态机更新，重新接收指令        
+#if USER_DEBUG_ENABLE
+            printf("instruction recv timeout\n");
+#endif
+        }
+    }
+
     if (0 == instruction_buffer_get_count())
     {
         return; // 指令缓冲区为空
     }
 
     recv_byte = instruction_buffer_get();
+    instruction_buffer_timeout_reset(); // 有新数据，重置接收超时计数
 
     if (INSTRUCTION_STATUS_NONE == cur_recv_instruction_status)
     {
@@ -176,6 +226,27 @@ void instruction_scan(void)
         {
             // 总共要接收 4 个字节的命令 
             dest_recv_instruction_len = 4;
+        }
+        break;
+        // ============================================================================
+        case INSTRUCTION_TYPE_SET_RELAY_SCHEDULE:
+        {
+            /*
+                总共要接收 11 个字节的命令
+                格式头 + 指令类型 + 设备地址 +
+                继电器编号(1byte) +
+                星期(1byte) +
+                小时(1byte) + 分钟(1byte) + 秒(1byte) +
+                小时(1byte) + 分钟(1byte) + 秒(1byte)
+            */
+            dest_recv_instruction_len = 11;
+        }
+        break;
+        // ============================================================================
+        case INSTRUCTION_TYPE_CANCEL_RELAY_SCHEDULE:
+        {
+            // 总共要接收 5 个字节的命令
+            dest_recv_instruction_len = 5;
         }
         break;
         // ============================================================================
@@ -388,6 +459,48 @@ void instruction_handle(void)
     }
     break;
     // ===================================================================
+    case INSTRUCTION_TYPE_SET_RELAY_SCHEDULE:
+    {
+        // 设置某个继电器每周对应星期值的定时激活、定时停用计划
+        user_sys_time_t active_time = { 0 };// 存放定时激活时间
+        user_sys_time_t deactive_time = { 0 }; // 存放定时停用时间
+        relay_index_t relay_index = RELAY_INDEX_INVALID;
+        u8 weekday = 255;
+
+#if USER_DEBUG_ENABLE        
+        printf("INSTRUCTION_TYPE SET_RELAY_SCHEDULE \n");
+#endif
+
+        relay_index = recv_instruction_buff[3];
+        weekday = recv_instruction_buff[4]; // 星期值
+        active_time.hour = recv_instruction_buff[5];
+        active_time.min = recv_instruction_buff[6];
+        active_time.sec = recv_instruction_buff[7];
+
+        deactive_time.hour = recv_instruction_buff[8];
+        deactive_time.min = recv_instruction_buff[9];
+        deactive_time.sec = recv_instruction_buff[10];
+        ret = handle_set_relay_weekly_schedule(sequencer_addr, relay_index, weekday, active_time, deactive_time);
+        // printf("ret == %d\n", ret);
+    }
+    break;
+    // ===================================================================
+    case INSTRUCTION_TYPE_CANCEL_RELAY_SCHEDULE:
+    {
+        // 取消某个继电器对应星期值的定时激活、定时停用计划
+        relay_index_t relay_index = RELAY_INDEX_INVALID;
+        u8 weekday = 255;
+
+#if USER_DEBUG_ENABLE        
+        printf("INSTRUCTION_TYPE CANCEL_RELAY_SCHEDULE \n");
+#endif
+
+        relay_index = recv_instruction_buff[3]; // 继电器编号（注意数值是1~8）
+        weekday = recv_instruction_buff[4]; // 星期值
+        ret = handle_cancel_relay_weekly_schedule(sequencer_addr, relay_index, weekday);
+        printf("ret == %d\n", ret);
+    }
+    break;
     // ===================================================================
     default:
     {

@@ -25,6 +25,7 @@
  ***********************************************************/
 #if TCFG_APP_BT_EN
 const u16 bt_key_ir_table[KEY_IR_NUM_MAX][KEY_EVENT_MAX] = {
+#if 0
     [69] = {
         KEY1_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
     }, /* 开机/关机 */
@@ -88,7 +89,7 @@ const u16 bt_key_ir_table[KEY_IR_NUM_MAX][KEY_EVENT_MAX] = {
     [74] = {
         KEY21_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
     },
-
+#endif
 
 };
 #endif
@@ -305,7 +306,7 @@ const u16 music_key_ir_table[KEY_IR_NUM_MAX][KEY_EVENT_MAX] = {
     // },
 
 
-
+#if 0
 
      [69] = {
         KEY1_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
@@ -370,6 +371,7 @@ const u16 music_key_ir_table[KEY_IR_NUM_MAX][KEY_EVENT_MAX] = {
     [74] = {
         KEY21_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
     },
+#endif
 
 };
 #endif
@@ -662,69 +664,54 @@ const u16 spdif_key_ir_table[KEY_IR_NUM_MAX][KEY_EVENT_MAX] = {
  *				idle 模式的 irkey table
  ***********************************************************/
 const u16 idle_key_ir_table[KEY_IR_NUM_MAX][KEY_EVENT_MAX] = {
+    // [键值] = {按键事件}
     [0x45] = {
-        KEY1_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
+        KEY_IR_R1C1_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
     },
-    [70] = {
-        KEY2_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
+    [0x47] = {
+        KEY_IR_R1C3_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
     },
-    [71] = {
-        KEY3_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
+    [0x43] = {
+        KEY_IR_R2C3_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
     },
-    [68] = {
-        KEY4_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
+    [0x07] = {
+        KEY_IR_R3C1_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
+    }, 
+    [0x15] = {
+        KEY_IR_R3C2_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
     },
-    // [64] = {
-    //     KEY5_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
-    // },
-    // [67] = {
-    //     KEY6_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
-    // },
-    [7] = {
-        KEY7_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
+    [0x16] = {
+        KEY_IR_R4C1_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
     },
-    [21] = {
-        KEY8_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
+    [0x19] = {
+        KEY_IR_R4C2_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
     },
-    [9] = {
-        KEY9_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
+    [0x0C] = {
+        KEY_IR_R5C1_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
     },
-    [22] = {
-        KEY10_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
+    [0x18] = {
+        KEY_IR_R5C2_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
     },
-    [25] = {
-        KEY11_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
+    [0x5E] = {
+        KEY_IR_R5C3_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
     },
-    [13] = {
-        KEY12_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
+    [0x08] = {
+        KEY_IR_R6C1_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
     },
-    [12] = {
-        KEY13_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
+    [0x1C] = {
+        KEY_IR_R6C2_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
     },
-    [24] = {
-        KEY14_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
+    [0x5A] = {
+        KEY_IR_R6C3_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
     },
-    [94] = {
-        KEY15_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
+    [0x42] = {
+        KEY_IR_R7C1_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
     },
-    [8] = {
-        KEY16_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
+    [0x52] = {
+        KEY_IR_R7C2_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
     },
-    [28] = {
-        KEY17_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
-    },
-    [90] = {
-        KEY18_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
-    },
-    [66] = {
-        KEY19_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
-    },
-    [82] = {
-        KEY20_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
-    },
-    [74] = {
-        KEY21_IR_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
-    },
-
+    [0x4A] = {
+        KEY_IR_R7C3_CLICK,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL,		KEY_NULL
+    }, 
 };
 #endif

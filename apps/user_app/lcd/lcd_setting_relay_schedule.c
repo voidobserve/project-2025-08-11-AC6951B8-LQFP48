@@ -18,6 +18,7 @@ void lcd_setting_relay_active_constructor(relay_index_t relay_index)
     lcd_setting_relay_schedule.flag_is_timeout = 0;
     lcd_setting_relay_schedule.flag_is_setting_active_time = 1; // 表示当前正在设置 激活时间
 
+#if 0
     // 找到对应的继电器，任意一天的计划（目前设置是每周的计划，所以可以找任意一天）
     if (weekly_schedule_relay[relay_index].schedule[0].enable == 1)
     {
@@ -31,16 +32,41 @@ void lcd_setting_relay_active_constructor(relay_index_t relay_index)
         // 如果没有计划，初始化数据
         memset(&lcd_setting_relay_schedule.schedule, 0, sizeof(daily_schedule_t));
     }
+#endif
+
+    // 默认先清空对应的定时激活、定时停用计划
+    memset(&lcd_setting_relay_schedule.schedule, 0, sizeof(daily_schedule_t));
+    for (u8 i = 0; i < 7; i++) // 星期值：0 ~ 6，遍历一周的定时激活、定时停用计划
+    {
+        if (weekly_schedule_relay[relay_index].schedule[i].enable)
+        {
+            // 如果找到了一个使能的计划，初始化对应的变量
+            memcpy(&lcd_setting_relay_schedule.schedule,
+                &weekly_schedule_relay[relay_index].schedule[i],
+                sizeof(daily_schedule_t));
+            
+            // printf("[function]%s\n", __func__);
+            // printf("weekday == %u\n", (u16)i);
+            // printf("relay_index == %u\n", (u16)relay_index);
+            // printf("active hour == %u\n", (u16)weekly_schedule_relay[relay_index].schedule[i].on_hour);
+            // printf("active min == %u\n", (u16)weekly_schedule_relay[relay_index].schedule[i].on_minute);
+            // printf("active sec == %u\n", (u16)weekly_schedule_relay[relay_index].schedule[i].on_second);
+            // printf("deactive hour == %u\n", (u16)weekly_schedule_relay[relay_index].schedule[i].off_hour);
+            // printf("deactive min == %u\n", (u16)weekly_schedule_relay[relay_index].schedule[i].off_minute);
+            // printf("deactive sec == %u\n", (u16)weekly_schedule_relay[relay_index].schedule[i].off_second);
+            break;
+        }
+    }
 
     __this = &lcd_setting_relay_schedule;
 }
 
 /**
  * @brief 在设置指定继电器定时激活、定时停用计划期间，获取当前继电器的索引值
- * 
+ *
  * @param relay_index 存放得到的继电器的索引值
  */
-void lcd_setting_relay_schedule_get_index(relay_index_t * relay_index)
+void lcd_setting_relay_schedule_get_index(relay_index_t* relay_index)
 {
     *relay_index = __this->relay_index;
 }

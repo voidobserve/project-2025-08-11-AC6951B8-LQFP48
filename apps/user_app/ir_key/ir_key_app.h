@@ -9,6 +9,6 @@
 
 
 
-void ir_key_event_handle(int keyevent);
+void ir_key_event_handle(int key_event);
 
 #endif

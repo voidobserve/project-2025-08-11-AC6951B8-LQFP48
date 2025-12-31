@@ -35,6 +35,13 @@ void weekly_schedule_relay_set(
     relay_index_t relay_index,
     const user_sys_time_t active_time,
     const user_sys_time_t deactive_time);
+void week_schedule_relay_set_by_weekday(
+    relay_index_t relay_index,
+    u8 weekday,
+    const user_sys_time_t active_time,
+    const user_sys_time_t deactive_time);
+void weekly_schedule_relay_cancel_by_weekday(relay_index_t relay_index, u8 weekday);
+
 
 void weekly_schedule_info_set(const user_sys_time_t power_on_time, const user_sys_time_t power_off_time);
 void weekly_schedule_info_cancel(u8 weekday);
