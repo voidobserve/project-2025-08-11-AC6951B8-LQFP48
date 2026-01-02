@@ -21,7 +21,7 @@ typedef struct
 	// u16 (*time_out_get)(void);
 } lcd_setting_sys_time_t; // 将变量改成使用该结构体类型的变量
 
-
+void lcd_refresh_time_reset(void);
 
 void lcd_setting_sys_time_timeout_add_10ms(void);
 void lcd_setting_sys_time_timeout_reset(void);

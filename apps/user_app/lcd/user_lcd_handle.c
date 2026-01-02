@@ -5,12 +5,11 @@
 #include "lcd_setting_relay_schedule.h"
 
 volatile lcd_setting_sys_time_t lcd_setting_sys_time = { 0 };
+// lcd 更新时间显示的计数值：
+static volatile u8 lcd_refresh_time_cnt = 0;
+// lcd 更新时间显示的状态机，控制当前要显示的时间单位，0：年，1：月-日，2：时：分
+static volatile u8 lcd_refresh_time_status = 0;
 
-// USER_TO_DO 构造函数
-void lcd_setting_sys_time_constructor(void)
-{
-
-}
 
 /**
  * @brief 在设置系统时间时，如果没有操作，累加超时时间
@@ -266,6 +265,13 @@ void lcd_setting_sys_time_animation(void)
 	// }
 }
 
+// 从其他模式跳转到 SEQUENCER_STATUS_NONE 时，需要调用该函数，清空lcd显示时间时使用到的计数值和状态机
+void lcd_refresh_time_reset(void)
+{
+	lcd_refresh_time_cnt = 0;
+	lcd_refresh_time_status = 0;
+}
+
 //  LCD屏显示处理  10ms执行一次
 void lcdseg_handle(void)
 {
@@ -284,35 +290,34 @@ void lcdseg_handle(void)
 		clean_num(4);clean_num(5);clean_num(6); clean_num(7);  // 清屏
 		clean_dis(clrbit(SEG_S3));clean_dis(clrbit(SEG_S4)); // 不显示： ' " 
 		clean_dis(clrbit(SEG_S6)); // 关闭"W"
-		// // 交流电电压： 
+		// 交流电电压： 
 		lcd_update_ac_voltage();
 		make_dis(SEG_S5); // lcd显示符号：V		
 
 		// 后面需要显示年份xx时间，再切换到显示月日xx时间，最后切换到显示时分 
 		{
-			static u8 cnt = 0;
-			static u8 dir = 0; // 控制当前要显示的时间单位，0：年，1：月-日，2：时：分
-			static volatile user_sys_time_t user_sys_time = {0};
+			// static volatile user_sys_time_t user_sys_time = { 0 };
+			volatile user_sys_time_t user_sys_time = { 0 };
 
-			cnt++;
-			if (cnt >= 200)
+			lcd_refresh_time_cnt++;
+			if (lcd_refresh_time_cnt >= 200)
 			{
-				cnt = 0;
+				lcd_refresh_time_cnt = 0;
 
-				dir++;
-				if (dir >= 3)
+				lcd_refresh_time_status++;
+				if (lcd_refresh_time_status >= 3)
 				{
-					dir = 0;
+					lcd_refresh_time_status = 0;
 				}
 			}
 
 			user_sys_time_get(&user_sys_time);
-			if (dir == 0)
+			if (lcd_refresh_time_status == 0)
 			{
 				lcd_clear_year();
 				lcd_update_year(user_sys_time.year);
 			}
-			else if (dir == 1)
+			else if (lcd_refresh_time_status == 1)
 			{
 				lcd_clear_month();
 				lcd_update_month(user_sys_time.month);
@@ -320,7 +325,7 @@ void lcdseg_handle(void)
 				lcd_clear_day();
 				lcd_update_day(user_sys_time.day);
 			}
-			else if (dir == 2)
+			else if (lcd_refresh_time_status == 2)
 			{
 				lcd_clear_hour();
 				lcd_update_hour(user_sys_time.hour);
@@ -341,13 +346,14 @@ void lcdseg_handle(void)
 		if (lcd_setting_sys_time_is_timeout())
 		{
 			// 如果 设置系统时间 超时，返回普通模式
-			sequencer_status = SEQUENCER_STATUS_NONE;
 			lcd_setting_sys_time_timeout_reset();
 
 			// 保存设置的时间
 			user_sys_time_t user_sys_time = { 0 };
 			user_setting_time_get(&user_sys_time);
 			user_sys_time_set(&user_sys_time);
+			lcd_refresh_time_reset();
+			sequencer_status = SEQUENCER_STATUS_NONE;
 			printf("setting sys time exit\n");
 			// 保存用户数据
 			os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO);
@@ -378,7 +384,7 @@ void lcdseg_handle(void)
 			lcd_setting_relay_schedule_get_index(&relay_index); // 获取当前正在设置的继电器索引
 			lcd_setting_relay_time_get(&active_time, &deactive_time);
 			weekly_schedule_relay_set(relay_index, active_time, deactive_time);
-
+			lcd_refresh_time_reset();
 			sequencer_status = SEQUENCER_STATUS_NONE;
 			// 保存用户数据
 			os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO);
@@ -409,7 +415,7 @@ void lcdseg_handle(void)
 			lcd_setting_relay_schedule_get_index(&relay_index); // 获取当前正在设置的继电器索引
 			lcd_setting_relay_time_get(&active_time, &deactive_time);
 			weekly_schedule_relay_set(relay_index, active_time, deactive_time);
-
+			lcd_refresh_time_reset();
 			sequencer_status = SEQUENCER_STATUS_NONE;
 			// 保存用户数据
 			os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO);

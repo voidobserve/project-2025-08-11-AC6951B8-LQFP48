@@ -46,6 +46,21 @@ void user_msg_handle_task(void* p)
     }
 }
 
+/**
+ * @brief 每隔一段时间，保存一次当前的系统时间
+ *
+ */
+void user_sys_time_save_task(void)
+{
+    static u16 cnt = 0;
+    cnt++;
+    if (cnt >= 3000) // 每10ms调用一次该函数，时间 == cnt * 10ms
+    {
+        cnt = 0;
+        os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO);
+    }
+}
+
 void user_main_task(void* p)
 {
     // volatile user_sys_time_t time = { 2000, 01, 01 , 00 , 01 };
@@ -54,7 +69,6 @@ void user_main_task(void* p)
 
     while (1)
     {
-#if 1
         {
             static u8 cnt = 0;
             cnt++;
@@ -63,26 +77,28 @@ void user_main_task(void* p)
             if (cnt >= 20) // 20 --> 20 * 10ms，每 200 ms进入一次
             {
                 cnt = 0;
-                weekly_schedule_info_handle(); // 可能需要每200ms扫描一次 
-                weekly_schedule_relay_info_handle();
-            }
-        }
 
+                // 可能需要每200ms扫描一次：
+                weekly_schedule_info_handle(); // 定时开关机的处理函数
+                weekly_schedule_relay_info_handle(); // 定时激活、定时停用继电器的处理函数
+            }
+        } 
+
+#if 0
         { // 每隔一段时间，打印一下当前系统时间
             static u16 cnt = 0;
             cnt++;
             if (cnt >= 500)
             {
-                cnt = 0;
+                cnt = 0; 
 
-#if 0
-                user_sys_time_get(&time);
-                printf("Current time: %d-%02d-%02d %02d:%02d:%02d\n",
-                    time.year, time.month, time.day,
-                    time.hour, time.min, time.sec);
-                time.weekday = rtc_calculate_week_val(&time);
-                printf("cur weekday: %d\n", time.weekday);
-#endif
+                // user_sys_time_get(&time);
+                // printf("Current time: %d-%02d-%02d %02d:%02d:%02d\n",
+                //     time.year, time.month, time.day,
+                //     time.hour, time.min, time.sec);
+                // time.weekday = rtc_calculate_week_val(&time);
+                // printf("cur weekday: %d\n", time.weekday);
+
 
                 // printf("\n=============================================\n");
                 // printf("is sequencer in delay: %u\n", (u16)is_sequencer_in_delay()); 
@@ -94,7 +110,7 @@ void user_main_task(void* p)
         instruction_handle(); // 从指令缓冲区中取出指令，并进行处理 
 
 
-
+        user_sys_time_save_task();
         save_user_data_time_count_down(); // 保存数据的倒计时，使能保存数据的操作才会进入内部执行
         save_user_data_handle(); // 保存用户数据，内部会根据标志位来判断是否保存
         os_time_dly(1); // 10ms 

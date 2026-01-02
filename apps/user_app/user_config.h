@@ -21,7 +21,7 @@
 #include "instruction_handle/instruction_handle.h"
 
 
-#define USER_DEBUG_ENABLE 1
+#define USER_DEBUG_ENABLE 0
 
 // // 定义打印当前函数的宏函数：
 #define USER_PRINTF_FUNC()       \

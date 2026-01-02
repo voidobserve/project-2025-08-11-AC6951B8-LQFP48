@@ -6,9 +6,7 @@
 #include "sequencer.h" 
 #include "user_config.h"
 
-#define FLASH_CRC_DATA 0xC5
-
-volatile weekly_schedule_t weekly_schedule; // 存放定时开关机的计划
+volatile weekly_schedule_t weekly_schedule = {0}; // 存放定时开关机的计划
 // 存放继电器定时激活/停用的计划
 volatile weekly_schedule_t weekly_schedule_relay[8] = { 0 }; // 存放8个继电器的定时激活/定时停用计划
 
@@ -135,6 +133,12 @@ void weekly_schedule_relay_info_handle(void)
     if (sequencers.on_ff == DEVICE_OFF)
     {
         // 如果设备没有开机，不执行继电器的操作
+        return;
+    }
+
+    if (is_sequencer_in_delay())
+    {
+        // 如果设备处于开关机的延时中，不执行操作，直接返回
         return;
     }
 

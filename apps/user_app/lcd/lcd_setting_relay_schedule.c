@@ -17,24 +17,8 @@ void lcd_setting_relay_active_constructor(relay_index_t relay_index)
     lcd_setting_relay_schedule.timeout_cnt = 0;
     lcd_setting_relay_schedule.flag_is_timeout = 0;
     lcd_setting_relay_schedule.flag_is_setting_active_time = 1; // 表示当前正在设置 激活时间
-
-#if 0
-    // 找到对应的继电器，任意一天的计划（目前设置是每周的计划，所以可以找任意一天）
-    if (weekly_schedule_relay[relay_index].schedule[0].enable == 1)
-    {
-        // 如果有使能定时激活/定时停用，初始化对应的变量
-        memcpy(&lcd_setting_relay_schedule.schedule,
-            &weekly_schedule_relay[relay_index].schedule[0],
-            sizeof(daily_schedule_t));
-    }
-    else
-    {
-        // 如果没有计划，初始化数据
-        memset(&lcd_setting_relay_schedule.schedule, 0, sizeof(daily_schedule_t));
-    }
-#endif
-
-    // 默认先清空对应的定时激活、定时停用计划
+  
+    // 默认先清空 变量中 对应的定时激活、定时停用计划
     memset(&lcd_setting_relay_schedule.schedule, 0, sizeof(daily_schedule_t));
     for (u8 i = 0; i < 7; i++) // 星期值：0 ~ 6，遍历一周的定时激活、定时停用计划
     {

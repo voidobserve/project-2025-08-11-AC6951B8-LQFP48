@@ -230,6 +230,7 @@ void ad_key_event_handle_in_setting_relay_schedule_mode(int key_event)
         // printf("active time == %u : %u\n", (u16)active_time.hour, (u16)active_time.min);
         // printf("deactive time == %u : %u\n", (u16)deactive_time.hour, (u16)deactive_time.min);
         // printf("\n========================================\n");
+        lcd_refresh_time_reset();
         sequencer_status = SEQUENCER_STATUS_NONE; // 退出设置继电器定时计划的模式
     }
     break;
@@ -247,6 +248,7 @@ void ad_key_event_handle_in_setting_relay_schedule_mode(int key_event)
 
         lcd_setting_relay_time_get(&active_time, &deactive_time); // 获取设置好的 定时计划
         weekly_schedule_relay_set(RELAY_INDEX_1, active_time, deactive_time); // 根据设置好的定时计划进行设置
+        lcd_refresh_time_reset();
         sequencer_status = SEQUENCER_STATUS_NONE; // 退出设置继电器定时计划的模式
     }
     break;
@@ -264,6 +266,7 @@ void ad_key_event_handle_in_setting_relay_schedule_mode(int key_event)
 
         lcd_setting_relay_time_get(&active_time, &deactive_time); // 获取设置好的 定时计划
         weekly_schedule_relay_set(RELAY_INDEX_2, active_time, deactive_time); // 根据设置好的定时计划进行设置
+        lcd_refresh_time_reset();
         sequencer_status = SEQUENCER_STATUS_NONE; // 退出设置继电器定时计划的模式
     }
     break;
@@ -281,6 +284,7 @@ void ad_key_event_handle_in_setting_relay_schedule_mode(int key_event)
 
         lcd_setting_relay_time_get(&active_time, &deactive_time); // 获取设置好的 定时计划
         weekly_schedule_relay_set(RELAY_INDEX_3, active_time, deactive_time); // 根据设置好的定时计划进行设置
+        lcd_refresh_time_reset();
         sequencer_status = SEQUENCER_STATUS_NONE; // 退出设置继电器定时计划的模式
     }
     break;
@@ -315,6 +319,7 @@ void ad_key_event_handle_in_setting_relay_schedule_mode(int key_event)
 
         lcd_setting_relay_time_get(&active_time, &deactive_time); // 获取设置好的 定时计划
         weekly_schedule_relay_set(RELAY_INDEX_4, active_time, deactive_time); // 根据设置好的定时计划进行设置
+        lcd_refresh_time_reset();
         sequencer_status = SEQUENCER_STATUS_NONE; // 退出设置继电器定时计划的模式
     }
     break;
@@ -349,6 +354,7 @@ void ad_key_event_handle_in_setting_relay_schedule_mode(int key_event)
 
         lcd_setting_relay_time_get(&active_time, &deactive_time); // 获取设置好的 定时计划
         weekly_schedule_relay_set(RELAY_INDEX_5, active_time, deactive_time); // 根据设置好的定时计划进行设置
+        lcd_refresh_time_reset();
         sequencer_status = SEQUENCER_STATUS_NONE; // 退出设置继电器定时计划的模式
     }
     break;
@@ -374,6 +380,7 @@ void ad_key_event_handle_in_setting_relay_schedule_mode(int key_event)
 
         lcd_setting_relay_time_get(&active_time, &deactive_time); // 获取设置好的 定时计划
         weekly_schedule_relay_set(RELAY_INDEX_6, active_time, deactive_time); // 根据设置好的定时计划进行设置
+        lcd_refresh_time_reset();
         sequencer_status = SEQUENCER_STATUS_NONE; // 退出设置继电器定时计划的模式
     }
     // ===================================================================
@@ -398,6 +405,7 @@ void ad_key_event_handle_in_setting_relay_schedule_mode(int key_event)
 
         lcd_setting_relay_time_get(&active_time, &deactive_time); // 获取设置好的 定时计划
         weekly_schedule_relay_set(RELAY_INDEX_7, active_time, deactive_time); // 根据设置好的定时计划进行设置
+        lcd_refresh_time_reset();
         sequencer_status = SEQUENCER_STATUS_NONE; // 退出设置继电器定时计划的模式
     }
     // ===================================================================  

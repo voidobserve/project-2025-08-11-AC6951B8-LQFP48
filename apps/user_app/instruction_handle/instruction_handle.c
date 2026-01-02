@@ -302,6 +302,7 @@ void instruction_handle(void)
     // u8 flag_is_need_to_transmit = 0; // 标志位，是否要将指令传给下位机
     u8 sequencer_addr = 0x00;
     u8 instruction_type = 0x00;
+    u8 last_sequencer_addr = sequencers.addr; // 存放 时序器 地址，在恢复出厂设置后，时序器的地址会改变，影响之后的判断，这里要记忆一下之前的地址
     // instruction_t instruction_structure;
 
     if (INSTRUCTION_STATUS_END != cur_recv_instruction_status)
@@ -512,7 +513,10 @@ void instruction_handle(void)
     } break;
     }
 
-    if (sequencer_addr == sequencers.addr || sequencer_addr == 0xFF)
+    if (sequencer_addr == sequencers.addr ||
+        sequencer_addr == 0xFF ||
+        sequencer_addr == last_sequencer_addr /* 如果是因为恢复出厂设置，导致地址改变，也要反馈指令结果 */
+        )
     {
         // 如果地址匹配，或者地址为0xFF，则反馈指令结果
         if (ret)
@@ -529,7 +533,7 @@ void instruction_handle(void)
     }
 
     if ((instruction_type != INSTRUCTION_TYPE_INIT_ALL_DEVICE_ADDR) &&
-        sequencer_addr != sequencers.addr || sequencer_addr == 0xFF)
+        ((sequencer_addr != sequencers.addr) || (sequencer_addr == 0xFF)))
     {
         // 如果地址不匹配，或者地址为0xFF，将收到的指令转发给下位机
         instruction_transmit_buff(recv_instruction_buff, recv_instruction_buff_len);

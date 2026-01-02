@@ -159,14 +159,15 @@ void ir_key_event_handle_in_setting_sys_time_mode(int key_event)
     case KEY_IR_R1C3_CLICK:
     {
         // 如果正在设置系统时间，则退出设置
-        sequencer_status = SEQUENCER_STATUS_NONE;
+        
 
         // 保存设置的时间
         user_sys_time_t user_sys_time = { 0 };
         user_setting_time_get(&user_sys_time);
         user_sys_time_set(&user_sys_time);
         printf("setting sys time exit\n");
-
+        lcd_refresh_time_reset();
+        sequencer_status = SEQUENCER_STATUS_NONE;
         // 退出设置之后，保存相关的用户数据
         os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO);
     }
@@ -296,6 +297,7 @@ void ir_key_event_handle_in_setting_relay_schedule_mode(int key_event)
         lcd_setting_relay_schedule_get_index(&relay_index);
         lcd_setting_relay_time_get(&active_time, &deactive_time); // 获取设置好的 定时计划
         weekly_schedule_relay_set(relay_index, active_time, deactive_time); // 根据设置好的定时计划进行设置
+        lcd_refresh_time_reset();
         sequencer_status = SEQUENCER_STATUS_NONE; // 退出设置继电器定时计划的模式
         // 保存用户数据
         os_taskq_post("msg_task", 1, MSG_USER_SAVE_INFO);
